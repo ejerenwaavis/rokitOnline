@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body { font-family: "Poppins", system-ui, sans-serif; color: #777777; background: #fff; }
+  h1, h2, h3, h4, h5, h6 { color: #222222; font-weight: 600; }
+  a { color: #FF9729; transition: color 0.2s ease; }
+  a:hover { color: #e6861a; }
+}
+
+@layer components {
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-rokit-orange text-white font-semibold border-2 border-rokit-orange hover:bg-rokit-orange-dark hover:border-rokit-orange-dark transition-all duration-300 cursor-pointer; }
+  .btn-outline { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent text-rokit-orange font-semibold border-2 border-rokit-orange hover:bg-rokit-orange hover:text-white transition-all duration-300 cursor-pointer; }
+  .btn-gold { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent text-rokit-gold font-semibold border-2 border-rokit-gold hover:bg-rokit-gold hover:text-white transition-all duration-300 cursor-pointer; }
+  .btn-white { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-rokit-dark font-semibold border-2 border-white hover:bg-transparent hover:text-white transition-all duration-300 cursor-pointer; }
+  .section-title { @apply text-3xl md:text-4xl font-bold text-rokit-dark mb-3; }
+  .section-subtitle { @apply text-rokit-body text-base md:text-lg mb-10; }
+  .section-divider { @apply w-16 h-1 bg-rokit-orange mx-auto mb-6; }
+  .card { @apply bg-white shadow-md hover:shadow-xl transition-shadow duration-300; }
+  .form-input { @apply w-full px-4 py-3 border border-gray-300 focus:border-rokit-orange focus:outline-none focus:ring-2 transition-colors duration-200 text-rokit-dark bg-white; }
+  .form-label { @apply block text-sm font-medium text-rokit-dark mb-1; }
+  .badge-status { @apply inline-block px-3 py-1 text-xs font-semibold rounded-full; }
+}
+
+.swiper-pagination-bullet { background: rgba(255,255,255,0.6) !important; width: 10px !important; height: 10px !important; }
+.swiper-pagination-bullet-active { background: #FF9729 !important; width: 30px !important; border-radius: 4px !important; }
+html { scroll-behavior: smooth; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #FF9729; border-radius: 3px; }
+.tiptap-content h1 { font-size:2rem; font-weight:700; color:#222; margin:1.5rem 0 1rem; }
+.tiptap-content h2 { font-size:1.5rem; font-weight:700; color:#222; margin:1.25rem 0 0.75rem; }
+.tiptap-content p  { color:#777; margin-bottom:1rem; line-height:1.75; }
+.tiptap-content ul { list-style:disc inside; margin-bottom:1rem; color:#777; }
+.tiptap-content blockquote { border-left:4px solid #FF9729; padding-left:1rem; font-style:italic; margin:1rem 0; }
+.tiptap-content img { max-width:100%; height:auto; border-radius:4px; margin:1rem 0; }
+.tiptap-content a { color:#FF9729; text-decoration:underline; }
+.tiptap-content code { background:#f3f4f6; padding:2px 6px; border-radius:4px; font-family:monospace; }
+.tiptap-content pre { background:#1f2937; color:#4ade80; padding:1rem; border-radius:8px; overflow-x:auto; margin:1rem 0; }

@@ -61,7 +61,7 @@ const fs = require('fs');
 if (fs.existsSync(frontendPath)) {
   app.use(express.static(frontendPath));
   // React Router catch-all — serve index.html for any non-API route
-  app.get('*', (req, res) => {
+  app.get('/{*path}', (req, res) => {
     res.sendFile(path.join(frontendPath, 'index.html'));
   });
 } else {

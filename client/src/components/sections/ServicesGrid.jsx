@@ -19,7 +19,7 @@ export default function ServicesGrid() {
 
   useEffect(() => {
     api.get('/services').then(res => {
-      if (res.data?.length) setServices(res.data);
+      if (Array.isArray(res.data) && res.data.length) setServices(res.data);
     }).catch(() => {});
   }, []);
 

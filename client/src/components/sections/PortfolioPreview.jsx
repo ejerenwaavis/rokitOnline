@@ -22,7 +22,7 @@ export default function PortfolioPreview() {
 
   useEffect(() => {
     api.get('/portfolio/featured').then(res => {
-      if (res.data?.length) setItems(res.data);
+      if (Array.isArray(res.data) && res.data.length) setItems(res.data);
     }).catch(() => {});
   }, []);
 

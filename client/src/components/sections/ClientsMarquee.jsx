@@ -25,7 +25,7 @@ export default function ClientsMarquee() {
   useEffect(() => {
     const controller = new AbortController();
     api.get('/clients', { signal: controller.signal })
-      .then(res => { if (res.data?.length >= 3) setClients(res.data); })
+      .then(res => { if (Array.isArray(res.data) && res.data.length >= 3) setClients(res.data); })
       .catch(() => {});
     return () => controller.abort();
   }, []);

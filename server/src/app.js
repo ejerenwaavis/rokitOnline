@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -54,8 +55,18 @@ app.use('/api/admin',     require('./routes/admin'));
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
-// 404 handler
-app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
+// Serve frontend static files in production
+if (process.env.NODE_ENV === 'production') {
+  const frontendPath = path.join(__dirname, '../../client/public_html');
+  app.use(express.static(frontendPath));
+  // React Router catch-all — serve index.html for any non-API route
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  });
+} else {
+  // 404 handler for dev (API only)
+  app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
+}
 
 // Global error handler
 app.use((err, req, res, next) => {

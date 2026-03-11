@@ -16,6 +16,7 @@ import Contact from './pages/Contact';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Cookies from './pages/Cookies';
+import Health from './pages/Health';
 
 // Auth
 import Login from './pages/auth/Login';
@@ -88,6 +89,7 @@ export default function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/cookies" element={<Cookies />} />
+          <Route path="/health" element={<Health />} />
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
           <Route path="/login" element={<Navigate to="/auth/login" replace />} />

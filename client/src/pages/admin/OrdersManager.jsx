@@ -83,7 +83,7 @@ function OrderRow({ order, onUpdate }) {
       </td>
       <td className="px-4 py-3">
         {order.priceStatus === 'accepted' ? (
-          <span className="text-xs text-green-600 font-semibold">✓ Accepted ₦{Number(order.quotedPrice).toLocaleString()}</span>
+          <span className="text-xs text-green-600 font-semibold">✓ Accepted ₦{Number(order.totalAmount).toLocaleString()}</span>
         ) : order.priceStatus === 'negotiating' ? (
           <div className="space-y-1">
             <div className="text-xs text-blue-600 font-semibold">

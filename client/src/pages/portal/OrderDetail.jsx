@@ -1,27 +1,169 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, CheckCircle, Clock } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Clock, AlertCircle, X } from 'lucide-react';
+import toast from 'react-hot-toast';
 import api from '../../utils/api';
+import { useAuth } from '../../context/AuthContext';
 import StatusBadge from '../../components/ui/StatusBadge';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
+function NegotiateModal({ order, userEmail, onClose, onNegotiated }) {
+  const [form, setForm] = useState({
+    counterOffer: '',
+    message: '',
+  });
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.counterOffer || isNaN(form.counterOffer) || Number(form.counterOffer) <= 0) {
+      toast.error('Please enter a valid counter-offer amount.');
+      return;
+    }
+    if (!form.message.trim()) {
+      toast.error('Please explain your counter-offer.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      // 1. Stamp the order as negotiating + add timeline entry
+      const res = await api.post(`/orders/${order._id}/counter-offer`, {
+        counterAmount: Number(form.counterOffer),
+        message: form.message,
+      });
+      // 2. Send contact message to staff
+      await api.post('/contact', {
+        name: order.customer?.name || 'Customer',
+        email: userEmail,
+        phone: order.customer?.phone || '',
+        subject: `Price Negotiation – Order #${order._id.slice(-6).toUpperCase()}`,
+        message:
+          `Order: #${order._id}\n` +
+          `Service: ${order.serviceType}\n` +
+          `Quoted Price: ₦${Number(order.quotedPrice).toLocaleString()}\n` +
+          `Counter-Offer: ₦${Number(form.counterOffer).toLocaleString()}\n\n` +
+          form.message,
+      });
+      onNegotiated(res.data);
+      toast.success('Counter-offer sent! We will review and get back to you.');
+      onClose();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to send. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
+      <div className="bg-white w-full max-w-md shadow-xl" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 bg-rokit-dark">
+          <div>
+            <h2 className="font-black text-white text-lg">Negotiate Price</h2>
+            <p className="text-gray-400 text-xs mt-0.5">Order #{order._id.slice(-6).toUpperCase()} · {order.serviceType?.replace(/-/g, ' ')}</p>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-white"><X size={20} /></button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
+          {/* Pre-filled read-only info */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-rokit-dark mb-1">Your Email</label>
+              <input value={userEmail} readOnly className="form-input bg-gray-50 text-gray-500 cursor-not-allowed" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-rokit-dark mb-1">Quoted Price</label>
+              <input value={`₦${Number(order.quotedPrice).toLocaleString()}`} readOnly className="form-input bg-gray-50 text-rokit-orange font-semibold cursor-not-allowed" />
+            </div>
+          </div>
+
+          {/* Counter offer */}
+          <div>
+            <label className="block text-xs font-semibold text-rokit-dark mb-1">Your Counter-Offer (₦) *</label>
+            <input
+              type="number"
+              value={form.counterOffer}
+              onChange={e => setForm(p => ({ ...p, counterOffer: e.target.value }))}
+              className="form-input"
+              placeholder="e.g. 15000"
+              min="1"
+              required
+            />
+          </div>
+
+          {/* Explanation */}
+          <div>
+            <label className="block text-xs font-semibold text-rokit-dark mb-1">Reason / Explanation *</label>
+            <textarea
+              value={form.message}
+              onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
+              className="form-input"
+              rows={4}
+              placeholder="Explain your counter-offer — budget constraints, comparisons, project scope clarifications…"
+              required
+            />
+          </div>
+
+          <div className="flex gap-3 pt-1">
+            <button type="submit" disabled={submitting} className="btn-primary flex-1">
+              {submitting ? 'Sending…' : 'Send Negotiation Request'}
+            </button>
+            <button type="button" onClick={onClose} className="btn-outline flex-1">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export default function OrderDetail() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [order, setOrder] = useState(null);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
+  const [accepting, setAccepting] = useState(false);
+  const [negotiating, setNegotiating] = useState(false);
+
+  const handleNegotiated = (updatedOrder) => {
+    setOrder(updatedOrder);
+  };
 
   useEffect(() => {
     const controller = new AbortController();
     api.get(`/orders/${id}`, { signal: controller.signal })
       .then(res => { setOrder(res.data); })
-      .catch(() => { setError(true); });
+      .catch(err => {
+        // Ignore aborts caused by React Strict Mode double-invoking effects
+        if (err.code === 'ERR_CANCELED' || err.name === 'CanceledError' || err.name === 'AbortError') return;
+        const status = err.response?.status;
+        if (status === 403) setError('You do not have permission to view this order.');
+        else if (status === 404) setError('Order not found.');
+        else setError('Failed to load order. Please try again.');
+      });
     return () => controller.abort();
   }, [id]);
 
+  const handleAcceptPrice = async () => {
+    if (!window.confirm(`Accept quoted price of \u20a6${Number(order.quotedPrice).toLocaleString()}?`)) return;
+    setAccepting(true);
+    try {
+      const res = await api.post(`/orders/${id}/accept-price`);
+      setOrder(res.data);
+      toast.success('Price accepted! Our team will proceed with your order.');
+    } catch {
+      toast.error('Failed to accept price. Please try again.');
+    } finally {
+      setAccepting(false);
+    }
+  };
+
   if (error) return (
-    <div className="p-8 text-center">
-      <p className="text-rokit-body mb-4">Order not found.</p>
+    <div className="pt-24 p-8 text-center">
+      <AlertCircle className="mx-auto mb-3 text-red-400" size={40} />
+      <p className="text-rokit-body mb-4">{error}</p>
       <Link to="/portal" className="btn-primary">Back to Dashboard</Link>
     </div>
   );
@@ -31,7 +173,7 @@ export default function OrderDetail() {
   return (
     <>
       <Helmet><title>Order #{order._id.slice(-6).toUpperCase()} – Rokit Media</title></Helmet>
-      <div className="p-6 max-w-3xl mx-auto">
+      <div className="pt-24 pb-6 px-6 max-w-3xl mx-auto">
         <Link to="/portal" className="inline-flex items-center gap-2 text-rokit-orange hover:underline text-sm mb-6">
           <ArrowLeft size={16} /> Back to Dashboard
         </Link>
@@ -45,6 +187,39 @@ export default function OrderDetail() {
           </div>
           <StatusBadge status={order.status} />
         </div>
+
+        {/* Price Quote Banner */}
+        {order.priceStatus === 'quoted' && (
+          <div className="bg-rokit-orange/10 border-l-4 border-rokit-orange p-5 mb-8 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="font-black text-rokit-dark text-lg">Price Quote Ready</p>
+              <p className="text-rokit-body text-sm mt-0.5">Our team has quoted <strong className="text-rokit-orange text-xl">₦{Number(order.quotedPrice).toLocaleString()}</strong> for this order.</p>
+              {order.adminNotes && <p className="text-sm text-rokit-body mt-1"><em>"{order.adminNotes}"</em></p>}
+            </div>
+            <div className="flex gap-3">
+              <button onClick={handleAcceptPrice} disabled={accepting} className="btn-primary">
+                {accepting ? 'Processing…' : '✓ Accept Price'}
+              </button>
+              <button onClick={() => setNegotiating(true)} className="btn-outline">Negotiate</button>
+            </div>
+          </div>
+        )}
+
+        {order.priceStatus === 'negotiating' && (
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-5 mb-8">
+            <p className="font-black text-rokit-dark text-lg">Counter-Offer Sent</p>
+            <p className="text-rokit-body text-sm mt-1">
+              Your counter-offer of <strong className="text-blue-600">₦{Number(order.customerBudget).toLocaleString()}</strong> has been received.
+              Our team will review and respond. Check back here for updates.
+            </p>
+          </div>
+        )}
+
+        {order.priceStatus === 'accepted' && (
+          <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-8">
+            <p className="text-green-700 font-semibold">✓ Price accepted – ₦{Number(order.quotedPrice).toLocaleString()}. Our team is now processing your order.</p>
+          </div>
+        )}
 
         {/* Details */}
         <div className="grid sm:grid-cols-2 gap-4 mb-8">
@@ -88,6 +263,15 @@ export default function OrderDetail() {
           </div>
         )}
       </div>
+
+      {negotiating && (
+        <NegotiateModal
+          order={order}
+          userEmail={user?.email || order.customer?.email || ''}
+          onClose={() => setNegotiating(false)}
+          onNegotiated={handleNegotiated}
+        />
+      )}
     </>
   );
 }

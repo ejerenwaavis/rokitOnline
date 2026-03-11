@@ -11,7 +11,7 @@
 }
 
 @layer components {
-  .btn-primary { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-rokit-orange text-white font-semibold border-2 border-rokit-orange hover:bg-rokit-orange-dark hover:border-rokit-orange-dark transition-all duration-300 cursor-pointer; }
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-rokit-orange text-white font-semibold border-2 border-rokit-orange hover:bg-rokit-orange-dark hover:border-rokit-orange-dark hover:text-white transition-all duration-300 cursor-pointer; }
   .btn-outline { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent text-rokit-orange font-semibold border-2 border-rokit-orange hover:bg-rokit-orange hover:text-white transition-all duration-300 cursor-pointer; }
   .btn-gold { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent text-rokit-gold font-semibold border-2 border-rokit-gold hover:bg-rokit-gold hover:text-white transition-all duration-300 cursor-pointer; }
   .btn-white { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-rokit-dark font-semibold border-2 border-white hover:bg-transparent hover:text-white transition-all duration-300 cursor-pointer; }

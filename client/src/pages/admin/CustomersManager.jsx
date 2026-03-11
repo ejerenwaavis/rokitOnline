@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Search } from 'lucide-react';
+import { Search, ShieldCheck, ShieldOff } from 'lucide-react';
+import toast from 'react-hot-toast';
 import api from '../../utils/api';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
@@ -23,6 +24,19 @@ export default function CustomersManager() {
         c.email?.toLowerCase().includes(search.toLowerCase())
       )
     : customers;
+
+  const toggleRole = async (id, currentRole) => {
+    const newRole = currentRole === 'admin' ? 'customer' : 'admin';
+    const label = newRole === 'admin' ? 'promote to admin' : 'remove admin access';
+    if (!window.confirm(`Are you sure you want to ${label} for this user?`)) return;
+    try {
+      await api.patch(`/admin/customers/${id}/role`, { role: newRole });
+      setCustomers(prev => prev.map(c => c._id === id ? { ...c, role: newRole } : c));
+      toast.success(`User ${newRole === 'admin' ? 'promoted to admin' : 'demoted to customer'}.`);
+    } catch {
+      toast.error('Failed to update role.');
+    }
+  };
 
   return (
     <>
@@ -52,11 +66,12 @@ export default function CustomersManager() {
                   <th className="px-4 py-3">Phone</th>
                   <th className="px-4 py-3">Role</th>
                   <th className="px-4 py-3">Joined</th>
+                  <th className="px-4 py-3">Access</th>
                 </tr>
               </thead>
               <tbody>
                 {displayed.length === 0 ? (
-                  <tr><td colSpan={5} className="px-4 py-10 text-center text-rokit-body">No customers found.</td></tr>
+                  <tr><td colSpan={6} className="px-4 py-10 text-center text-rokit-body">No customers found.</td></tr>
                 ) : displayed.map((c, i) => (
                   <tr key={c._id} className={`border-t border-gray-100 ${i % 2 === 0 ? '' : 'bg-gray-50'}`}>
                     <td className="px-4 py-3 font-medium">{c.name}</td>
@@ -68,6 +83,19 @@ export default function CustomersManager() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-400">{new Date(c.createdAt).toLocaleDateString('en-NG')}</td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={() => toggleRole(c._id, c.role)}
+                        title={c.role === 'admin' ? 'Remove admin access' : 'Promote to admin'}
+                        className={`flex items-center gap-1 text-xs font-semibold px-2 py-1 transition-colors ${
+                          c.role === 'admin'
+                            ? 'text-red-500 hover:text-red-700'
+                            : 'text-rokit-orange hover:text-rokit-orange-dark'
+                        }`}
+                      >
+                        {c.role === 'admin' ? <><ShieldOff size={14} /> Demote</> : <><ShieldCheck size={14} /> Make Admin</>}
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

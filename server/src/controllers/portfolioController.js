@@ -33,11 +33,20 @@ const getPortfolioById = async (req, res) => {
 const createPortfolioItem = async (req, res) => {
   try {
     const data = { ...req.body };
+    // Parse comma-separated tags into an array
+    if (typeof data.tags === 'string') {
+      data.tags = data.tags.split(',').map(t => t.trim()).filter(Boolean);
+    }
+    // featured arrives as a string from FormData
+    if (data.featured !== undefined) {
+      data.featured = data.featured === 'true' || data.featured === true;
+    }
     if (req.files && req.files.length > 0) {
       data.images = req.files.map((f, i) => ({
         url: f.path,
         publicId: f.filename,
         isCover: i === 0,
+        type: f.mimetype.startsWith('video/') ? 'video' : 'image',
       }));
     }
     const item = await Portfolio.create(data);

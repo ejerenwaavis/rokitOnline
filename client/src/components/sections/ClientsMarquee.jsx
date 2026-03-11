@@ -2,12 +2,20 @@ import { useEffect, useRef, useState } from 'react';
 import api from '../../utils/api';
 
 const placeholderClients = [
-  { _id: '1', name: 'Client A', logoUrl: '/assets/images/rokit-logo.png' },
-  { _id: '2', name: 'Client B', logoUrl: '/assets/images/rokit-logo-lite.png' },
-  { _id: '3', name: 'Client C', logoUrl: '/assets/images/rokit-logo-white-2.png' },
-  { _id: '4', name: 'Client D', logoUrl: '/assets/images/rokit-logo.png' },
-  { _id: '5', name: 'Client E', logoUrl: '/assets/images/rokit-logo-lite.png' },
-  { _id: '6', name: 'Client F', logoUrl: '/assets/images/rokit-logo-white-2.png' },
+  { _id: '1',  name: 'Client 1',  logoUrl: '/assets/images/clients/1.png' },
+  { _id: '2',  name: 'Client 2',  logoUrl: '/assets/images/clients/2.png' },
+  { _id: '3',  name: 'Client 3',  logoUrl: '/assets/images/clients/3.png' },
+  { _id: '4',  name: 'Client 4',  logoUrl: '/assets/images/clients/4.png' },
+  { _id: '5',  name: 'Client 5',  logoUrl: '/assets/images/clients/5.png' },
+  { _id: '6',  name: 'Client 6',  logoUrl: '/assets/images/clients/6.png' },
+  { _id: '7',  name: 'Client 7',  logoUrl: '/assets/images/clients/7.png' },
+  { _id: '8',  name: 'Client 8',  logoUrl: '/assets/images/clients/8.png' },
+  { _id: '9',  name: 'Client 9',  logoUrl: '/assets/images/clients/9.png' },
+  { _id: '10', name: 'Client 10', logoUrl: '/assets/images/clients/10.png' },
+  { _id: '11', name: 'Client 11', logoUrl: '/assets/images/clients/11.png' },
+  { _id: '12', name: 'Client 12', logoUrl: '/assets/images/clients/12.png' },
+  { _id: '13', name: 'Client 13', logoUrl: '/assets/images/clients/13.png' },
+  { _id: '14', name: 'Client 14', logoUrl: '/assets/images/clients/14.png' },
 ];
 
 export default function ClientsMarquee() {
@@ -16,7 +24,7 @@ export default function ClientsMarquee() {
 
   useEffect(() => {
     const controller = new AbortController();
-    api.get('/admin/clients', { signal: controller.signal })
+    api.get('/clients', { signal: controller.signal })
       .then(res => { if (res.data?.length >= 3) setClients(res.data); })
       .catch(() => {});
     return () => controller.abort();

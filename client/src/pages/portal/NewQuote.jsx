@@ -46,7 +46,7 @@ export default function NewQuote() {
   return (
     <>
       <Helmet><title>Request a Quote – Rokit Media</title></Helmet>
-      <div className="p-6 max-w-2xl mx-auto">
+      <div className="pt-24 pb-6 px-6 max-w-2xl mx-auto">
         <h1 className="text-3xl font-black text-rokit-dark mb-2">Request a Quote</h1>
         <p className="text-rokit-body mb-8">Tell us about your project and we'll send you a detailed quotation within 24 hours.</p>
 

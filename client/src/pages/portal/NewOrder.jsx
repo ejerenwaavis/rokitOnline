@@ -111,7 +111,7 @@ export default function NewOrder() {
   return (
     <>
       <Helmet><title>New Job Order – Rokit Media</title></Helmet>
-      <div className="p-6 max-w-2xl mx-auto">
+      <div className="pt-24 pb-6 px-6 max-w-2xl mx-auto">
         <h1 className="text-3xl font-black text-rokit-dark mb-2">New Job Order</h1>
         <p className="text-rokit-body mb-8">Fill in the details below to submit your print or design job.</p>
 

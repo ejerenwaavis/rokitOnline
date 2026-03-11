@@ -69,6 +69,7 @@ export default function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="orders" element={<OrdersManager />} />
           <Route path="portfolio" element={<PortfolioManager />} />
+          <Route path="portfolio-manager" element={<Navigate to="/admin/portfolio" replace />} />
           <Route path="tutorials" element={<TutorialsManager />} />
           <Route path="services" element={<ServicesManager />} />
           <Route path="customers" element={<CustomersManager />} />
@@ -89,11 +90,16 @@ export default function App() {
           <Route path="/cookies" element={<Cookies />} />
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
+          <Route path="/login" element={<Navigate to="/auth/login" replace />} />
+          <Route path="/register" element={<Navigate to="/auth/register" replace />} />
           <Route path="/portal" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/portal/orders/new" element={<ProtectedRoute><NewOrder /></ProtectedRoute>} />
           <Route path="/portal/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
           <Route path="/portal/quotes/new" element={<NewQuote />} />
           <Route path="/portal/designs/new" element={<ProtectedRoute><NewDesign /></ProtectedRoute>} />
+          <Route path="/portal/order" element={<Navigate to="/portal/orders/new" replace />} />
+          <Route path="/portal/quote" element={<Navigate to="/portal/quotes/new" replace />} />
+          <Route path="/portal/design" element={<Navigate to="/portal/designs/new" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

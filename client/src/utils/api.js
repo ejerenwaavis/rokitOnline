@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   timeout: 15000,
 });
 
@@ -12,14 +12,14 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401 globally
+// Handle 401 globally — only clear stored credentials, never force-redirect
+// (a hard redirect would kick unauthenticated users off public pages)
 api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
       localStorage.removeItem('rokit_token');
       localStorage.removeItem('rokit_user');
-      window.location.href = '/auth/login';
     }
     return Promise.reject(err);
   }

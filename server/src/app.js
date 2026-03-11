@@ -48,6 +48,7 @@ app.use('/api/orders',    require('./routes/orders'));
 app.use('/api/quotes',    require('./routes/quotes'));
 app.use('/api/designs',   require('./routes/designs'));
 app.use('/api/contact',   require('./routes/contact'));
+app.use('/api/clients',   require('./routes/clients'));
 app.use('/api/admin',     require('./routes/admin'));
 
 // Health check

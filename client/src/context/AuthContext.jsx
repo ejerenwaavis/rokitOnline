@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       setUser(data);
       return { success: true, data };
     } catch (err) {
-      return { success: false, message: err.response?.data?.message || 'Login failed' };
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
       setUser(data);
       return { success: true, data };
     } catch (err) {
-      return { success: false, message: err.response?.data?.message || 'Registration failed' };
+      throw err;
     } finally {
       setLoading(false);
     }

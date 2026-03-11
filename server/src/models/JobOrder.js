@@ -25,6 +25,9 @@ const jobOrderSchema = new mongoose.Schema({
   currency: { type: String, default: 'usd' },
   adminNotes: { type: String },
   customerNotes: { type: String },
+  quotedPrice: { type: Number },
+  customerBudget: { type: Number },
+  priceStatus: { type: String, enum: ['pending', 'quoted', 'accepted', 'negotiating'], default: 'pending' },
   timeline: [{
     status: String,
     note: String,

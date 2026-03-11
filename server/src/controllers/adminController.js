@@ -40,18 +40,82 @@ const getAllOrders = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   try {
-    const { status, adminNotes } = req.body;
-    const order = await JobOrder.findById(req.params.id);
+    const { status, adminNotes, quotedPrice } = req.body;
+    const order = await JobOrder.findById(req.params.id).populate('customer', 'name email');
     if (!order) return res.status(404).json({ message: 'Order not found' });
-    if (status) {
+
+    if (status && status !== order.status) {
       order.status = status;
       order.timeline.push({ status, note: adminNotes || `Status updated to ${status}` });
+      // Notify customer of status change
+      try {
+        const { orderStatusUpdateEmail } = require('../utils/emailTemplates');
+        await require('../config/email').sendMail({
+          to: order.customer.email,
+          subject: `Order Update: ${status} – Rokit Media`,
+          html: orderStatusUpdateEmail(order, order.customer),
+        });
+      } catch { /* non-blocking */ }
     }
+
     if (adminNotes) order.adminNotes = adminNotes;
+
+    if (quotedPrice && Number(quotedPrice) > 0) {
+      order.quotedPrice = Number(quotedPrice);
+      order.priceStatus = 'quoted';
+      order.timeline.push({ status: order.status, note: `Price quoted: ₦${Number(quotedPrice).toLocaleString()}` });
+      // Notify customer of price quote
+      try {
+        const { pricedQuoteEmail } = require('../utils/emailTemplates');
+        await require('../config/email').sendMail({
+          to: order.customer.email,
+          subject: `Price Quote Ready for Your Order – Rokit Media`,
+          html: pricedQuoteEmail(order, order.customer),
+        });
+      } catch { /* non-blocking */ }
+    }
+
     await order.save();
     res.json(order);
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+};
+
+// Admin accepts customer counter-offer
+const acceptOffer = async (req, res) => {
+  try {
+    const order = await JobOrder.findById(req.params.id).populate('customer', 'name email');
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+    if (order.priceStatus !== 'negotiating')
+      return res.status(400).json({ message: 'No counter-offer to accept on this order' });
+    const finalPrice = order.customerBudget;
+    order.priceStatus = 'accepted';
+    order.totalAmount = finalPrice;
+    order.timeline.push({ status: order.status, note: `Team accepted customer counter-offer of ₦${Number(finalPrice).toLocaleString()}` });
+    await order.save();
+    // Notify customer their counter was accepted
+    try {
+      const { offerAcceptedCustomerEmail } = require('../utils/emailTemplates');
+      await require('../config/email').sendMail({
+        to: order.customer.email,
+        subject: 'Counter-Offer Accepted – Rokit Media',
+        html: offerAcceptedCustomerEmail(order, order.customer),
+      });
+    } catch { /* non-blocking */ }
+    // Notify staff
+    try {
+      const staffEmail = process.env.JOBS_EMAIL || process.env.EMAIL_USER;
+      const { orderConfirmedStaffEmail } = require('../utils/emailTemplates');
+      await require('../config/email').sendMail({
+        to: staffEmail,
+        subject: `Order Confirmed – #${order._id.toString().slice(-6).toUpperCase()} – ₦${Number(finalPrice).toLocaleString()}`,
+        html: orderConfirmedStaffEmail(order, order.customer, finalPrice),
+      });
+    } catch { /* non-blocking */ }
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -88,8 +152,27 @@ const getAllDesigns = async (req, res) => {
 // Customers
 const getAllCustomers = async (req, res) => {
   try {
-    const customers = await User.find({ role: 'customer' }).select('-password').sort({ createdAt: -1 });
+    // Return all users (admins and customers) so admin panel can manage roles
+    const customers = await User.find().select('-password').sort({ createdAt: -1 });
     res.json(customers);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const updateUserRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+    if (!['customer', 'admin'].includes(role)) {
+      return res.status(400).json({ message: 'Invalid role. Must be customer or admin.' });
+    }
+    // Prevent removing your own admin access
+    if (req.params.id === req.user._id.toString()) {
+      return res.status(400).json({ message: 'You cannot change your own role.' });
+    }
+    const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true }).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json(user);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -142,4 +225,4 @@ const deleteClient = async (req, res) => {
   }
 };
 
-module.exports = { getStats, getAllOrders, updateOrder, getAllQuotations, updateQuotation, getAllDesigns, getAllCustomers, getMessages, markMessageRead, getClients, createClient, deleteClient };
+module.exports = { getStats, getAllOrders, updateOrder, acceptOffer, getAllQuotations, updateQuotation, getAllDesigns, getAllCustomers, updateUserRole, getMessages, markMessageRead, getClients, createClient, deleteClient };

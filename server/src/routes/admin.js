@@ -4,8 +4,8 @@ const { protect } = require('../middleware/auth');
 const { adminOnly } = require('../middleware/adminCheck');
 const upload = require('../middleware/upload');
 const {
-  getStats, getAllOrders, updateOrder, getAllQuotations, updateQuotation,
-  getAllDesigns, getAllCustomers, getMessages, markMessageRead,
+  getStats, getAllOrders, updateOrder, acceptOffer, getAllQuotations, updateQuotation,
+  getAllDesigns, getAllCustomers, updateUserRole, getMessages, markMessageRead,
   getClients, createClient, deleteClient,
 } = require('../controllers/adminController');
 const { createPortfolioItem, updatePortfolioItem, deletePortfolioItem } = require('../controllers/portfolioController');
@@ -19,6 +19,7 @@ router.get('/stats', getStats);
 // Orders
 router.get('/orders', getAllOrders);
 router.patch('/orders/:id', updateOrder);
+router.post('/orders/:id/accept-offer', acceptOffer);
 
 // Quotations
 router.get('/quotations', getAllQuotations);
@@ -44,6 +45,7 @@ router.delete('/services/:id', deleteService);
 
 // Customers
 router.get('/customers', getAllCustomers);
+router.patch('/customers/:id/role', updateUserRole);
 
 // Contact messages
 router.get('/messages', getMessages);

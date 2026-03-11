@@ -12,6 +12,7 @@ const portfolioSchema = new mongoose.Schema({
     url: { type: String, required: true },
     publicId: String,
     isCover: { type: Boolean, default: false },
+    type: { type: String, enum: ['image', 'video'], default: 'image' },
   }],
   tags: [String],
   client: { type: String },

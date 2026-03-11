@@ -34,7 +34,7 @@ export default function PortalDashboard() {
   return (
     <>
       <Helmet><title>My Dashboard – Rokit Media</title></Helmet>
-      <div className="p-6 max-w-6xl mx-auto">
+      <div className="pt-24 pb-6 px-6 max-w-6xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-black text-rokit-dark">Welcome, {user?.name?.split(' ')[0]} 👋</h1>
           <p className="text-rokit-body mt-1">Here's an overview of your Rokit Media account.</p>
@@ -66,9 +66,9 @@ export default function PortalDashboard() {
         <div className="bg-rokit-tan p-6 mb-10">
           <h2 className="font-black text-rokit-dark text-lg mb-4">Quick Actions</h2>
           <div className="flex flex-wrap gap-3">
-            <Link to="/portal/order" className="btn-primary inline-flex items-center gap-2"><Plus size={16} /> New Job Order</Link>
-            <Link to="/portal/quote" className="btn-outline inline-flex items-center gap-2"><Plus size={16} /> Request Quote</Link>
-            <Link to="/portal/design" className="btn-gold inline-flex items-center gap-2"><Plus size={16} /> Design Request</Link>
+            <Link to="/portal/orders/new" className="btn-primary inline-flex items-center gap-2"><Plus size={16} /> New Job Order</Link>
+            <Link to="/portal/quotes/new" className="btn-outline inline-flex items-center gap-2"><Plus size={16} /> Request Quote</Link>
+            <Link to="/portal/designs/new" className="btn-gold inline-flex items-center gap-2"><Plus size={16} /> Design Request</Link>
           </div>
         </div>
 
@@ -77,7 +77,7 @@ export default function PortalDashboard() {
           <h2 className="text-xl font-black text-rokit-dark mb-4">Job Orders</h2>
           {orders.length === 0 ? (
             <div className="bg-gray-50 text-center py-10 text-rokit-body">
-              No orders yet. <Link to="/portal/order" className="text-rokit-orange font-semibold hover:underline">Place your first order</Link>.
+              No orders yet. <Link to="/portal/orders/new" className="text-rokit-orange font-semibold hover:underline">Place your first order</Link>.
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -116,7 +116,7 @@ export default function PortalDashboard() {
           <h2 className="text-xl font-black text-rokit-dark mb-4">Quotation Requests</h2>
           {quotes.length === 0 ? (
             <div className="bg-gray-50 text-center py-10 text-rokit-body">
-              No quotes yet. <Link to="/portal/quote" className="text-rokit-orange font-semibold hover:underline">Request a quote</Link>.
+              No quotes yet. <Link to="/portal/quotes/new" className="text-rokit-orange font-semibold hover:underline">Request a quote</Link>.
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -149,7 +149,7 @@ export default function PortalDashboard() {
           <h2 className="text-xl font-black text-rokit-dark mb-4">Design Requests</h2>
           {designs.length === 0 ? (
             <div className="bg-gray-50 text-center py-10 text-rokit-body">
-              No design requests yet. <Link to="/portal/design" className="text-rokit-orange font-semibold hover:underline">Submit one</Link>.
+              No design requests yet. <Link to="/portal/designs/new" className="text-rokit-orange font-semibold hover:underline">Submit one</Link>.
             </div>
           ) : (
             <div className="overflow-x-auto">

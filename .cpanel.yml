@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export APPDIR=${HOME}/rokitOnline/server
+    - export NODEPATH=${HOME}/nodevenv/rokitOnline/server/22/bin/activate
+    - source ${NODEPATH} && cd ${APPDIR} && npm install --production

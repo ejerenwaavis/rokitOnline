@@ -14,6 +14,8 @@ export default defineConfig({
     },
   },
   build: {
+    outDir: 'public_html',
+    emptyOutDir: true,
     rollupOptions: {
       output: {
         manualChunks: {

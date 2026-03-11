@@ -55,16 +55,17 @@ app.use('/api/admin',     require('./routes/admin'));
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
-// Serve frontend static files in production
-if (process.env.NODE_ENV === 'production') {
-  const frontendPath = path.join(__dirname, '../../client/public_html');
+// Serve frontend static files (always — works in both dev and production on server)
+const frontendPath = path.join(__dirname, '../../client/public_html');
+const fs = require('fs');
+if (fs.existsSync(frontendPath)) {
   app.use(express.static(frontendPath));
   // React Router catch-all — serve index.html for any non-API route
   app.get('*', (req, res) => {
     res.sendFile(path.join(frontendPath, 'index.html'));
   });
 } else {
-  // 404 handler for dev (API only)
+  // Dev: no build present, just return 404 for unknown routes
   app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
 }
 

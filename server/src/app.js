@@ -55,11 +55,11 @@ app.use('/api/admin',     require('./routes/admin'));
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
-// Request logger — logs every request with timestamp so we can debug routing
+// Request logger — logs every request to stderr so it appears in cPanel's stderr.log
 app.use((req, res, next) => {
   const start = Date.now();
   res.on('finish', () => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} → ${res.statusCode} (${Date.now() - start}ms)`);
+    process.stderr.write(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} → ${res.statusCode} (${Date.now() - start}ms)\n`);
   });
   next();
 });
@@ -85,4 +85,6 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Rokit Media API running on port ${PORT}`));
+app.listen(PORT, () => {
+  process.stderr.write(`[${new Date().toISOString()}] 🚀 Rokit Media API running on port ${PORT}\n`);
+});

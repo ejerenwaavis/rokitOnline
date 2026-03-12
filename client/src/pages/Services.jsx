@@ -6,7 +6,7 @@ import api from '../utils/api';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 
 const fallback = [
-  { _id: '1', slug: 'large-format-prints', name: 'Large Format Prints', shortDescription: 'Eye-catching banners, posters, and billboards at scale.', features: ['High-resolution output', 'Weather-resistant materials', 'Nationwide delivery'], startingPrice: 15000, turnaround: '3–5 business days' },
+  { _id: '1', slug: 'large-format', name: 'Large Format Prints', shortDescription: 'Eye-catching banners, posters, and billboards at scale.', features: ['High-resolution output', 'Weather-resistant materials', 'Nationwide delivery'], startingPrice: 15000, turnaround: '3–5 business days' },
   { _id: '2', slug: 'graphic-design', name: 'Graphic Design', shortDescription: 'Creative visuals for print, digital, and social media.', features: ['Unlimited revisions', 'Print-ready files', 'Brand consistency'], startingPrice: 10000, turnaround: '2–4 business days' },
   { _id: '3', slug: 'branding', name: 'Branding', shortDescription: 'Complete brand identity systems from logo to brand guide.', features: ['Logo design', 'Color & typography system', 'Brand guidelines document'], startingPrice: 50000, turnaround: '5–10 business days' },
   { _id: '4', slug: 'web-design', name: 'Web Design', shortDescription: 'Modern, responsive websites and landing pages.', features: ['Mobile-first design', 'SEO optimization', 'CMS integration'], startingPrice: 80000, turnaround: '10–20 business days' },

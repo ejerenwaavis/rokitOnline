@@ -5,6 +5,51 @@ import { CheckCircle, ArrowLeft, Clock, DollarSign } from 'lucide-react';
 import api from '../utils/api';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 
+const fallbackBySlug = {
+  'large-format': {
+    name: 'Large Format Prints',
+    shortDescription: 'High-impact large-format printing for outdoor and indoor displays.',
+    features: ['Billboard printing', 'Outdoor signage', 'Exhibition displays', 'Vehicle wraps', 'Wall graphics', 'UV-resistant inks'],
+    startingPrice: 5000,
+    turnaround: '2–5 business days',
+  },
+  'idea-creation': {
+    name: 'Idea Creation',
+    shortDescription: 'Creative concepts and visual strategies that set your brand apart.',
+    features: ['Brand concept development', 'Campaign ideation', 'Visual strategy', 'Mood boards', 'Creative briefs', 'Market research'],
+    startingPrice: 20000,
+    turnaround: '3–7 business days',
+  },
+  'graphic-design': {
+    name: 'Graphic Design',
+    shortDescription: 'Professional graphic design for print and digital media.',
+    features: ['Flyers & posters', 'Business cards', 'Brochures', 'Magazines', 'Packaging design', 'Social media graphics'],
+    startingPrice: 3500,
+    turnaround: '1–3 business days',
+  },
+  'branding': {
+    name: 'Branding',
+    shortDescription: 'Complete brand identity development for businesses of all sizes.',
+    features: ['Logo design', 'Brand guidelines', 'Color system', 'Typography', 'Brand stationery', 'Brand audit'],
+    startingPrice: 30000,
+    turnaround: '5–10 business days',
+  },
+  'web-design': {
+    name: 'Web Design',
+    shortDescription: 'Modern, responsive websites that convert visitors into customers.',
+    features: ['Responsive design', 'E-commerce', 'CMS integration', 'SEO optimization', 'Performance optimised', 'Hosting setup'],
+    startingPrice: 80000,
+    turnaround: '7–21 business days',
+  },
+  'roll-up-banners': {
+    name: 'Roll-Up Banners',
+    shortDescription: 'Portable, professional roll-up banners for events and exhibitions.',
+    features: ['Full-colour print', 'Hardware included', 'Standard & custom sizes', 'Carry bag included', 'Quick turnaround', 'Durable materials'],
+    startingPrice: 8000,
+    turnaround: '1–3 business days',
+  },
+};
+
 export default function ServiceDetail() {
   const { slug } = useParams();
   const [service, setService] = useState(null);
@@ -16,10 +61,16 @@ export default function ServiceDetail() {
         if (res.data && typeof res.data === 'object' && res.data.name) {
           setService(res.data);
         } else {
-          setError(true);
+          const fbk = fallbackBySlug[slug];
+          if (fbk) setService({ _id: slug, slug, ...fbk });
+          else setError(true);
         }
       })
-      .catch(() => setError(true));
+      .catch(() => {
+        const fbk = fallbackBySlug[slug];
+        if (fbk) setService({ _id: slug, slug, ...fbk });
+        else setError(true);
+      });
   }, [slug]);
 
   if (error) return (

@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import api from '../../utils/api';
 
 const serviceTypes = [
-  { value: 'large-format-prints', label: 'Large Format Prints' },
+  { value: 'large-format', label: 'Large Format Prints' },
   { value: 'graphic-design', label: 'Graphic Design' },
   { value: 'branding', label: 'Branding' },
   { value: 'web-design', label: 'Web Design' },

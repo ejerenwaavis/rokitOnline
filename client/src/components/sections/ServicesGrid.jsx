@@ -4,7 +4,7 @@ import { Printer, Palette, Globe, Layers, Lightbulb, AlignLeft } from 'lucide-re
 import api from '../../utils/api';
 
 const fallbackServices = [
-  { _id: '1', slug: 'large-format-prints', name: 'Large Format Prints', shortDescription: 'High-quality banners, billboards, and large-scale printing for maximum visual impact.', icon: 'Printer' },
+  { _id: '1', slug: 'large-format', name: 'Large Format Prints', shortDescription: 'High-quality banners, billboards, and large-scale printing for maximum visual impact.', icon: 'Printer' },
   { _id: '2', slug: 'graphic-design', name: 'Graphic Design', shortDescription: 'Creative visual solutions — from social media assets to print-ready artworks.', icon: 'Palette' },
   { _id: '3', slug: 'branding', name: 'Branding', shortDescription: 'Build a memorable identity with cohesive brand strategy and visual systems.', icon: 'Layers' },
   { _id: '4', slug: 'web-design', name: 'Web Design', shortDescription: 'Modern, fast, and responsive websites that convert visitors into customers.', icon: 'Globe' },

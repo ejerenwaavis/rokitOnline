@@ -201,8 +201,6 @@ const orderConfirmedStaffEmail = (order, customer, finalPrice) => `
 </body>
 </html>`;
 
-module.exports = { orderConfirmationEmail, contactReplyEmail, newContactNotificationEmail, newOrderNotificationEmail, orderStatusUpdateEmail, pricedQuoteEmail, offerAcceptedCustomerEmail, orderConfirmedStaffEmail, resetPasswordEmail };
-
 const resetPasswordEmail = (user, resetUrl) => `
 <!DOCTYPE html>
 <html>
@@ -227,3 +225,5 @@ const resetPasswordEmail = (user, resetUrl) => `
   <div class="footer">© ${new Date().getFullYear()} Rokit Media · 4 Gbogan-Ibadan Road, Osogbo, Osun State</div>
 </body>
 </html>`;
+
+module.exports = { orderConfirmationEmail, contactReplyEmail, newContactNotificationEmail, newOrderNotificationEmail, orderStatusUpdateEmail, pricedQuoteEmail, offerAcceptedCustomerEmail, orderConfirmedStaffEmail, resetPasswordEmail };

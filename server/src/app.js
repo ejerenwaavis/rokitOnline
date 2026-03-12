@@ -55,6 +55,15 @@ app.use('/api/admin',     require('./routes/admin'));
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 
+// Request logger — logs every request with timestamp so we can debug routing
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} → ${res.statusCode} (${Date.now() - start}ms)`);
+  });
+  next();
+});
+
 // Serve frontend static files (always — works in both dev and production on server)
 const frontendPath = path.join(__dirname, '../../client/public_html');
 const fs = require('fs');

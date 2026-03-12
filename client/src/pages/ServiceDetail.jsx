@@ -12,7 +12,13 @@ export default function ServiceDetail() {
 
   useEffect(() => {
     api.get(`/services/${slug}`)
-      .then(res => setService(res.data))
+      .then(res => {
+        if (res.data && typeof res.data === 'object' && res.data.name) {
+          setService(res.data);
+        } else {
+          setError(true);
+        }
+      })
       .catch(() => setError(true));
   }, [slug]);
 

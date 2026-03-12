@@ -22,7 +22,9 @@ export default function Tutorials() {
     api.get(`/tutorials?${params}`, { signal: controller.signal })
       .then(res => {
         setLoading(false);
-        setTutorials(res.data?.tutorials || res.data || []);
+        const tuts = Array.isArray(res.data?.tutorials) ? res.data.tutorials
+          : Array.isArray(res.data) ? res.data : [];
+        setTutorials(tuts);
         setTotalPages(res.data?.totalPages || 1);
       })
       .catch(() => { setLoading(false); setTutorials([]); });

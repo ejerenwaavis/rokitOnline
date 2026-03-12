@@ -26,7 +26,7 @@ export default function Gallery() {
     const url = activeCategory ? `/portfolio?category=${activeCategory}` : '/portfolio';
     const controller = new AbortController();
     api.get(url, { signal: controller.signal })
-      .then(res => { setLoading(false); setItems(res.data || []); })
+      .then(res => { setLoading(false); setItems(Array.isArray(res.data) ? res.data : []); })
       .catch(() => { setLoading(false); setItems([]); });
     return () => controller.abort();
   }, [activeCategory]);

@@ -34,7 +34,7 @@ export default function TutorialPost() {
   return (
     <>
       <Helmet>
-        <title>{tutorial.title} – Rokit Media Tutorials</title>
+        <title>{`${tutorial.title} – Rokit Media Tutorials`}</title>
         <meta name="description" content={tutorial.title} />
       </Helmet>
 

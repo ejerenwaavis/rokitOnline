@@ -28,7 +28,7 @@ export default function ServiceDetail() {
   return (
     <>
       <Helmet>
-        <title>{service.name} – Rokit Media</title>
+        <title>{`${service.name} – Rokit Media`}</title>
         <meta name="description" content={service.shortDescription} />
       </Helmet>
 

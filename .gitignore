@@ -37,3 +37,6 @@ Thumbs.db
 
 # Misc
 *.local
+
+server/package-lock.json
+client/package-lock.json

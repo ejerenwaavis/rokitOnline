@@ -134,7 +134,10 @@ export default function OrderDetail() {
   useEffect(() => {
     const controller = new AbortController();
     api.get(`/orders/${id}`, { signal: controller.signal })
-      .then(res => { setOrder(res.data); })
+      .then(res => {
+        if (res.data && typeof res.data === 'object' && res.data._id) setOrder(res.data);
+        else setError('Failed to load order. Please try again.');
+      })
       .catch(err => {
         // Ignore aborts caused by React Strict Mode double-invoking effects
         if (err.code === 'ERR_CANCELED' || err.name === 'CanceledError' || err.name === 'AbortError') return;

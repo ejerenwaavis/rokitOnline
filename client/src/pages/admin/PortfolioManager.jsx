@@ -183,7 +183,7 @@ export default function PortfolioManager() {
   useEffect(() => {
     const controller = new AbortController();
     api.get('/portfolio', { signal: controller.signal })
-      .then(res => { setItems(res.data || []); setLoading(false); })
+      .then(res => { setItems(Array.isArray(res.data) ? res.data : []); setLoading(false); })
       .catch(() => { setLoading(false); });
     return () => controller.abort();
   }, []);

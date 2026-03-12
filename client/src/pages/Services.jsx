@@ -18,7 +18,7 @@ export default function Services() {
   const [services, setServices] = useState(null);
 
   useEffect(() => {
-    api.get('/services').then(res => setServices(res.data?.length ? res.data : fallback)).catch(() => setServices(fallback));
+    api.get('/services').then(res => setServices(Array.isArray(res.data) && res.data.length ? res.data : fallback)).catch(() => setServices(fallback));
   }, []);
 
   return (

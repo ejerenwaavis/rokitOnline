@@ -84,7 +84,7 @@ export default function ServicesManager() {
   useEffect(() => {
     const controller = new AbortController();
     api.get('/services', { signal: controller.signal })
-      .then(res => { setServices(res.data || []); setLoading(false); })
+      .then(res => { setServices(Array.isArray(res.data) ? res.data : []); setLoading(false); })
       .catch(() => { setLoading(false); });
     return () => controller.abort();
   }, []);

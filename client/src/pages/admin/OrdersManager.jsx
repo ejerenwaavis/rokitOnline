@@ -143,7 +143,7 @@ export default function OrdersManager() {
   useEffect(() => {
     const controller = new AbortController();
     api.get('/admin/orders', { signal: controller.signal })
-      .then(res => { setOrders(res.data || []); setLoading(false); })
+      .then(res => { setOrders(Array.isArray(res.data) ? res.data : []); setLoading(false); })
       .catch(() => { setLoading(false); });
     return () => controller.abort();
   }, []);

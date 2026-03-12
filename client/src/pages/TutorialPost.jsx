@@ -13,7 +13,10 @@ export default function TutorialPost() {
   useEffect(() => {
     const controller = new AbortController();
     api.get(`/tutorials/${slug}`, { signal: controller.signal })
-      .then(res => { setTutorial(res.data); })
+      .then(res => {
+        if (res.data && typeof res.data === 'object' && res.data.title) setTutorial(res.data);
+        else setError(true);
+      })
       .catch(() => { setError(true); });
     return () => controller.abort();
   }, [slug]);

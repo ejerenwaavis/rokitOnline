@@ -13,7 +13,7 @@ export default function CustomersManager() {
   useEffect(() => {
     const controller = new AbortController();
     api.get('/admin/customers', { signal: controller.signal })
-      .then(res => { setCustomers(res.data || []); setLoading(false); })
+      .then(res => { setCustomers(Array.isArray(res.data) ? res.data : []); setLoading(false); })
       .catch(() => { setLoading(false); });
     return () => controller.abort();
   }, []);

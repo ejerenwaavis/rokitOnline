@@ -130,7 +130,7 @@ export default function TutorialsManager() {
   useEffect(() => {
     const controller = new AbortController();
     api.get('/tutorials/admin/all', { signal: controller.signal })
-      .then(res => { setTutorials(res.data || []); setLoading(false); })
+      .then(res => { setTutorials(Array.isArray(res.data) ? res.data : []); setLoading(false); })
       .catch(() => { setLoading(false); });
     return () => controller.abort();
   }, []);

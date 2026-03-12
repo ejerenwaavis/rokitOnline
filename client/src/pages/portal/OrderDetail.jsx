@@ -215,6 +215,11 @@ export default function OrderDetail() {
               Your counter-offer of <strong className="text-blue-600">₦{Number(order.customerBudget).toLocaleString()}</strong> has been received.
               Our team will review and respond. Check back here for updates.
             </p>
+            {order.quotedPrice > 0 && (
+              <p className="text-rokit-body text-sm mt-1">
+                Latest quoted price from our team: <strong className="text-rokit-dark">₦{Number(order.quotedPrice).toLocaleString()}</strong>
+              </p>
+            )}
           </div>
         )}
 

@@ -201,4 +201,29 @@ const orderConfirmedStaffEmail = (order, customer, finalPrice) => `
 </body>
 </html>`;
 
-module.exports = { orderConfirmationEmail, contactReplyEmail, newContactNotificationEmail, newOrderNotificationEmail, orderStatusUpdateEmail, pricedQuoteEmail, offerAcceptedCustomerEmail, orderConfirmedStaffEmail };
+module.exports = { orderConfirmationEmail, contactReplyEmail, newContactNotificationEmail, newOrderNotificationEmail, orderStatusUpdateEmail, pricedQuoteEmail, offerAcceptedCustomerEmail, orderConfirmedStaffEmail, resetPasswordEmail };
+
+const resetPasswordEmail = (user, resetUrl) => `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>
+  body { font-family: Arial, sans-serif; color: #333; margin: 0; padding: 0; }
+  .header { background: #FF9729; padding: 30px 20px; text-align: center; }
+  .header h1 { color: #fff; margin: 0; font-size: 24px; }
+  .content { padding: 30px 20px; }
+  .footer { background: #222; color: #aaa; text-align: center; padding: 20px; font-size: 12px; }
+  .btn { display: inline-block; background: #FF9729; color: #fff; padding: 14px 28px; text-decoration: none; border-radius: 4px; margin-top: 16px; font-weight: bold; }
+</style></head>
+<body>
+  <div class="header"><h1>Reset Your Password</h1></div>
+  <div class="content">
+    <p>Hi <strong>${user.name}</strong>,</p>
+    <p>We received a request to reset your password for your Rokit Media account.</p>
+    <p>Click the button below to set a new password. This link expires in <strong>1 hour</strong>.</p>
+    <a href="${resetUrl}" class="btn">Reset Password</a>
+    <p style="margin-top:24px;color:#888;font-size:13px;">If you didn't request this, you can safely ignore this email — your password won't change.</p>
+    <p style="color:#888;font-size:13px;">Or copy this link into your browser:<br><a href="${resetUrl}" style="color:#FF9729;">${resetUrl}</a></p>
+  </div>
+  <div class="footer">© ${new Date().getFullYear()} Rokit Media · 4 Gbogan-Ibadan Road, Osogbo, Osun State</div>
+</body>
+</html>`;

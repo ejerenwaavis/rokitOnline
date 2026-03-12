@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const { data } = await api.post('/auth/login', { email, password });
+      if (!data?.token) throw new Error('Invalid response from server');
       localStorage.setItem('rokit_token', data.token);
       localStorage.setItem('rokit_user', JSON.stringify(data));
       setUser(data);

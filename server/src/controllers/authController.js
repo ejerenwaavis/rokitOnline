@@ -1,5 +1,8 @@
+const crypto = require('crypto');
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
+const { sendMail } = require('../config/email');
+const { resetPasswordEmail } = require('../utils/emailTemplates');
 
 // POST /api/auth/register
 const register = async (req, res) => {
@@ -46,4 +49,58 @@ const getMe = async (req, res) => {
   res.json({ _id: req.user._id, name: req.user.name, email: req.user.email, role: req.user.role, phone: req.user.phone });
 };
 
-module.exports = { register, login, getMe };
+// POST /api/auth/forgot-password
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: 'Email is required' });
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+    // Always respond 200 so we don't reveal whether an account exists
+    if (!user) return res.json({ message: 'If that email exists, a reset link has been sent.' });
+
+    const token = crypto.randomBytes(32).toString('hex');
+    user.resetPasswordToken = crypto.createHash('sha256').update(token).digest('hex');
+    user.resetPasswordExpires = Date.now() + 60 * 60 * 1000; // 1 hour
+    await user.save({ validateBeforeSave: false });
+
+    const resetUrl = `${process.env.CLIENT_URL}/auth/reset-password/${token}`;
+    await sendMail({
+      to: user.email,
+      subject: 'Reset your Rokit Media password',
+      html: resetPasswordEmail(user, resetUrl),
+    });
+
+    res.json({ message: 'If that email exists, a reset link has been sent.' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// POST /api/auth/reset-password/:token
+const resetPassword = async (req, res) => {
+  try {
+    const { password } = req.body;
+    if (!password || password.length < 8)
+      return res.status(400).json({ message: 'Password must be at least 8 characters' });
+
+    const hashed = crypto.createHash('sha256').update(req.params.token).digest('hex');
+    const user = await User.findOne({
+      resetPasswordToken: hashed,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) return res.status(400).json({ message: 'Reset link is invalid or has expired.' });
+
+    user.password = password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.json({ message: 'Password updated successfully. You can now log in.' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { register, login, getMe, forgotPassword, resetPassword };

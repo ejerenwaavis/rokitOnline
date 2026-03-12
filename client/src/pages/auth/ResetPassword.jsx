@@ -1,17 +1,14 @@
 import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../context/AuthContext';
+import api from '../../utils/api';
 
-export default function Login() {
-  const { login, isAdmin } = useAuth();
+export default function ResetPassword() {
+  const { token } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || '/portal';
-
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ password: '', confirmPassword: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -19,13 +16,21 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (form.password !== form.confirmPassword) {
+      toast.error('Passwords do not match.');
+      return;
+    }
+    if (form.password.length < 8) {
+      toast.error('Password must be at least 8 characters.');
+      return;
+    }
     setLoading(true);
     try {
-      await login(form.email, form.password);
-      toast.success('Welcome back!');
-      navigate(isAdmin() ? '/admin' : from, { replace: true });
+      await api.post(`/auth/reset-password/${token}`, { password: form.password });
+      toast.success('Password updated! Please log in.');
+      navigate('/auth/login');
     } catch (err) {
-      toast.error(err?.response?.data?.message || 'Invalid email or password.');
+      toast.error(err?.response?.data?.message || 'Reset link is invalid or has expired.');
     } finally {
       setLoading(false);
     }
@@ -33,33 +38,19 @@ export default function Login() {
 
   return (
     <>
-      <Helmet><title>Log In – Rokit Media</title></Helmet>
+      <Helmet><title>Reset Password – Rokit Media</title></Helmet>
       <div className="min-h-screen bg-rokit-tan flex items-center justify-center px-4 py-20">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <img src="/assets/images/rokit-logo.png" alt="Rokit Media" className="h-12 mx-auto mb-4" />
-            <h1 className="text-3xl font-black text-rokit-dark">Log In</h1>
-            <p className="text-rokit-body mt-1">Welcome back! Sign in to your account.</p>
+            <h1 className="text-3xl font-black text-rokit-dark">Set New Password</h1>
+            <p className="text-rokit-body mt-1">Choose a strong password for your account.</p>
           </div>
 
           <div className="bg-white p-8 shadow-lg">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-semibold text-rokit-dark mb-1">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                  autoComplete="email"
-                  className="form-input"
-                  placeholder="your@email.com"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-rokit-dark mb-1">Password</label>
+                <label className="block text-sm font-semibold text-rokit-dark mb-1">New Password</label>
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -67,9 +58,9 @@ export default function Login() {
                     value={form.password}
                     onChange={handleChange}
                     required
-                    autoComplete="current-password"
+                    autoComplete="new-password"
                     className="form-input pr-10"
-                    placeholder="Your password"
+                    placeholder="Min. 8 characters"
                   />
                   <button
                     type="button"
@@ -81,19 +72,28 @@ export default function Login() {
                 </div>
               </div>
 
+              <div>
+                <label className="block text-sm font-semibold text-rokit-dark mb-1">Confirm Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  required
+                  autoComplete="new-password"
+                  className="form-input"
+                  placeholder="Repeat your password"
+                />
+              </div>
+
               <button type="submit" disabled={loading} className="btn-primary w-full justify-center">
-                {loading ? 'Signing in…' : 'Sign In'}
+                {loading ? 'Updating…' : 'Update Password'}
               </button>
 
-              <p className="text-center text-sm">
-                <Link to="/auth/forgot-password" className="text-rokit-body hover:text-rokit-orange transition-colors">Forgot password?</Link>
+              <p className="text-center text-sm text-rokit-body">
+                <Link to="/auth/login" className="text-rokit-orange font-semibold hover:underline">Back to Login</Link>
               </p>
             </form>
-
-            <p className="text-center text-sm text-rokit-body mt-6">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-rokit-orange font-semibold hover:underline">Create one</Link>
-            </p>
           </div>
         </div>
       </div>

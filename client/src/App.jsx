@@ -21,6 +21,8 @@ import Health from './pages/Health';
 // Auth
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 
 // Portal
 import Dashboard from './pages/portal/Dashboard';
@@ -92,6 +94,8 @@ export default function App() {
           <Route path="/health" element={<Health />} />
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
+          <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+          <Route path="/auth/reset-password/:token" element={<ResetPassword />} />
           <Route path="/login" element={<Navigate to="/auth/login" replace />} />
           <Route path="/register" element={<Navigate to="/auth/register" replace />} />
           <Route path="/portal" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

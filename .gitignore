@@ -38,5 +38,12 @@ Thumbs.db
 # Misc
 *.local
 
+# cPanel / server-managed files (DO NOT track these)
+client/public_html/.htaccess
+client/public_html/.well-known/
+server/tmp/
+server/package-lock.json
+client/package-lock.json
+
 server/package-lock.json
 client/package-lock.json

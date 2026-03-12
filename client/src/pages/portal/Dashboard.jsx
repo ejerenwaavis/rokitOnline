@@ -21,9 +21,9 @@ export default function PortalDashboard() {
       api.get('/quotes/mine', { signal: controller.signal }),
       api.get('/designs/mine', { signal: controller.signal }),
     ]).then(([o, q, d]) => {
-      setOrders(o.data || []);
-      setQuotes(q.data || []);
-      setDesigns(d.data || []);
+      setOrders(Array.isArray(o.data) ? o.data : []);
+      setQuotes(Array.isArray(q.data) ? q.data : []);
+      setDesigns(Array.isArray(d.data) ? d.data : []);
       setLoading(false);
     }).catch(() => { setLoading(false); });
     return () => controller.abort();
@@ -36,7 +36,7 @@ export default function PortalDashboard() {
       <Helmet><title>My Dashboard – Rokit Media</title></Helmet>
       <div className="pt-24 pb-6 px-6 max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-black text-rokit-dark">Welcome, {user?.name?.split(' ')[0]} 👋</h1>
+          <h1 className="text-3xl font-black text-rokit-dark">Welcome, {user?.name?.split(' ')?.[0] ?? 'back'} 👋</h1>
           <p className="text-rokit-body mt-1">Here's an overview of your Rokit Media account.</p>
         </div>
 

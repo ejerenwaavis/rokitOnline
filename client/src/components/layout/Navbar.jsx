@@ -126,7 +126,7 @@ export default function Navbar() {
           {user ? (
             <div className="relative group">
               <button className={`flex items-center gap-2 text-sm transition-colors ${iconColor}`}>
-                <User size={15} /> {user.name.split(' ')[0]}
+                <User size={15} /> {user.name?.split(' ')[0] ?? 'Account'}
                 <ChevronDown size={12} className="opacity-60" />
               </button>
               <div className="absolute right-0 top-full bg-rokit-dark/95 backdrop-blur-md min-w-44 shadow-2xl rounded-lg overflow-hidden ring-1 ring-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 mt-1">

@@ -53,7 +53,7 @@ export default function Health() {
             <div className="flex items-center justify-between border border-gray-100 rounded p-4">
               <span className="text-sm text-rokit-body">Server time</span>
               <span className="text-sm font-semibold text-rokit-dark">
-                {new Date(data.timestamp).toLocaleString('en-NG')}
+                {data.timestamp ? new Date(data.timestamp).toLocaleString() : '—'}
               </span>
             </div>
           )}

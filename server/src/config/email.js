@@ -11,8 +11,11 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendMail = async ({ to, subject, html }) => {
+  // Build from address safely — avoid shell-unsafe angle brackets in env vars
+  const fromName = process.env.EMAIL_FROM_NAME || 'Rokit Media';
+  const fromAddr = process.env.EMAIL_USER;
   return transporter.sendMail({
-    from: process.env.EMAIL_FROM,
+    from: `"${fromName}" <${fromAddr}>`,
     to,
     subject,
     html,

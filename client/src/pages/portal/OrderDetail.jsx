@@ -220,7 +220,7 @@ export default function OrderDetail() {
 
         {order.priceStatus === 'accepted' && (
           <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-8">
-            <p className="text-green-700 font-semibold">✓ Price accepted – ₦{Number(order.quotedPrice).toLocaleString()}. Our team is now processing your order.</p>
+            <p className="text-green-700 font-semibold">✓ Price accepted – ₦{Number(order.totalAmount || order.quotedPrice).toLocaleString()}. Our team is now processing your order.</p>
           </div>
         )}
 

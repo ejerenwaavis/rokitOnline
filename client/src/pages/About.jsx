@@ -18,23 +18,18 @@ export default function About() {
       </Helmet>
 
       {/* Hero */}
-      <div
-        className="relative h-72 md:h-96 bg-cover bg-center flex items-end"
-        style={{ backgroundImage: "url('/assets/images/about-cover.jpg')" }}
-      >
-        <div className="absolute inset-0 bg-rokit-dark/70" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 pb-12 w-full">
-          <p className="text-rokit-orange font-semibold uppercase tracking-widest text-sm mb-1">Who We Are</p>
-          <h1 className="text-5xl font-black text-white">About Rokit Media</h1>
-        </div>
+      <div className="bg-gray-50 border-b border-gray-100 pt-32 pb-14 text-center">
+        <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">Who We Are</p>
+        <h1 className="text-5xl font-bold text-rokit-dark mb-4">About Rokit Media</h1>
+        <p className="text-rokit-body max-w-xl mx-auto">Nigeria's trusted creative agency for printing, branding, and design since 2014.</p>
       </div>
 
       {/* Mission / Vision */}
       <section className="bg-white py-20">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <p className="text-rokit-orange font-semibold uppercase tracking-widest text-sm mb-2">Our Story</p>
-            <h2 className="text-4xl font-black text-rokit-dark mb-6">Creating Visual Impact Since 2014</h2>
+            <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">Our Story</p>
+            <h2 className="text-4xl font-bold text-rokit-dark mb-6">Creating Visual Impact Since 2014</h2>
             <p className="text-rokit-body leading-relaxed mb-4">
               Rokit Media is a full-service creative and printing agency headquartered in Osogbo, Osun State, Nigeria.
               We specialise in large format printing, graphic design, branding, web design, roll-up banners, and
@@ -52,20 +47,20 @@ export default function About() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-rokit-tan p-6">
-              <h4 className="text-rokit-orange font-black text-xl mb-2">Our Mission</h4>
+            <div className="bg-gray-50 border border-gray-100 rounded-xl p-6">
+              <h4 className="text-rokit-orange font-bold text-xl mb-2">Our Mission</h4>
               <p className="text-rokit-body text-sm leading-relaxed">
                 To deliver high-quality, impactful creative and printing services that drive growth for every client.
               </p>
             </div>
-            <div className="bg-rokit-orange p-6">
-              <h4 className="text-white font-black text-xl mb-2">Our Vision</h4>
+            <div className="bg-rokit-orange rounded-xl p-6">
+              <h4 className="text-white font-bold text-xl mb-2">Our Vision</h4>
               <p className="text-white/90 text-sm leading-relaxed">
                 To be the most trusted creative agency across West Africa by 2030.
               </p>
             </div>
-            <div className="bg-rokit-dark p-6 col-span-2">
-              <h4 className="text-rokit-gold font-black text-xl mb-2">Our Values</h4>
+            <div className="bg-rokit-dark rounded-xl p-6 col-span-2">
+              <h4 className="text-rokit-gold font-bold text-xl mb-2">Our Values</h4>
               <div className="flex flex-wrap gap-2 mt-2">
                 {['Creativity', 'Excellence', 'Integrity', 'Speed', 'Customer Focus'].map(v => (
                   <span key={v} className="bg-white/10 text-white text-xs px-3 py-1 rounded-full">{v}</span>
@@ -77,7 +72,7 @@ export default function About() {
       </section>
 
       {/* CEO */}
-      <section className="bg-rokit-tan py-20">
+      <section className="bg-gray-50 py-20">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
           <div className="relative">
             <img
@@ -85,14 +80,14 @@ export default function About() {
               alt="Okorite Isokariari – CEO, Rokit Media"
               className="w-full max-w-sm mx-auto object-cover shadow-2xl"
             />
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-rokit-orange text-white px-6 py-3 text-center w-72">
-              <p className="font-black text-lg">Okorite Isokariari</p>
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-rokit-orange text-white px-6 py-3 text-center w-72 rounded-lg">
+              <p className="font-bold text-lg">Okorite Isokariari</p>
               <p className="text-sm text-white/80">Founder & CEO</p>
             </div>
           </div>
           <div className="pt-12 md:pt-0">
-            <p className="text-rokit-orange font-semibold uppercase tracking-widest text-sm mb-2">Leadership</p>
-            <h2 className="text-4xl font-black text-rokit-dark mb-6">A Word From Our CEO</h2>
+            <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">Leadership</p>
+            <h2 className="text-4xl font-bold text-rokit-dark mb-6">A Word From Our CEO</h2>
             <blockquote className="border-l-4 border-rokit-orange pl-5 text-rokit-body italic leading-relaxed mb-6">
               "We started Rokit Media with one goal in mind — to give every business in Nigeria access to
               world-class creative and printing excellence. Today, that dream is alive in every banner we print,

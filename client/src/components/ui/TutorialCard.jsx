@@ -7,8 +7,8 @@ export default function TutorialCard({ tutorial }) {
     : '';
 
   return (
-    <Link to={`/tutorials/${tutorial.slug}`} className="group block bg-white border border-gray-100 hover:shadow-lg transition-shadow duration-300">
-      <div className="overflow-hidden aspect-[16/9] bg-rokit-tan">
+    <Link to={`/tutorials/${tutorial.slug}`} className="group block bg-white border border-gray-100 rounded-xl hover:shadow-lg hover:border-rokit-orange/20 transition-all duration-300 overflow-hidden">
+      <div className="overflow-hidden aspect-[16/9] bg-gray-100">
         <img
           src={thumb}
           alt={tutorial.title}
@@ -17,7 +17,7 @@ export default function TutorialCard({ tutorial }) {
       </div>
       <div className="p-5">
         {tutorial.category && (
-          <span className="text-xs font-bold uppercase tracking-widest text-rokit-orange mb-2 block">
+          <span className="text-xs font-medium tracking-[0.15em] uppercase text-rokit-orange mb-2 block">
             {tutorial.category}
           </span>
         )}

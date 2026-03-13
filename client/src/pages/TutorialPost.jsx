@@ -22,8 +22,8 @@ export default function TutorialPost() {
   }, [slug]);
 
   if (error) return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-rokit-tan">
-      <h2 className="text-2xl font-black mb-4">Tutorial Not Found</h2>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+      <h2 className="text-2xl font-bold mb-4">Tutorial Not Found</h2>
       <Link to="/tutorials" className="btn-primary">Back to Tutorials</Link>
     </div>
   );
@@ -41,16 +41,16 @@ export default function TutorialPost() {
         <meta name="description" content={tutorial.title} />
       </Helmet>
 
-      <div className="bg-rokit-dark pt-32 pb-16">
+      <div className="bg-gray-50 border-b border-gray-100 pt-32 pb-14">
         <div className="max-w-4xl mx-auto px-4">
-          <Link to="/tutorials" className="inline-flex items-center gap-2 text-rokit-orange hover:underline text-sm mb-6">
+          <Link to="/tutorials" className="inline-flex items-center gap-2 text-rokit-body hover:text-rokit-orange text-sm mb-6">
             <ArrowLeft size={16} /> All Tutorials
           </Link>
           {tutorial.category && (
-            <span className="text-xs font-bold uppercase tracking-widest text-rokit-orange mb-3 block">{tutorial.category}</span>
+            <span className="text-xs font-medium tracking-[0.15em] uppercase text-rokit-orange mb-3 block">{tutorial.category}</span>
           )}
-          <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4">{tutorial.title}</h1>
-          <div className="flex items-center gap-4 text-gray-400 text-sm">
+          <h1 className="text-4xl md:text-5xl font-bold text-rokit-dark leading-tight mb-4">{tutorial.title}</h1>
+          <div className="flex items-center gap-4 text-rokit-body text-sm">
             {dateStr && <span className="flex items-center gap-1"><Calendar size={14} /> {dateStr}</span>}
             <span className="flex items-center gap-1"><Eye size={14} /> {tutorial.views || 0} views</span>
           </div>
@@ -58,7 +58,7 @@ export default function TutorialPost() {
       </div>
 
       {tutorial.thumbnail && (
-        <div className="bg-rokit-tan">
+        <div className="bg-gray-50">
           <div className="max-w-4xl mx-auto">
             <img src={tutorial.thumbnail} alt={tutorial.title} className="w-full max-h-80 object-cover" />
           </div>

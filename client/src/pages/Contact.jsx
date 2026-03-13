@@ -44,10 +44,10 @@ export default function Contact() {
       </Helmet>
 
       {/* Hero */}
-      <div className="bg-rokit-dark pt-32 pb-16 text-center">
-        <p className="text-rokit-orange font-semibold uppercase tracking-widest text-sm mb-2">Reach Out</p>
-        <h1 className="text-5xl font-black text-white mb-4">Contact Us</h1>
-        <p className="text-gray-400 max-w-xl mx-auto">
+      <div className="bg-gray-50 border-b border-gray-100 pt-32 pb-14 text-center">
+        <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">Reach Out</p>
+        <h1 className="text-5xl font-bold text-rokit-dark mb-4">Contact Us</h1>
+        <p className="text-rokit-body max-w-xl mx-auto">
           Have a project in mind? We're ready to help. Drop us a message or give us a call.
         </p>
       </div>
@@ -56,10 +56,10 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-16">
           {/* Contact Form */}
           <div>
-            <h2 className="text-3xl font-black text-rokit-dark mb-8">Send Us a Message</h2>
+            <h2 className="text-3xl font-bold text-rokit-dark mb-8">Send Us a Message</h2>
             {sent ? (
-              <div className="bg-rokit-green/10 border border-rokit-green/30 p-8 text-center">
-                <p className="text-2xl font-black text-rokit-green mb-2">Message Sent!</p>
+              <div className="bg-rokit-green/10 border border-rokit-green/30 rounded-xl p-8 text-center">
+                <p className="text-2xl font-bold text-rokit-green mb-2">Message Sent!</p>
                 <p className="text-rokit-body">Thank you for reaching out. Our team will respond within 24 hours.</p>
                 <button onClick={() => { setSent(false); setForm({ name: '', email: '', phone: '', subject: '', message: '' }); }} className="mt-6 btn-outline">
                   Send Another
@@ -100,14 +100,14 @@ export default function Contact() {
 
           {/* Info Panel */}
           <div>
-            <h2 className="text-3xl font-black text-rokit-dark mb-8">Our Office</h2>
+            <h2 className="text-3xl font-bold text-rokit-dark mb-8">Our Office</h2>
             <div className="space-y-6 mb-10">
               {contactInfo.map((item) => {
                 const ItemIcon = item.icon;
                 return (
                   <div key={item.label} className="flex gap-4">
-                    <div className="w-12 h-12 bg-rokit-orange flex items-center justify-center shrink-0">
-                      <ItemIcon size={20} className="text-white" />
+                    <div className="w-10 h-10 bg-rokit-orange/10 rounded-full flex items-center justify-center shrink-0">
+                      <ItemIcon size={18} className="text-rokit-orange" />
                     </div>
                     <div>
                       <p className="font-bold text-rokit-dark text-sm">{item.label}</p>
@@ -119,7 +119,7 @@ export default function Contact() {
             </div>
 
             {/* Google Maps iframe */}
-            <div className="aspect-video w-full">
+            <div className="aspect-video w-full overflow-hidden rounded-xl">
               <iframe
                 title="Rokit Media Office Location"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.3!2d4.561!3d7.771!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwNDYnMTUuNiJOIDTCsDMzJzM5LjYiRQ!5e0!3m2!1sen!2sng!4v1600000000000!5m2!1sen!2sng"

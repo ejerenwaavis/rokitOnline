@@ -53,10 +53,10 @@ export default function Gallery() {
       </Helmet>
 
       {/* Hero */}
-      <div className="bg-rokit-dark pt-32 pb-16 text-center">
-        <p className="text-rokit-orange font-semibold uppercase tracking-widest text-sm mb-2">Our Portfolio</p>
-        <h1 className="text-5xl font-black text-white mb-4">Gallery</h1>
-        <p className="text-gray-400 max-w-xl mx-auto">
+      <div className="bg-gray-50 border-b border-gray-100 pt-32 pb-14 text-center">
+        <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">Our Portfolio</p>
+        <h1 className="text-5xl font-bold text-rokit-dark mb-4">Gallery</h1>
+        <p className="text-rokit-body max-w-xl mx-auto">
           A curated showcase of creative and printing work delivered for brands across Nigeria.
         </p>
       </div>
@@ -68,10 +68,10 @@ export default function Gallery() {
             <button
               key={cat.value}
               onClick={() => handleCategoryChange(cat.value)}
-              className={`shrink-0 px-5 py-2 text-sm font-semibold transition-all duration-200 ${
+              className={`shrink-0 px-5 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
                 activeCategory === cat.value
                   ? 'bg-rokit-orange text-white'
-                  : 'bg-rokit-tan text-rokit-body hover:bg-rokit-orange/10'
+                  : 'bg-white border border-gray-200 text-rokit-body hover:border-rokit-orange/40 hover:text-rokit-dark'
               }`}
             >
               {cat.label}
@@ -93,7 +93,7 @@ export default function Gallery() {
                 (item.images || []).map((img, imgIdx) => (
                   <div
                     key={`${item._id}-${imgIdx}`}
-                    className="break-inside-avoid group relative overflow-hidden cursor-pointer bg-rokit-tan"
+                    className="break-inside-avoid group relative overflow-hidden cursor-pointer rounded-xl bg-gray-100"
                     onClick={() => openLightbox(itemIdx, imgIdx)}
                   >
                     <img

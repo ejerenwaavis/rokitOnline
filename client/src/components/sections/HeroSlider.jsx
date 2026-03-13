@@ -8,21 +8,21 @@ import 'swiper/css/effect-fade';
 
 const slides = [
   {
-    image: '/assets/images/1-no-text.jpg',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80&fit=crop',
     title: 'Prints That Make an Impact',
     subtitle: 'Large format, banners, stationery — crafted with precision and passion',
     cta: { label: 'Explore Services', to: '/services' },
     cta2: { label: 'Get a Quote', to: '/portal/quotes/new' },
   },
   {
-    image: '/assets/images/strip-1.jpg',
+    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1920&q=80&fit=crop',
     title: 'Your Brand, Elevated',
     subtitle: 'From concept to creation — branding that tells your story',
     cta: { label: 'View Our Work', to: '/gallery' },
     cta2: { label: 'Start a Project', to: '/portal/orders/new' },
   },
   {
-    image: '/assets/images/strip-2.jpg',
+    image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=1920&q=80&fit=crop',
     title: 'Design with Love',
     subtitle: 'Every pixel, every line — crafted to represent your vision perfectly',
     cta: { label: 'Our Portfolio', to: '/gallery' },

@@ -29,10 +29,10 @@ export default function Services() {
       </Helmet>
 
       {/* Page Hero */}
-      <div className="bg-rokit-dark pt-32 pb-16 text-center">
-        <p className="text-rokit-orange font-semibold uppercase tracking-widest text-sm mb-2">What We Offer</p>
-        <h1 className="text-5xl font-black text-white mb-4">Our Services</h1>
-        <p className="text-gray-400 max-w-xl mx-auto">
+      <div className="bg-gray-50 border-b border-gray-100 pt-32 pb-14 text-center">
+        <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">What We Offer</p>
+        <h1 className="text-5xl font-bold text-rokit-dark mb-4">Our Services</h1>
+        <p className="text-rokit-body max-w-xl mx-auto">
           From concept to delivery — we have everything your brand needs to look and communicate its best.
         </p>
       </div>
@@ -51,10 +51,10 @@ export default function Services() {
                 >
                   {/* Text */}
                   <div className={idx % 2 === 1 ? 'md:col-start-2' : ''}>
-                    <p className="text-rokit-orange text-sm font-bold uppercase tracking-widest mb-2">
+                    <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-2">
                       0{idx + 1}
                     </p>
-                    <h2 className="text-3xl font-black text-rokit-dark mb-4">{service.name}</h2>
+                    <h2 className="text-3xl font-bold text-rokit-dark mb-4">{service.name}</h2>
                     <p className="text-rokit-body leading-relaxed mb-6">{service.shortDescription}</p>
                     {service.features?.length > 0 && (
                       <ul className="space-y-2 mb-6">
@@ -79,10 +79,10 @@ export default function Services() {
                   </div>
 
                   {/* Visual tile */}
-                  <div className={`bg-rokit-tan aspect-video flex items-center justify-center ${idx % 2 === 1 ? 'md:col-start-1' : ''}`}>
+                  <div className={`bg-gray-50 border border-gray-100 rounded-xl aspect-video flex items-center justify-center ${idx % 2 === 1 ? 'md:col-start-1' : ''}`}>
                     <div className="text-center px-8">
-                      <div className="text-7xl font-black text-rokit-orange/20 mb-2">0{idx + 1}</div>
-                      <p className="text-2xl font-black text-rokit-dark">{service.name}</p>
+                      <div className="text-7xl font-bold text-rokit-orange/20 mb-2">0{idx + 1}</div>
+                      <p className="text-2xl font-bold text-rokit-dark">{service.name}</p>
                       {service.turnaround && (
                         <p className="text-sm text-rokit-body mt-2">Turnaround: {service.turnaround}</p>
                       )}
@@ -97,7 +97,7 @@ export default function Services() {
 
       {/* CTA */}
       <div className="bg-rokit-orange py-12 text-center">
-        <h3 className="text-3xl font-black text-white mb-4">Not Sure Which Service You Need?</h3>
+        <h3 className="text-3xl font-bold text-white mb-4">Not Sure Which Service You Need?</h3>
         <p className="text-white/90 mb-6">Tell us about your project and we'll recommend the perfect solution.</p>
         <Link to="/portal/quote" className="btn-white">Request a Free Quote</Link>
       </div>

@@ -43,10 +43,10 @@ export default function Tutorials() {
       </Helmet>
 
       {/* Hero */}
-      <div className="bg-rokit-dark pt-32 pb-16 text-center">
-        <p className="text-rokit-orange font-semibold uppercase tracking-widest text-sm mb-2">Knowledge Hub</p>
-        <h1 className="text-5xl font-black text-white mb-4">Tutorials & Tips</h1>
-        <p className="text-gray-400 max-w-xl mx-auto">
+      <div className="bg-gray-50 border-b border-gray-100 pt-32 pb-14 text-center">
+        <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">Knowledge Hub</p>
+        <h1 className="text-5xl font-bold text-rokit-dark mb-4">Tutorials & Tips</h1>
+        <p className="text-rokit-body max-w-xl mx-auto">
           Practical guides, design tips, and industry insights from our creative team.
         </p>
       </div>
@@ -59,8 +59,8 @@ export default function Tutorials() {
               <button
                 key={cat}
                 onClick={() => { setActiveCategory(cat); setPage(1); }}
-                className={`shrink-0 px-4 py-2 text-sm font-semibold capitalize transition-all ${
-                  activeCategory === cat ? 'bg-rokit-orange text-white' : 'bg-rokit-tan text-rokit-body hover:bg-rokit-orange/10'
+                className={`shrink-0 px-4 py-2 text-sm font-medium capitalize rounded-full transition-all duration-200 ${
+                  activeCategory === cat ? 'bg-rokit-orange text-white' : 'bg-white border border-gray-200 text-rokit-body hover:border-rokit-orange/40 hover:text-rokit-dark'
                 }`}
               >
                 {cat}
@@ -74,14 +74,14 @@ export default function Tutorials() {
               placeholder="Search tutorials…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="pl-9 pr-4 py-2 border border-gray-200 text-sm focus:outline-none focus:border-rokit-orange w-56"
+              className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-rokit-orange w-56"
             />
           </div>
         </div>
       </div>
 
       {/* Grid */}
-      <section className="bg-rokit-tan py-16">
+      <section className="bg-gray-50 py-16">
         <div className="max-w-7xl mx-auto px-4">
           {loading ? (
             <LoadingSpinner center />
@@ -100,8 +100,8 @@ export default function Tutorials() {
                 <button
                   key={i + 1}
                   onClick={() => setPage(i + 1)}
-                  className={`w-10 h-10 font-semibold text-sm transition-all ${
-                    page === i + 1 ? 'bg-rokit-orange text-white' : 'bg-white text-rokit-body hover:bg-rokit-orange/10'
+                  className={`w-10 h-10 font-medium text-sm rounded-lg transition-all duration-200 ${
+                    page === i + 1 ? 'bg-rokit-orange text-white' : 'bg-white border border-gray-200 text-rokit-body hover:border-rokit-orange/40'
                   }`}
                 >
                   {i + 1}

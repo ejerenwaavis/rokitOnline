@@ -30,34 +30,33 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // These pages have a light background at the top (no full-width dark hero),
-  // so use dark nav links when the navbar is transparent.
-  const lightTopPages = ['/auth/', '/portal'];
-  const isLightTop = lightTopPages.some(p => location.pathname.startsWith(p));
+  // Only the homepage has a dark full-screen hero — all other pages have light bg.
+  // Transparent navbar: white links on homepage, dark links everywhere else.
   const isDark = scrolled;
+  const hasDarkHero = location.pathname === '/';
 
   // Link colour tokens
   const linkBase = isDark
     ? 'text-gray-600 hover:text-rokit-dark'
-    : !isLightTop
+    : hasDarkHero
       ? 'text-white/80 hover:text-white'
-      : 'text-rokit-dark/80 hover:text-rokit-dark';
+      : 'text-rokit-dark/70 hover:text-rokit-dark';
   const linkActive = 'text-rokit-orange';
   const loginColor = isDark
     ? 'text-gray-500 hover:text-rokit-dark'
-    : !isLightTop
+    : hasDarkHero
       ? 'text-white/70 hover:text-white'
-      : 'text-rokit-dark/70 hover:text-rokit-dark';
+      : 'text-rokit-dark/60 hover:text-rokit-dark';
   const iconColor = isDark
     ? 'text-gray-600 hover:text-rokit-dark'
-    : !isLightTop
+    : hasDarkHero
       ? 'text-white/80 hover:text-white'
-      : 'text-rokit-dark/80 hover:text-rokit-dark';
+      : 'text-rokit-dark/70 hover:text-rokit-dark';
   const hamburgerColor = isDark
     ? 'text-gray-600 hover:text-rokit-dark'
-    : !isLightTop
+    : hasDarkHero
       ? 'text-white/80 hover:text-white'
-      : 'text-rokit-dark/80 hover:text-rokit-dark';
+      : 'text-rokit-dark/70 hover:text-rokit-dark';
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
@@ -79,7 +78,7 @@ export default function Navbar() {
         {/* Logo — white on dark-hero pages, coloured on light-top pages */}
         <Link to="/" className="flex items-center">
           <img
-            src={(!isDark && !isLightTop) ? '/assets/images/rokit-logo-white.png' : '/assets/images/rokit-logo.png'}
+            src={(!isDark && hasDarkHero) ? '/assets/images/rokit-logo-white.png' : '/assets/images/rokit-logo.png'}
             alt="Rokit Media"
             className="h-6 w-auto transition-all duration-300"
           />

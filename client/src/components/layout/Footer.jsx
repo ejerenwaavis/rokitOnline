@@ -22,7 +22,7 @@ export default function Footer() {
   return (
     <footer>
       {/* Main footer */}
-      <div className="bg-rokit-dark text-gray-300">
+      <div className="bg-gray-50 border-t border-gray-100">
         {/* Top accent */}
         <div className="flex h-1">
           <div className="flex-1 bg-rokit-orange" />
@@ -36,11 +36,11 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link to="/">
-              <img src="/assets/images/rokit-logo-white.png" alt="Rokit Media" className="h-12 mb-4"
+              <img src="/assets/images/rokit-logo.png" alt="Rokit Media" className="h-10 mb-4"
                 onError={(e) => { e.target.style.display='none'; }}
               />
             </Link>
-            <p className="text-sm leading-relaxed text-gray-400 mb-6">
+            <p className="text-sm leading-relaxed text-rokit-body mb-6">
               Nigeria's leading print, branding, and design company based in Osogbo, Lagos & Port Harcourt. Quality, creativity, and integrity since 2016.
             </p>
             <div className="flex gap-3">
@@ -54,7 +54,7 @@ export default function Footer() {
                 const SocialIcon = item.icon;
                 return (
                   <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer"
-                    className="w-9 h-9 flex items-center justify-center border border-gray-600 text-rokit-gold hover:border-rokit-orange hover:text-rokit-orange hover:bg-rokit-orange/10 transition-all duration-300"
+                    className="w-9 h-9 flex items-center justify-center border border-gray-200 text-rokit-body rounded-full hover:border-rokit-orange hover:text-rokit-orange hover:bg-rokit-orange/10 transition-all duration-300"
                   >
                     <SocialIcon size={16} />
                   </a>
@@ -65,14 +65,14 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="text-white font-semibold text-sm uppercase tracking-widest mb-5 border-b border-rokit-orange pb-2">
+            <h4 className="text-rokit-dark font-semibold text-sm uppercase tracking-widest mb-5 border-b border-gray-200 pb-2">
               Our Services
             </h4>
             <ul className="space-y-2">
               {services.map((s) => (
                 <li key={s.to}>
-                  <Link to={s.to} className="text-sm text-gray-400 hover:text-rokit-orange transition-colors flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-rokit-orange rounded-full" />
+                  <Link to={s.to} className="text-sm text-rokit-body hover:text-rokit-orange transition-colors flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-rokit-orange/60 rounded-full" />
                     {s.label}
                   </Link>
                 </li>
@@ -82,14 +82,14 @@ export default function Footer() {
 
           {/* Quick links */}
           <div>
-            <h4 className="text-white font-semibold text-sm uppercase tracking-widest mb-5 border-b border-rokit-orange pb-2">
+            <h4 className="text-rokit-dark font-semibold text-sm uppercase tracking-widest mb-5 border-b border-gray-200 pb-2">
               Quick Links
             </h4>
             <ul className="space-y-2">
               {quickLinks.map((l) => (
                 <li key={l.to}>
-                  <Link to={l.to} className="text-sm text-gray-400 hover:text-rokit-orange transition-colors flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-rokit-orange rounded-full" />
+                  <Link to={l.to} className="text-sm text-rokit-body hover:text-rokit-orange transition-colors flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-rokit-orange/60 rounded-full" />
                     {l.label}
                   </Link>
                 </li>
@@ -99,26 +99,26 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-white font-semibold text-sm uppercase tracking-widest mb-5 border-b border-rokit-orange pb-2">
+            <h4 className="text-rokit-dark font-semibold text-sm uppercase tracking-widest mb-5 border-b border-gray-200 pb-2">
               Contact Us
             </h4>
             <ul className="space-y-4">
-              <li className="flex gap-3 text-sm text-gray-400">
+              <li className="flex gap-3 text-sm text-rokit-body">
                 <MapPin size={16} className="text-rokit-orange mt-0.5 shrink-0" />
                 <span>4 Gbogan-Ibadan Road, beside Sterling Bank, Ogo-Oluwa, Osogbo, Osun State</span>
               </li>
-              <li className="flex gap-3 text-sm text-gray-400">
+              <li className="flex gap-3 text-sm text-rokit-body">
                 <Phone size={16} className="text-rokit-orange mt-0.5 shrink-0" />
                 <div>
                   <a href="tel:+2347069035095" className="hover:text-rokit-orange block">0706 903 5095</a>
                   <a href="tel:+2349095503422" className="hover:text-rokit-orange block">0909 550 3422</a>
                 </div>
               </li>
-              <li className="flex gap-3 text-sm text-gray-400">
+              <li className="flex gap-3 text-sm text-rokit-body">
                 <Mail size={16} className="text-rokit-orange mt-0.5 shrink-0" />
                 <a href="mailto:rokitnow@gmail.com" className="hover:text-rokit-orange">rokitnow@gmail.com</a>
               </li>
-              <li className="flex gap-3 text-sm text-gray-400">
+              <li className="flex gap-3 text-sm text-rokit-body">
                 <Clock size={16} className="text-rokit-orange mt-0.5 shrink-0" />
                 <div>
                   <div>Mon–Fri: 09:00 – 21:00</div>
@@ -132,8 +132,8 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="bg-[#111] py-4 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+      <div className="bg-white border-t border-gray-100 py-4 px-4">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-rokit-body/70">
           <p>© {new Date().getFullYear()} Rokit Media. All rights reserved.</p>
           <div className="flex gap-4">
             <Link to="/privacy" className="hover:text-rokit-orange transition-colors">Privacy Policy</Link>

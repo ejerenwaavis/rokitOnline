@@ -27,10 +27,10 @@ export default function PortfolioPreview() {
   }, []);
 
   return (
-    <section className="bg-white py-20">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="bg-white py-24">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-14">
-          <p className="text-rokit-orange font-semibold uppercase tracking-widest text-sm mb-2">Our Work</p>
+          <p className="text-rokit-orange text-xs font-medium uppercase tracking-[0.15em] mb-3">Our Work</p>
           <h2 className="section-title">Featured Projects</h2>
           <div className="section-divider" />
           <p className="text-rokit-body max-w-xl mx-auto mt-4">
@@ -38,22 +38,22 @@ export default function PortfolioPreview() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {items.map((item) => {
             const badgeColor = categoryColors[item.category] || 'bg-gray-500';
             const imgUrl = item.images?.[0]?.url || '/assets/images/strip-1.jpg';
             return (
-              <div key={item._id} className="group relative overflow-hidden bg-rokit-dark aspect-[4/3]">
+              <div key={item._id} className="group relative overflow-hidden rounded-xl bg-rokit-dark aspect-[4/3]">
                 <img
                   src={imgUrl}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
-                  <span className={`text-xs font-bold text-white uppercase tracking-wider px-2 py-1 ${badgeColor} w-fit mb-2`}>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent flex flex-col justify-end p-5">
+                  <span className={`text-xs font-medium text-white uppercase tracking-wider px-2.5 py-1 rounded-full ${badgeColor} w-fit mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
                     {item.category?.replace(/-/g, ' ')}
                   </span>
-                  <h4 className="text-white font-bold text-lg leading-tight">{item.title}</h4>
+                  <h4 className="text-white font-semibold text-base leading-tight translate-y-2 group-hover:translate-y-0 transition-transform duration-300">{item.title}</h4>
                 </div>
               </div>
             );

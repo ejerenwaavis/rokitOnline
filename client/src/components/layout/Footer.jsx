@@ -23,8 +23,8 @@ export default function Footer() {
     <footer>
       {/* Main footer */}
       <div className="bg-rokit-dark text-gray-300">
-        {/* Colour strip */}
-        <div className="flex h-2">
+        {/* Top accent */}
+        <div className="flex h-1">
           <div className="flex-1 bg-rokit-orange" />
           <div className="flex-1 bg-rokit-gold" />
           <div className="flex-1 bg-rokit-green" />

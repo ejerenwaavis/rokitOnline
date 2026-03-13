@@ -11,15 +11,15 @@
 }
 
 @layer components {
-  .btn-primary { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-rokit-orange text-white font-semibold border-2 border-rokit-orange hover:bg-rokit-orange-dark hover:border-rokit-orange-dark hover:text-white transition-all duration-300 cursor-pointer; }
-  .btn-outline { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent text-rokit-orange font-semibold border-2 border-rokit-orange hover:bg-rokit-orange hover:text-white transition-all duration-300 cursor-pointer; }
-  .btn-gold { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent text-rokit-gold font-semibold border-2 border-rokit-gold hover:bg-rokit-gold hover:text-white transition-all duration-300 cursor-pointer; }
-  .btn-white { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-rokit-dark font-semibold border-2 border-white hover:bg-transparent hover:text-white transition-all duration-300 cursor-pointer; }
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-rokit-orange text-white font-medium rounded-lg border-2 border-rokit-orange hover:bg-rokit-orange-dark hover:border-rokit-orange-dark transition-all duration-200 cursor-pointer; }
+  .btn-outline { @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-transparent text-rokit-orange font-medium rounded-lg border-2 border-rokit-orange hover:bg-rokit-orange hover:text-white transition-all duration-200 cursor-pointer; }
+  .btn-gold { @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-transparent text-rokit-gold font-medium rounded-lg border-2 border-rokit-gold hover:bg-rokit-gold hover:text-white transition-all duration-200 cursor-pointer; }
+  .btn-white { @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-white text-rokit-dark font-medium rounded-lg border-2 border-white hover:bg-white/10 hover:text-white transition-all duration-200 cursor-pointer; }
   .section-title { @apply text-3xl md:text-4xl font-bold text-rokit-dark mb-3; }
   .section-subtitle { @apply text-rokit-body text-base md:text-lg mb-10; }
-  .section-divider { @apply w-16 h-1 bg-rokit-orange mx-auto mb-6; }
-  .card { @apply bg-white shadow-md hover:shadow-xl transition-shadow duration-300; }
-  .form-input { @apply w-full px-4 py-3 border border-gray-300 focus:border-rokit-orange focus:outline-none focus:ring-2 transition-colors duration-200 text-rokit-dark bg-white; }
+  .section-divider { @apply w-10 h-0.5 bg-rokit-orange/60 mx-auto mb-6; }
+  .card { @apply bg-white shadow-sm hover:shadow-lg rounded-xl transition-shadow duration-300; }
+  .form-input { @apply w-full px-4 py-3 border border-gray-200 rounded-lg focus:border-rokit-orange focus:outline-none focus:ring-2 focus:ring-rokit-orange/10 transition-colors duration-200 text-rokit-dark bg-white; }
   .form-label { @apply block text-sm font-medium text-rokit-dark mb-1; }
   .badge-status { @apply inline-block px-3 py-1 text-xs font-semibold rounded-full; }
 }

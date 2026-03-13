@@ -24,10 +24,10 @@ export default function ServicesGrid() {
   }, []);
 
   return (
-    <section className="bg-white py-20">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="bg-white py-24">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-14">
-          <p className="text-rokit-orange font-semibold uppercase tracking-widest text-sm mb-2">What We Do</p>
+          <p className="text-rokit-orange text-xs font-medium uppercase tracking-[0.15em] mb-3">What We Do</p>
           <h2 className="section-title">Our Services</h2>
           <div className="section-divider" />
           <p className="text-rokit-body max-w-xl mx-auto mt-4">
@@ -35,25 +35,25 @@ export default function ServicesGrid() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {services.map((service) => {
             const ServiceIcon = iconMap[service.icon] || Palette;
             return (
               <Link
                 key={service._id}
                 to={`/services/${service.slug}`}
-                className="group relative overflow-hidden bg-rokit-tan p-8 transition-all duration-300 hover:bg-rokit-orange hover:shadow-xl"
+                className="group bg-white border border-gray-100 rounded-xl p-7 hover:border-rokit-orange/20 hover:shadow-lg transition-all duration-300"
               >
-                <div className="w-14 h-14 flex items-center justify-center bg-rokit-orange text-white mb-5 group-hover:bg-white group-hover:text-rokit-orange transition-colors duration-300">
-                  <ServiceIcon size={26} />
+                <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-rokit-orange/10 text-rokit-orange mb-5 group-hover:bg-rokit-orange group-hover:text-white transition-colors duration-300">
+                  <ServiceIcon size={22} />
                 </div>
-                <h3 className="text-xl font-bold text-rokit-dark group-hover:text-white mb-3 transition-colors duration-300">
+                <h3 className="text-base font-semibold text-rokit-dark mb-2">
                   {service.name}
                 </h3>
-                <p className="text-rokit-body group-hover:text-white/90 text-sm leading-relaxed transition-colors duration-300">
+                <p className="text-rokit-body text-sm leading-relaxed mb-5">
                   {service.shortDescription}
                 </p>
-                <div className="mt-5 text-rokit-orange group-hover:text-white font-semibold text-sm flex items-center gap-1 transition-colors duration-300">
+                <div className="text-rokit-orange text-sm font-medium flex items-center gap-1">
                   Learn More <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
                 </div>
               </Link>

@@ -37,19 +37,27 @@ export default function Navbar() {
   const isDark = scrolled;
 
   // Link colour tokens
-  const linkBase = (isDark || !isLightTop)
-    ? 'text-white/80 hover:text-white'
-    : 'text-rokit-dark/80 hover:text-rokit-dark';
+  const linkBase = isDark
+    ? 'text-gray-600 hover:text-rokit-dark'
+    : !isLightTop
+      ? 'text-white/80 hover:text-white'
+      : 'text-rokit-dark/80 hover:text-rokit-dark';
   const linkActive = 'text-rokit-orange';
-  const loginColor = (isDark || !isLightTop)
-    ? 'text-white/70 hover:text-white'
-    : 'text-rokit-dark/70 hover:text-rokit-dark';
-  const iconColor = (isDark || !isLightTop)
-    ? 'text-white/80 hover:text-white'
-    : 'text-rokit-dark/80 hover:text-rokit-dark';
-  const hamburgerColor = (isDark || !isLightTop)
-    ? 'text-white/80 hover:text-white'
-    : 'text-rokit-dark/80 hover:text-rokit-dark';
+  const loginColor = isDark
+    ? 'text-gray-500 hover:text-rokit-dark'
+    : !isLightTop
+      ? 'text-white/70 hover:text-white'
+      : 'text-rokit-dark/70 hover:text-rokit-dark';
+  const iconColor = isDark
+    ? 'text-gray-600 hover:text-rokit-dark'
+    : !isLightTop
+      ? 'text-white/80 hover:text-white'
+      : 'text-rokit-dark/80 hover:text-rokit-dark';
+  const hamburgerColor = isDark
+    ? 'text-gray-600 hover:text-rokit-dark'
+    : !isLightTop
+      ? 'text-white/80 hover:text-white'
+      : 'text-rokit-dark/80 hover:text-rokit-dark';
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
@@ -63,15 +71,15 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
         isDark
-          ? 'bg-rokit-dark/95 backdrop-blur-md border-white/5 py-2'
-          : 'bg-transparent border-transparent py-4'
+          ? 'bg-white/95 backdrop-blur-sm shadow-sm border-gray-100 py-3'
+          : 'bg-transparent border-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo — white on dark-hero pages, coloured on light-top pages */}
         <Link to="/" className="flex items-center">
           <img
-            src={(isDark || !isLightTop) ? '/assets/images/rokit-logo-white.png' : '/assets/images/rokit-logo.png'}
+            src={(!isDark && !isLightTop) ? '/assets/images/rokit-logo-white.png' : '/assets/images/rokit-logo.png'}
             alt="Rokit Media"
             className="h-6 w-auto transition-all duration-300"
           />

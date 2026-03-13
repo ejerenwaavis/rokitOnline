@@ -34,10 +34,10 @@ export default function ClientsMarquee() {
   const doubled = [...clients, ...clients];
 
   return (
-    <section className="bg-rokit-tan py-14">
-      <div className="max-w-7xl mx-auto px-4 text-center mb-8">
-        <p className="text-rokit-orange font-semibold uppercase tracking-widest text-sm mb-1">Our Clients</p>
-        <h2 className="text-3xl font-black text-rokit-dark">Trusted by Growing Brands</h2>
+    <section className="bg-gray-50 py-14 border-t border-gray-100">
+      <div className="max-w-7xl mx-auto px-6 text-center mb-8">
+        <p className="text-rokit-orange text-xs font-medium uppercase tracking-[0.15em] mb-2">Our Clients</p>
+        <h2 className="text-3xl font-bold text-rokit-dark">Trusted by Growing Brands</h2>
       </div>
 
       <div className="overflow-hidden">

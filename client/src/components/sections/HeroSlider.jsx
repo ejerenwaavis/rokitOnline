@@ -55,11 +55,11 @@ export default function HeroSlider() {
               {/* Content */}
               <div className="relative z-10 max-w-7xl mx-auto px-4 w-full">
                 <div className="max-w-2xl">
-                  <div className="w-12 h-1 bg-rokit-orange mb-6" />
-                  <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-4">
+                  <div className="w-8 h-0.5 bg-rokit-orange mb-8" />
+                  <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight mb-5">
                     {slide.title}
                   </h1>
-                  <p className="text-lg md:text-xl text-gray-200 mb-8 font-light">
+                  <p className="text-base md:text-lg text-gray-300 mb-8 font-light max-w-lg">
                     {slide.subtitle}
                   </p>
                   <div className="flex flex-wrap gap-4">

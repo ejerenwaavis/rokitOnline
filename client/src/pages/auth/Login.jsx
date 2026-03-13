@@ -34,7 +34,7 @@ export default function Login() {
   return (
     <>
       <Helmet><title>Log In – Rokit Media</title></Helmet>
-      <div className="min-h-screen bg-rokit-tan flex items-center justify-center px-4 py-20">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-20">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <img src="/assets/images/rokit-logo.png" alt="Rokit Media" className="h-12 mx-auto mb-4" />
@@ -42,7 +42,7 @@ export default function Login() {
             <p className="text-rokit-body mt-1">Welcome back! Sign in to your account.</p>
           </div>
 
-          <div className="bg-white p-8 shadow-lg">
+          <div className="bg-white p-8 shadow-lg rounded-xl">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-rokit-dark mb-1">Email</label>

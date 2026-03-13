@@ -25,7 +25,7 @@ export default function ForgotPassword() {
   return (
     <>
       <Helmet><title>Forgot Password – Rokit Media</title></Helmet>
-      <div className="min-h-screen bg-rokit-tan flex items-center justify-center px-4 py-20">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-20">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <img src="/assets/images/rokit-logo.png" alt="Rokit Media" className="h-12 mx-auto mb-4" />
@@ -33,7 +33,7 @@ export default function ForgotPassword() {
             <p className="text-rokit-body mt-1">We'll send you a reset link by email.</p>
           </div>
 
-          <div className="bg-white p-8 shadow-lg">
+          <div className="bg-white p-8 shadow-lg rounded-xl">
             {sent ? (
               <div className="text-center space-y-4">
                 <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto">

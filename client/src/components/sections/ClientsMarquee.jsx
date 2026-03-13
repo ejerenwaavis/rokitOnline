@@ -56,7 +56,14 @@ export default function ClientsMarquee() {
                 src={client.logoUrl}
                 alt={client.name}
                 className="max-w-full max-h-full object-contain"
+                onError={e => {
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.nextSibling && (e.currentTarget.nextSibling.style.display = 'block');
+                }}
               />
+              <span className="hidden text-xs font-semibold text-rokit-dark/50 tracking-wide text-center leading-tight">
+                {client.name}
+              </span>
             </div>
           ))}
         </div>

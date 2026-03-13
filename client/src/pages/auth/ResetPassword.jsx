@@ -39,7 +39,7 @@ export default function ResetPassword() {
   return (
     <>
       <Helmet><title>Reset Password – Rokit Media</title></Helmet>
-      <div className="min-h-screen bg-rokit-tan flex items-center justify-center px-4 py-20">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-20">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <img src="/assets/images/rokit-logo.png" alt="Rokit Media" className="h-12 mx-auto mb-4" />
@@ -47,7 +47,7 @@ export default function ResetPassword() {
             <p className="text-rokit-body mt-1">Choose a strong password for your account.</p>
           </div>
 
-          <div className="bg-white p-8 shadow-lg">
+          <div className="bg-white p-8 shadow-lg rounded-xl">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-rokit-dark mb-1">New Password</label>

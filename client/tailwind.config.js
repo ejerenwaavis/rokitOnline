@@ -25,6 +25,7 @@ export default {
       fontFamily: {
         display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
         sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        mono: ['"Space Mono"', 'monospace'],
         poppins: ['Poppins', 'system-ui', 'sans-serif'],
       },
       animation: {

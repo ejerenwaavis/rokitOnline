@@ -226,4 +226,30 @@ const resetPasswordEmail = (user, resetUrl) => `
 </body>
 </html>`;
 
-module.exports = { orderConfirmationEmail, contactReplyEmail, newContactNotificationEmail, newOrderNotificationEmail, orderStatusUpdateEmail, pricedQuoteEmail, offerAcceptedCustomerEmail, orderConfirmedStaffEmail, resetPasswordEmail };
+const mfaOtpEmail = (user, code) => `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>
+  body { font-family: Arial, sans-serif; color: #333; margin: 0; padding: 0; }
+  .header { background: #FF9729; padding: 30px 20px; text-align: center; }
+  .header h1 { color: #fff; margin: 0; font-size: 24px; }
+  .content { padding: 30px 20px; }
+  .otp { display: inline-block; background: #f5f5f5; border: 2px dashed #FF9729; border-radius: 8px; padding: 18px 36px; font-size: 36px; font-weight: bold; letter-spacing: 12px; color: #222; margin: 20px 0; }
+  .footer { background: #222; color: #aaa; text-align: center; padding: 20px; font-size: 12px; }
+</style></head>
+<body>
+  <div class="header"><h1>Your Login Code</h1></div>
+  <div class="content">
+    <p>Hi <strong>${user.name}</strong>,</p>
+    <p>Use the code below to complete your admin login. It expires in <strong>10 minutes</strong>.</p>
+    <div style="text-align:center">
+      <div class="otp">${code}</div>
+    </div>
+    <p style="color:#888;font-size:13px;margin-top:20px;">If you didn\'t try to log in, someone may have your password — consider changing it immediately.</p>
+    <p style="color:#888;font-size:13px;">Do not share this code with anyone, including Rokit Media staff.</p>
+  </div>
+  <div class="footer">&copy; ${new Date().getFullYear()} Rokit Media &middot; rokitonline.com</div>
+</body>
+</html>`;
+
+module.exports = { orderConfirmationEmail, contactReplyEmail, newContactNotificationEmail, newOrderNotificationEmail, orderStatusUpdateEmail, pricedQuoteEmail, offerAcceptedCustomerEmail, orderConfirmedStaffEmail, resetPasswordEmail, mfaOtpEmail };

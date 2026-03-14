@@ -16,6 +16,26 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const { data } = await api.post('/auth/login', { email, password });
+      // Admin MFA: server returns mfaPending instead of a full token
+      if (data?.mfaPending) {
+        return { mfaPending: true, mfaToken: data.mfaToken };
+      }
+      if (!data?.token) throw new Error('Invalid response from server');
+      localStorage.setItem('rokit_token', data.token);
+      localStorage.setItem('rokit_user', JSON.stringify(data));
+      setUser(data);
+      return { success: true, data };
+    } catch (err) {
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyMfa = async (mfaToken, code) => {
+    setLoading(true);
+    try {
+      const { data } = await api.post('/auth/verify-mfa', { mfaToken, code });
       if (!data?.token) throw new Error('Invalid response from server');
       localStorage.setItem('rokit_token', data.token);
       localStorage.setItem('rokit_user', JSON.stringify(data));
@@ -53,7 +73,7 @@ export const AuthProvider = ({ children }) => {
   const isLoggedIn = () => !!user;
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, isAdmin, isLoggedIn }}>
+    <AuthContext.Provider value={{ user, loading, login, verifyMfa, register, logout, isAdmin, isLoggedIn }}>
       {children}
     </AuthContext.Provider>
   );

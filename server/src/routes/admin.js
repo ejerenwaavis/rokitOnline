@@ -6,7 +6,7 @@ const upload = require('../middleware/upload');
 const {
   getStats, getAllOrders, updateOrder, acceptOffer, getAllQuotations, updateQuotation,
   getAllDesigns, getAllCustomers, updateUserRole, getMessages, markMessageRead,
-  getClients, createClient, deleteClient,
+  getClients, createClient, updateClient, deleteClient,
 } = require('../controllers/adminController');
 const { createPortfolioItem, updatePortfolioItem, deletePortfolioItem } = require('../controllers/portfolioController');
 const { createTutorial, updateTutorial, deleteTutorial } = require('../controllers/tutorialsController');
@@ -54,6 +54,7 @@ router.patch('/messages/:id/read', markMessageRead);
 // Client logos
 router.get('/clients', getClients);
 router.post('/clients', upload.single('logo'), createClient);
+router.put('/clients/:id', upload.single('logo'), updateClient);
 router.delete('/clients/:id', deleteClient);
 
 module.exports = router;

@@ -226,6 +226,32 @@ const createClient = async (req, res) => {
   }
 };
 
+const updateClient = async (req, res) => {
+  try {
+    const client = await Client.findById(req.params.id);
+    if (!client) return res.status(404).json({ message: 'Client not found' });
+    const { name, website, displayOrder } = req.body;
+    if (name) client.name = name;
+    if (website !== undefined) client.website = website;
+    if (displayOrder !== undefined) client.displayOrder = displayOrder;
+    if (req.file) {
+      // Delete old logo from Cloudinary
+      if (client.logoPublicId) {
+        try {
+          const cloudinary = require('../config/cloudinary');
+          await cloudinary.uploader.destroy(client.logoPublicId);
+        } catch { /* non-blocking */ }
+      }
+      client.logoUrl = req.file.path;
+      client.logoPublicId = req.file.filename;
+    }
+    await client.save();
+    res.json(client);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
 const deleteClient = async (req, res) => {
   try {
     const client = await Client.findById(req.params.id);
@@ -243,4 +269,4 @@ const deleteClient = async (req, res) => {
   }
 };
 
-module.exports = { getStats, getAllOrders, updateOrder, acceptOffer, getAllQuotations, updateQuotation, getAllDesigns, getAllCustomers, updateUserRole, getMessages, markMessageRead, getClients, createClient, deleteClient };
+module.exports = { getStats, getAllOrders, updateOrder, acceptOffer, getAllQuotations, updateQuotation, getAllDesigns, getAllCustomers, updateUserRole, getMessages, markMessageRead, getClients, createClient, updateClient, deleteClient };

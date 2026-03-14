@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import {
   LayoutDashboard, ShoppingBag, Images, BookOpen,
   Settings, Users, Menu, X, LogOut, ChevronRight,
-  MessageSquare
+  MessageSquare, Star
 } from 'lucide-react';
 
 const navItems = [
@@ -13,6 +13,7 @@ const navItems = [
   { to: '/admin/portfolio', label: 'Portfolio', icon: Images },
   { to: '/admin/tutorials', label: 'Tutorials', icon: BookOpen },
   { to: '/admin/services', label: 'Services', icon: Settings },
+  { to: '/admin/clients', label: 'Clients', icon: Star },
   { to: '/admin/customers', label: 'Customers', icon: Users },
 ];
 

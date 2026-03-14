@@ -105,14 +105,20 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex gap-3 text-sm text-rokit-body">
                 <MapPin size={16} className="text-rokit-orange mt-0.5 shrink-0" />
-                <span>4 Gbogan-Ibadan Road, beside Sterling Bank, Ogo-Oluwa, Osogbo, Osun State</span>
+                <div className="space-y-1">
+                  <div>
+                    <span className="text-xs font-semibold text-rokit-dark block">Abuja</span>
+                    6 Jama Are Close, Garki 2, Abuja, Nigeria
+                  </div>
+                  <div className="pt-1">
+                    <span className="text-xs font-semibold text-rokit-dark block">United Kingdom</span>
+                    25 James Street, Bradford, West Yorkshire, UK
+                  </div>
+                </div>
               </li>
               <li className="flex gap-3 text-sm text-rokit-body">
                 <Phone size={16} className="text-rokit-orange mt-0.5 shrink-0" />
-                <div>
-                  <a href="tel:+2347069035095" className="hover:text-rokit-orange block">0706 903 5095</a>
-                  <a href="tel:+2349095503422" className="hover:text-rokit-orange block">0909 550 3422</a>
-                </div>
+                <a href="tel:+2347031616075" className="hover:text-rokit-orange">+234 703 161 6075</a>
               </li>
               <li className="flex gap-3 text-sm text-rokit-body">
                 <Mail size={16} className="text-rokit-orange mt-0.5 shrink-0" />

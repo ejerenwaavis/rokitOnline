@@ -5,7 +5,16 @@ import toast from 'react-hot-toast';
 import api from '../utils/api';
 
 const contactInfo = [
-  { icon: MapPin, label: 'Office Address', value: '4 Gbogan-Ibadan Road, beside Sterling Bank, Ogo-Oluwa, Osogbo, Osun State' },
+  {
+    icon: MapPin,
+    label: 'Nigeria — Abuja',
+    value: '6 Jama Are Close, Garki 2, Abuja, Nigeria',
+  },
+  {
+    icon: MapPin,
+    label: 'United Kingdom',
+    value: '25 James Street, Bradford, West Yorkshire, UK',
+  },
   { icon: Phone, label: 'Phone', value: '+234 703 161 6075' },
   { icon: Mail, label: 'Email', value: 'rokitnow@gmail.com' },
   { icon: Clock, label: 'Business Hours', value: 'Mon–Fri: 8am–6pm | Sat: 9am–3pm' },

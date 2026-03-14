@@ -269,4 +269,27 @@ const deleteClient = async (req, res) => {
   }
 };
 
-module.exports = { getStats, getAllOrders, updateOrder, acceptOffer, getAllQuotations, updateQuotation, getAllDesigns, getAllCustomers, updateUserRole, getMessages, markMessageRead, getClients, createClient, updateClient, deleteClient };
+module.exports = { getStats, getAllOrders, updateOrder, acceptOffer, forwardOrder, getAllQuotations, updateQuotation, getAllDesigns, getAllCustomers, updateUserRole, getMessages, markMessageRead, getClients, createClient, updateClient, deleteClient };
+
+const { orderForwardEmail } = require('../utils/emailTemplates');
+const { sendMail } = require('../config/email');
+
+async function forwardOrder(req, res) {
+  try {
+    const { email, note } = req.body;
+    if (!email) return res.status(400).json({ message: 'Recipient email is required' });
+
+    const order = await JobOrder.findById(req.params.id).populate('customer', 'name email phone');
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    await sendMail({
+      to: email,
+      subject: `Job Order #${order._id.toString().slice(-6).toUpperCase()} – ${order.serviceType?.replace(/-/g, ' ')} | Rokit Media`,
+      html: orderForwardEmail(order, order.customer, req.user.name, note || ''),
+    });
+
+    res.json({ message: 'Order details sent successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}

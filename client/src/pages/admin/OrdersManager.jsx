@@ -1,13 +1,235 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import toast from 'react-hot-toast';
+import { X, Send, FileText, ExternalLink } from 'lucide-react';
 import api from '../../utils/api';
 import StatusBadge from '../../components/ui/StatusBadge';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 const ORDER_STATUSES = ['pending', 'confirmed', 'in-progress', 'review', 'completed', 'cancelled'];
 
-function OrderRow({ order, onUpdate }) {
+/* ─── Order Detail Modal ──────────────────────────────────────────────── */
+function OrderDetailModal({ order, onClose }) {
+  const [email, setEmail] = useState('');
+  const [note, setNote] = useState('');
+  const [sending, setSending] = useState(false);
+  const overlayRef = useRef();
+
+  // Close on backdrop click
+  const handleBackdrop = (e) => { if (e.target === overlayRef.current) onClose(); };
+
+  // Close on Escape key
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  const handleForward = async (e) => {
+    e.preventDefault();
+    if (!email.trim()) return toast.error('Enter a recipient email.');
+    setSending(true);
+    try {
+      await api.post(`/admin/orders/${order._id}/forward`, { email: email.trim(), note: note.trim() });
+      toast.success(`Order details sent to ${email.trim()}`);
+      setEmail('');
+      setNote('');
+    } catch {
+      toast.error('Failed to send. Please try again.');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const fmt = (val) => val != null && val !== '' ? val : '—';
+  const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+  const fmtMoney = (v) => v > 0 ? `₦${Number(v).toLocaleString()}` : '—';
+
+  return (
+    <div
+      ref={overlayRef}
+      onClick={handleBackdrop}
+      className="fixed inset-0 z-50 bg-black/50 flex items-start justify-center overflow-y-auto py-8 px-4"
+    >
+      <div className="bg-white w-full max-w-2xl rounded-xl shadow-2xl">
+        {/* Header */}
+        <div className="flex items-center justify-between bg-rokit-dark text-white px-6 py-4 rounded-t-xl">
+          <div>
+            <p className="text-xs uppercase tracking-widest text-gray-400 mb-0.5">Job Order</p>
+            <h2 className="text-xl font-black">#{order._id.slice(-6).toUpperCase()}</h2>
+          </div>
+          <div className="flex items-center gap-3">
+            <StatusBadge status={order.status} />
+            <button onClick={onClose} className="p-1 hover:text-rokit-orange transition-colors"><X size={20} /></button>
+          </div>
+        </div>
+
+        <div className="p-6 space-y-6">
+          {/* Customer */}
+          <section>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-rokit-body mb-3">Customer</h3>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
+              <DetailRow label="Name" value={order.customer?.name || '—'} />
+              <DetailRow label="Email" value={order.customer?.email || '—'} />
+              <DetailRow label="Phone" value={order.customer?.phone || '—'} />
+              <DetailRow label="Submitted" value={fmtDate(order.createdAt)} />
+            </div>
+          </section>
+
+          <hr className="border-gray-100" />
+
+          {/* Job Details */}
+          <section>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-rokit-body mb-3">Job Details</h3>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm mb-3">
+              <DetailRow label="Service" value={fmt(order.serviceType?.replace(/-/g, ' '))} />
+              <DetailRow label="Quantity" value={fmt(order.quantity)} />
+              <DetailRow label="Dimensions" value={fmt(order.dimensions)} />
+              <DetailRow label="Deadline" value={fmtDate(order.deadline)} />
+            </div>
+            <div className="text-sm mb-2">
+              <span className="text-xs font-semibold text-rokit-body uppercase tracking-wide block mb-1">Description</span>
+              <p className="bg-gray-50 p-3 rounded text-rokit-dark whitespace-pre-wrap">{fmt(order.description)}</p>
+            </div>
+            {order.specifications && (
+              <div className="text-sm">
+                <span className="text-xs font-semibold text-rokit-body uppercase tracking-wide block mb-1">Specifications</span>
+                <p className="bg-gray-50 p-3 rounded text-rokit-dark whitespace-pre-wrap">{order.specifications}</p>
+              </div>
+            )}
+          </section>
+
+          {/* Files */}
+          {order.files?.length > 0 && (
+            <>
+              <hr className="border-gray-100" />
+              <section>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-rokit-body mb-3">Attached Files</h3>
+                <ul className="space-y-1">
+                  {order.files.map((f, i) => (
+                    <li key={i}>
+                      <a
+                        href={f.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-rokit-orange hover:underline"
+                      >
+                        <FileText size={14} />
+                        {f.originalName || `File ${i + 1}`}
+                        <ExternalLink size={12} className="opacity-60" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </>
+          )}
+
+          <hr className="border-gray-100" />
+
+          {/* Financials */}
+          <section>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-rokit-body mb-3">Financials</h3>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm">
+              <DetailRow label="Quoted Price" value={fmtMoney(order.quotedPrice)} />
+              <DetailRow label="Customer Budget" value={fmtMoney(order.customerBudget)} />
+              <DetailRow label="Total Amount" value={fmtMoney(order.totalAmount)} />
+              <DetailRow label="Deposit" value={fmtMoney(order.depositAmount)} />
+              <DetailRow label="Price Status" value={fmt(order.priceStatus)} />
+              <DetailRow label="Payment Status" value={fmt(order.paymentStatus)} />
+            </div>
+          </section>
+
+          {/* Notes */}
+          {(order.adminNotes || order.customerNotes) && (
+            <>
+              <hr className="border-gray-100" />
+              <section>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-rokit-body mb-3">Notes</h3>
+                {order.customerNotes && (
+                  <div className="mb-2">
+                    <span className="text-xs font-semibold text-rokit-body uppercase tracking-wide block mb-1">Customer Notes</span>
+                    <p className="bg-gray-50 p-3 rounded text-sm whitespace-pre-wrap">{order.customerNotes}</p>
+                  </div>
+                )}
+                {order.adminNotes && (
+                  <div>
+                    <span className="text-xs font-semibold text-rokit-body uppercase tracking-wide block mb-1">Admin Notes</span>
+                    <p className="bg-gray-50 p-3 rounded text-sm whitespace-pre-wrap">{order.adminNotes}</p>
+                  </div>
+                )}
+              </section>
+            </>
+          )}
+
+          {/* Timeline */}
+          {order.timeline?.length > 0 && (
+            <>
+              <hr className="border-gray-100" />
+              <section>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-rokit-body mb-3">Timeline</h3>
+                <ol className="relative border-l border-gray-200 space-y-3 ml-2">
+                  {order.timeline.map((t, i) => (
+                    <li key={i} className="ml-4">
+                      <div className="absolute -left-1.5 mt-1.5 w-3 h-3 rounded-full bg-rokit-orange border-2 border-white" />
+                      <p className="text-xs text-gray-400">{fmtDate(t.date)}</p>
+                      <p className="text-sm text-rokit-dark font-medium capitalize">{t.status}</p>
+                      {t.note && <p className="text-xs text-rokit-body">{t.note}</p>}
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            </>
+          )}
+
+          <hr className="border-gray-100" />
+
+          {/* Forward to Email */}
+          <section>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-rokit-body mb-3">Forward to Teammate / External Email</h3>
+            <form onSubmit={handleForward} className="space-y-3">
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Recipient email address"
+                required
+                className="form-input"
+              />
+              <textarea
+                value={note}
+                onChange={e => setNote(e.target.value)}
+                placeholder="Optional note to include in the email…"
+                rows={2}
+                className="form-input resize-none"
+              />
+              <button
+                type="submit"
+                disabled={sending}
+                className="btn-primary w-full justify-center"
+              >
+                <Send size={15} className="mr-2" />
+                {sending ? 'Sending…' : 'Send Order Details'}
+              </button>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DetailRow({ label, value }) {
+  return (
+    <>
+      <span className="text-xs font-semibold text-rokit-body uppercase tracking-wide">{label}</span>
+      <span className="text-rokit-dark">{value}</span>
+    </>
+  );
+}
+
+/* ─── Order Row ───────────────────────────────────────────────────────── */
+function OrderRow({ order, onUpdate, onView }) {
   const [updating, setUpdating] = useState(false);
   const [quoteInput, setQuoteInput] = useState('');
   const [quoting, setQuoting] = useState(false);
@@ -56,8 +278,15 @@ function OrderRow({ order, onUpdate }) {
   };
 
   return (
-    <tr className="border-t border-gray-100">
-      <td className="px-4 py-3 font-mono text-xs text-gray-400">#{order._id.slice(-6).toUpperCase()}</td>
+    <tr className="border-t border-gray-100 hover:bg-gray-50 transition-colors">
+      <td className="px-4 py-3 font-mono text-xs text-gray-400">
+        <button
+          onClick={() => onView(order)}
+          className="text-rokit-orange hover:underline font-semibold"
+        >
+          #{order._id.slice(-6).toUpperCase()}
+        </button>
+      </td>
       <td className="px-4 py-3 text-sm">{order.customer?.name || 'Guest'}</td>
       <td className="px-4 py-3 text-sm capitalize">{order.serviceType?.replace(/-/g, ' ')}</td>
       <td className="px-4 py-3 text-sm">
@@ -131,6 +360,14 @@ function OrderRow({ order, onUpdate }) {
         )}
       </td>
       <td className="px-4 py-3 text-xs text-gray-400">{new Date(order.createdAt).toLocaleDateString('en-NG')}</td>
+      <td className="px-4 py-3">
+        <button
+          onClick={() => onView(order)}
+          className="text-xs text-rokit-orange border border-rokit-orange px-2 py-1 rounded hover:bg-rokit-orange hover:text-white transition-colors"
+        >
+          View
+        </button>
+      </td>
     </tr>
   );
 }
@@ -139,6 +376,7 @@ export default function OrdersManager() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('');
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -183,19 +421,27 @@ export default function OrdersManager() {
                   <th className="px-4 py-3">Update Status</th>
                   <th className="px-4 py-3">Quote Price</th>
                   <th className="px-4 py-3">Date</th>
+                  <th className="px-4 py-3">Details</th>
                 </tr>
               </thead>
               <tbody>
                 {displayed.length === 0 ? (
-                  <tr><td colSpan={7} className="px-4 py-10 text-center text-rokit-body">No orders found.</td></tr>
+                  <tr><td colSpan={9} className="px-4 py-10 text-center text-rokit-body">No orders found.</td></tr>
                 ) : (
-                  displayed.map(order => <OrderRow key={order._id} order={order} onUpdate={handleUpdate} />)
+                  displayed.map(order => <OrderRow key={order._id} order={order} onUpdate={handleUpdate} onView={setSelectedOrder} />)
                 )}
               </tbody>
             </table>
           </div>
         )}
       </div>
+
+      {selectedOrder && (
+        <OrderDetailModal
+          order={selectedOrder}
+          onClose={() => setSelectedOrder(null)}
+        />
+      )}
     </>
   );
 }

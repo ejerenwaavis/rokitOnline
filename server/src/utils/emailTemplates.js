@@ -252,4 +252,81 @@ const mfaOtpEmail = (user, code) => `
 </body>
 </html>`;
 
-module.exports = { orderConfirmationEmail, contactReplyEmail, newContactNotificationEmail, newOrderNotificationEmail, orderStatusUpdateEmail, pricedQuoteEmail, offerAcceptedCustomerEmail, orderConfirmedStaffEmail, resetPasswordEmail, mfaOtpEmail };
+module.exports = { orderConfirmationEmail, contactReplyEmail, newContactNotificationEmail, newOrderNotificationEmail, orderStatusUpdateEmail, pricedQuoteEmail, offerAcceptedCustomerEmail, orderConfirmedStaffEmail, resetPasswordEmail, mfaOtpEmail, orderForwardEmail };
+
+function orderForwardEmail(order, customer, senderName, note) {
+  const fmt = (v) => (v != null && v !== '' && v !== 0) ? v : '—';
+  const fmtMoney = (v) => v > 0 ? `&#8358;${Number(v).toLocaleString()}` : '—';
+  const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+  const filesHtml = order.files?.length
+    ? order.files.map(f => `<li><a href="${f.url}" style="color:#FF9729">${f.originalName || f.url}</a></li>`).join('')
+    : '<li>None attached</li>';
+  const timelineHtml = order.timeline?.length
+    ? order.timeline.map(t => `<li><strong>${t.status}</strong> &mdash; ${fmtDate(t.date)}${t.note ? `: ${t.note}` : ''}</li>`).join('')
+    : '<li>No timeline entries</li>';
+
+  return `<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><style>
+  body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:0;color:#333}
+  .wrap{max-width:640px;margin:30px auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+  .header{background:#1a1a2e;padding:24px 32px;color:#fff}
+  .header h1{margin:0;font-size:20px;color:#FF9729}
+  .content{padding:28px 32px}
+  h2{font-size:15px;color:#FF9729;border-bottom:1px solid #eee;padding-bottom:6px;margin-top:24px;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em}
+  .grid{display:grid;grid-template-columns:140px 1fr;gap:6px 12px;font-size:14px}
+  .label{font-weight:700;color:#888;text-transform:uppercase;font-size:11px}
+  .box{background:#f9f9f9;border-radius:4px;padding:12px;font-size:14px;white-space:pre-wrap}
+  ul{margin:0;padding-left:18px;font-size:14px}
+  .note{background:#fff8f0;border-left:3px solid #FF9729;padding:12px;font-size:14px;margin-bottom:20px;border-radius:0 4px 4px 0}
+  .footer{background:#f0f0f0;padding:16px 32px;text-align:center;font-size:12px;color:#999}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>Job Order #${order._id.toString().slice(-6).toUpperCase()}</h1>
+    <p style="margin:4px 0 0;color:#ccc;font-size:13px">Forwarded by ${senderName} &mdash; Rokit Media</p>
+  </div>
+  <div class="content">
+    ${note ? `<div class="note"><strong>Note from ${senderName}:</strong><br>${note}</div>` : ''}
+
+    <h2>Customer</h2>
+    <div class="grid">
+      <span class="label">Name</span><span>${fmt(customer?.name)}</span>
+      <span class="label">Email</span><span>${fmt(customer?.email)}</span>
+      <span class="label">Phone</span><span>${fmt(customer?.phone)}</span>
+      <span class="label">Submitted</span><span>${fmtDate(order.createdAt)}</span>
+    </div>
+
+    <h2>Job Details</h2>
+    <div class="grid">
+      <span class="label">Service</span><span>${fmt(order.serviceType?.replace(/-/g, ' '))}</span>
+      <span class="label">Quantity</span><span>${fmt(order.quantity)}</span>
+      <span class="label">Dimensions</span><span>${fmt(order.dimensions)}</span>
+      <span class="label">Deadline</span><span>${fmtDate(order.deadline)}</span>
+      <span class="label">Status</span><span>${fmt(order.status)}</span>
+    </div>
+    <p style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;margin:12px 0 4px">Description</p>
+    <div class="box">${fmt(order.description)}</div>
+    ${order.specifications ? `<p style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;margin:12px 0 4px">Specifications</p><div class="box">${order.specifications}</div>` : ''}
+
+    <h2>Financials</h2>
+    <div class="grid">
+      <span class="label">Quoted Price</span><span>${fmtMoney(order.quotedPrice)}</span>
+      <span class="label">Customer Budget</span><span>${fmtMoney(order.customerBudget)}</span>
+      <span class="label">Total Amount</span><span>${fmtMoney(order.totalAmount)}</span>
+      <span class="label">Deposit</span><span>${fmtMoney(order.depositAmount)}</span>
+      <span class="label">Price Status</span><span>${fmt(order.priceStatus)}</span>
+      <span class="label">Payment</span><span>${fmt(order.paymentStatus)}</span>
+    </div>
+
+    <h2>Attached Files</h2>
+    <ul>${filesHtml}</ul>
+
+    <h2>Timeline</h2>
+    <ul>${timelineHtml}</ul>
+  </div>
+  <div class="footer">&copy; ${new Date().getFullYear()} Rokit Media &middot; rokitonline.com</div>
+</div>
+</body></html>`;
+}

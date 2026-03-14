@@ -4,7 +4,7 @@ const { protect } = require('../middleware/auth');
 const { adminOnly } = require('../middleware/adminCheck');
 const upload = require('../middleware/upload');
 const {
-  getStats, getAllOrders, updateOrder, acceptOffer, getAllQuotations, updateQuotation,
+  getStats, getAllOrders, updateOrder, acceptOffer, forwardOrder, getAllQuotations, updateQuotation,
   getAllDesigns, getAllCustomers, updateUserRole, getMessages, markMessageRead,
   getClients, createClient, updateClient, deleteClient,
 } = require('../controllers/adminController');
@@ -20,6 +20,7 @@ router.get('/stats', getStats);
 router.get('/orders', getAllOrders);
 router.patch('/orders/:id', updateOrder);
 router.post('/orders/:id/accept-offer', acceptOffer);
+router.post('/orders/:id/forward', forwardOrder);
 
 // Quotations
 router.get('/quotations', getAllQuotations);

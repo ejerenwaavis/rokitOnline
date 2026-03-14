@@ -36,34 +36,26 @@ const login = async (req, res) => {
     if (!user || !(await user.matchPassword(password)))
       return res.status(401).json({ message: 'Invalid credentials' });
 
-    // MFA: admin accounts require a one-time email code
-    if (user.role === 'admin') {
-      const otp = String(crypto.randomInt(100000, 999999));
-      user.mfaOtpHash = crypto.createHash('sha256').update(otp).digest('hex');
-      user.mfaOtpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
-      await user.save({ validateBeforeSave: false });
+    // MFA: all accounts require a one-time email code
+    const otp = String(crypto.randomInt(100000, 999999));
+    user.mfaOtpHash = crypto.createHash('sha256').update(otp).digest('hex');
+    user.mfaOtpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+    await user.save({ validateBeforeSave: false });
 
-      await sendMail({
-        to: user.email,
-        subject: 'Your Rokit Media admin login code',
-        html: mfaOtpEmail(user, otp),
-      });
-
-      // Issue a short-lived "pending" token (10 min) — cannot be used for API access
-      const mfaToken = jwt.sign(
-        { id: user._id, mfaPending: true },
-        process.env.JWT_SECRET,
-        { expiresIn: '10m' }
-      );
-
-      return res.json({ mfaPending: true, mfaToken });
-    }
-
-    // Non-admin: issue full token immediately
-    res.json({
-      _id: user._id, name: user.name, email: user.email,
-      role: user.role, phone: user.phone, token: generateToken(user._id),
+    await sendMail({
+      to: user.email,
+      subject: 'Your Rokit Media login code',
+      html: mfaOtpEmail(user, otp),
     });
+
+    // Issue a short-lived "pending" token (10 min) — cannot be used for API access
+    const mfaToken = jwt.sign(
+      { id: user._id, mfaPending: true },
+      process.env.JWT_SECRET,
+      { expiresIn: '10m' }
+    );
+
+    return res.json({ mfaPending: true, mfaToken });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

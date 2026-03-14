@@ -50,9 +50,9 @@ export default function Login() {
     }
     setLoading(true);
     try {
-      await verifyMfa(mfaToken, otp.trim());
+      const result = await verifyMfa(mfaToken, otp.trim());
       toast.success('Welcome back!');
-      navigate('/admin', { replace: true });
+      navigate(isAdmin() ? '/admin' : from, { replace: true });
     } catch (err) {
       toast.error(err?.response?.data?.message || 'Verification failed.');
       setOtp('');

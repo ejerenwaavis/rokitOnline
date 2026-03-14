@@ -4,6 +4,7 @@ import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 import api from '../utils/api';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { T } from '../theme';
 
 const categories = [
   { value: '', label: 'All' },
@@ -53,26 +54,24 @@ export default function Gallery() {
       </Helmet>
 
       {/* Hero */}
-      <div className="bg-gray-50 border-b border-gray-100 pt-32 pb-14 text-center">
-        <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">Our Portfolio</p>
-        <h1 className="text-5xl font-bold text-rokit-dark mb-4">Gallery</h1>
-        <p className="text-rokit-body max-w-xl mx-auto">
-          A curated showcase of creative and printing work delivered for brands across Nigeria.
-        </p>
+      <div className={T.pageHero}>
+        <div className={`${T.pageHeroInner} ${T.pageHeroCentered}`}>
+          <span className={`${T.eyebrowOrange} mb-3`}>Our Portfolio</span>
+          <h1 className={`${T.h1} mb-4`}>Gallery</h1>
+          <p className={`${T.body} max-w-xl mx-auto`}>
+            A curated showcase of creative and printing work delivered for brands across Nigeria.
+          </p>
+        </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="bg-white sticky top-0 z-40 border-b border-gray-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 flex gap-2 overflow-x-auto py-4 scrollbar-hide">
+      <div className="bg-rokit-cream sticky top-0 z-40 border-b border-rokit-orange/10 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 flex gap-2 overflow-x-auto py-4 scrollbar-hide">
           {categories.map(cat => (
             <button
               key={cat.value}
               onClick={() => handleCategoryChange(cat.value)}
-              className={`shrink-0 px-5 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
-                activeCategory === cat.value
-                  ? 'bg-rokit-orange text-white'
-                  : 'bg-white border border-gray-200 text-rokit-body hover:border-rokit-orange/40 hover:text-rokit-dark'
-              }`}
+              className={activeCategory === cat.value ? T.chipActive : T.chipIdle}
             >
               {cat.label}
             </button>
@@ -81,8 +80,8 @@ export default function Gallery() {
       </div>
 
       {/* Grid */}
-      <section className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className={T.sectionCream}>
+        <div className={T.sectionInner}>
           {loading ? (
             <LoadingSpinner center />
           ) : items.length === 0 ? (
@@ -93,7 +92,7 @@ export default function Gallery() {
                 (item.images || []).map((img, imgIdx) => (
                   <div
                     key={`${item._id}-${imgIdx}`}
-                    className="break-inside-avoid group relative overflow-hidden cursor-pointer rounded-xl bg-gray-100"
+                    className="break-inside-avoid group relative overflow-hidden cursor-pointer bg-rokit-cream-dark"
                     onClick={() => openLightbox(itemIdx, imgIdx)}
                   >
                     <img
@@ -103,7 +102,7 @@ export default function Gallery() {
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                      <p className="text-white font-bold text-sm leading-tight">{item.title}</p>
+                      <p className="text-white font-mono text-[10px] uppercase tracking-[0.12em] leading-tight">{item.title}</p>
                     </div>
                   </div>
                 ))

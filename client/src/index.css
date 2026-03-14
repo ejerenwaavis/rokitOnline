@@ -19,8 +19,9 @@
   .section-subtitle { @apply text-rokit-body text-base md:text-lg mb-10 font-light; }
   .section-divider { @apply w-8 h-px bg-rokit-orange mx-auto mb-8; }
   .card { @apply bg-rokit-cream shadow-sm hover:shadow-lg transition-shadow duration-300 border border-rokit-orange/10; }
-  .eyebrow { @apply text-rokit-orange text-[11px] font-medium uppercase tracking-[0.22em] block; }
-  .form-input { @apply w-full px-4 py-3 border border-gray-200 rounded-lg focus:border-rokit-orange focus:outline-none focus:ring-2 focus:ring-rokit-orange/10 transition-colors duration-200 text-rokit-dark bg-white; }
+  .eyebrow { @apply font-mono text-[10px] uppercase tracking-[0.22em] text-rokit-body block; }
+  .eyebrow-orange { @apply font-mono text-[10px] uppercase tracking-[0.22em] text-rokit-orange block; }
+  .form-input { @apply w-full px-4 py-3 border border-gray-200 focus:border-rokit-orange focus:outline-none focus:ring-2 focus:ring-rokit-orange/10 transition-colors duration-200 text-rokit-dark bg-white; }
   .form-label { @apply block text-sm font-medium text-rokit-dark mb-1; }
   .badge-status { @apply inline-block px-3 py-1 text-xs font-semibold rounded-full; }
 }

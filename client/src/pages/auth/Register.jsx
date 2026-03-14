@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
+import { T } from '../../theme';
 
 export default function Register() {
   const { register } = useAuth();
@@ -40,15 +41,15 @@ export default function Register() {
   return (
     <>
       <Helmet><title>Create Account – Rokit Media</title></Helmet>
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-20">
+      <div className="min-h-screen bg-rokit-cream flex items-center justify-center px-4 py-20">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <img src="/assets/images/rokit-logo.png" alt="Rokit Media" className="h-12 mx-auto mb-4" />
-            <h1 className="text-3xl font-black text-rokit-dark">Create Account</h1>
-            <p className="text-rokit-body mt-1">Join Rokit Media to manage your orders and quotes.</p>
+            <img src="/assets/images/rokit-logo.png" alt="Rokit Media" className="h-10 mx-auto mb-5" />
+            <h1 className={`${T.h2} mb-1`}>Create Account</h1>
+            <p className={T.body}>Join Rokit Media to manage your orders and quotes.</p>
           </div>
 
-          <div className="bg-white p-8 shadow-lg rounded-xl">
+          <div className={T.formCard}>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-rokit-dark mb-1">Full Name *</label>

@@ -21,11 +21,11 @@ export default function Home() {
       </Helmet>
 
       <HeroEditorial />
+      <HeroSlider />
       <ClientsMarquee />
       <ManifestoSection />
       <StatsSection />
       <ServicesGrid />
-      <HeroSlider />
       <WhyUsSection />
       <PortfolioPreview />
       <CTABand />

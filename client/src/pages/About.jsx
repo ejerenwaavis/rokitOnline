@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { T } from '../theme';
 
 const timeline = [
   { year: '2014', event: 'Rokit Media founded in Osogbo, Osun State.' },
@@ -18,18 +19,20 @@ export default function About() {
       </Helmet>
 
       {/* Hero */}
-      <div className="bg-gray-50 border-b border-gray-100 pt-32 pb-14 text-center">
-        <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">Who We Are</p>
-        <h1 className="text-5xl font-bold text-rokit-dark mb-4">About Rokit Media</h1>
-        <p className="text-rokit-body max-w-xl mx-auto">Nigeria's trusted creative agency for printing, branding, and design since 2014.</p>
+      <div className={T.pageHero}>
+        <div className={`${T.pageHeroInner} ${T.pageHeroCentered}`}>
+          <span className={`${T.eyebrowOrange} mb-3`}>Who We Are</span>
+          <h1 className={`${T.h1} mb-4`}>About Rokit Media</h1>
+          <p className={`${T.body} max-w-xl mx-auto`}>Nigeria&apos;s trusted creative agency for printing, branding, and design since 2014.</p>
+        </div>
       </div>
 
       {/* Mission / Vision */}
-      <section className="bg-white py-20">
-        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+      <section className={T.sectionCream}>
+        <div className={`${T.sectionInner} grid md:grid-cols-2 gap-12 items-center`}>
           <div>
-            <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">Our Story</p>
-            <h2 className="text-4xl font-bold text-rokit-dark mb-6">Creating Visual Impact Since 2014</h2>
+            <span className={`${T.eyebrowOrange} mb-3`}>Our Story</span>
+            <h2 className={`${T.h2} mb-6`}>Creating Visual Impact Since 2014</h2>
             <p className="text-rokit-body leading-relaxed mb-4">
               Rokit Media is a full-service creative and printing agency headquartered in Osogbo, Osun State, Nigeria.
               We specialise in large format printing, graphic design, branding, web design, roll-up banners, and
@@ -47,23 +50,23 @@ export default function About() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-50 border border-gray-100 rounded-xl p-6">
-              <h4 className="text-rokit-orange font-bold text-xl mb-2">Our Mission</h4>
+            <div className="bg-rokit-cream-dark border border-rokit-orange/10 p-6">
+              <h4 className="text-rokit-orange font-display text-xl font-light mb-2">Our Mission</h4>
               <p className="text-rokit-body text-sm leading-relaxed">
                 To deliver high-quality, impactful creative and printing services that drive growth for every client.
               </p>
             </div>
-            <div className="bg-rokit-orange rounded-xl p-6">
-              <h4 className="text-white font-bold text-xl mb-2">Our Vision</h4>
+            <div className="bg-rokit-orange p-6">
+              <h4 className="text-white font-display text-xl font-light mb-2">Our Vision</h4>
               <p className="text-white/90 text-sm leading-relaxed">
                 To be the most trusted creative agency across West Africa by 2030.
               </p>
             </div>
-            <div className="bg-rokit-dark rounded-xl p-6 col-span-2">
-              <h4 className="text-rokit-gold font-bold text-xl mb-2">Our Values</h4>
+            <div className="bg-rokit-dark p-6 col-span-2">
+              <h4 className="text-rokit-gold font-display text-xl font-light mb-2">Our Values</h4>
               <div className="flex flex-wrap gap-2 mt-2">
                 {['Creativity', 'Excellence', 'Integrity', 'Speed', 'Customer Focus'].map(v => (
-                  <span key={v} className="bg-white/10 text-white text-xs px-3 py-1 rounded-full">{v}</span>
+                  <span key={v} className={T.tag.replace('text-rokit-dark border-rokit-orange/20', 'text-white border-white/20').replace('hover:border-rokit-orange hover:text-rokit-orange', 'hover:border-white/50')}>{v}</span>
                 ))}
               </div>
             </div>
@@ -72,22 +75,22 @@ export default function About() {
       </section>
 
       {/* CEO */}
-      <section className="bg-gray-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+      <section className={T.sectionAlt}>
+        <div className={`${T.sectionInner} grid md:grid-cols-2 gap-12 items-center`}>
           <div className="relative">
             <img
               src="/assets/images/ceo.jpg"
               alt="Okorite Isokariari – CEO, Rokit Media"
               className="w-full max-w-sm mx-auto object-cover shadow-2xl"
             />
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-rokit-orange text-white px-6 py-3 text-center w-72 rounded-lg">
-              <p className="font-bold text-lg">Okorite Isokariari</p>
-              <p className="text-sm text-white/80">Founder & CEO</p>
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-rokit-orange text-white px-6 py-3 text-center w-72">
+              <p className="font-display font-light text-lg">Okorite Isokariari</p>
+              <p className="text-sm text-white/80">Founder &amp; CEO</p>
             </div>
           </div>
           <div className="pt-12 md:pt-0">
-            <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">Leadership</p>
-            <h2 className="text-4xl font-bold text-rokit-dark mb-6">A Word From Our CEO</h2>
+            <span className={`${T.eyebrowOrange} mb-3`}>Leadership</span>
+            <h2 className={`${T.h2} mb-6`}>A Word From Our CEO</h2>
             <blockquote className="border-l-4 border-rokit-orange pl-5 text-rokit-body italic leading-relaxed mb-6">
               "We started Rokit Media with one goal in mind — to give every business in Nigeria access to
               world-class creative and printing excellence. Today, that dream is alive in every banner we print,
@@ -102,18 +105,18 @@ export default function About() {
       </section>
 
       {/* Timeline */}
-      <section className="bg-white py-20">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-14">
+      <section className={T.sectionCream}>
+        <div className="max-w-4xl mx-auto px-6 lg:px-12">
+          <div className={T.sectionHeaderCenter}>
             <h2 className="section-title">Our Journey</h2>
             <div className="section-divider" />
           </div>
           <div className="relative border-l-2 border-rokit-orange/30 pl-8 space-y-10">
             {timeline.map(({ year, event }) => (
               <div key={year} className="relative">
-                <div className="absolute -left-[2.65rem] top-1 w-5 h-5 bg-rokit-orange rounded-full border-4 border-white" />
-                <p className="text-rokit-orange font-black text-lg mb-1">{year}</p>
-                <p className="text-rokit-body">{event}</p>
+                <div className="absolute -left-[2.65rem] top-1 w-4 h-4 bg-rokit-orange border-4 border-rokit-cream" />
+                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-rokit-orange mb-1">{year}</p>
+                <p className="text-rokit-body font-light">{event}</p>
               </div>
             ))}
           </div>

@@ -4,6 +4,7 @@ import { Search } from 'lucide-react';
 import api from '../utils/api';
 import TutorialCard from '../components/ui/TutorialCard';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { T } from '../theme';
 
 const tutorialCategories = ['all', 'design tips', 'printing', 'branding', 'web', 'business'];
 
@@ -43,25 +44,26 @@ export default function Tutorials() {
       </Helmet>
 
       {/* Hero */}
-      <div className="bg-gray-50 border-b border-gray-100 pt-32 pb-14 text-center">
-        <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">Knowledge Hub</p>
-        <h1 className="text-5xl font-bold text-rokit-dark mb-4">Tutorials & Tips</h1>
-        <p className="text-rokit-body max-w-xl mx-auto">
-          Practical guides, design tips, and industry insights from our creative team.
-        </p>
+      <div className={T.pageHero}>
+        <div className={`${T.pageHeroInner} ${T.pageHeroCentered}`}>
+          <span className={`${T.eyebrowOrange} mb-3`}>Knowledge Hub</span>
+          <h1 className={`${T.h1} mb-4`}>Tutorials &amp; Tips</h1>
+          <p className={`${T.body} max-w-xl mx-auto`}>
+            Practical guides, design tips, and industry insights from our creative team.
+          </p>
+        </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white border-b border-gray-100 py-4 sticky top-0 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 flex flex-wrap gap-3 items-center justify-between">
+      {/* Filters */}
+      <div className="bg-rokit-cream border-b border-rokit-orange/10 py-4 sticky top-0 z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 flex flex-wrap gap-3 items-center justify-between">
           <div className="flex gap-2 overflow-x-auto scrollbar-hide">
             {tutorialCategories.map(cat => (
               <button
                 key={cat}
                 onClick={() => { setActiveCategory(cat); setPage(1); }}
-                className={`shrink-0 px-4 py-2 text-sm font-medium capitalize rounded-full transition-all duration-200 ${
-                  activeCategory === cat ? 'bg-rokit-orange text-white' : 'bg-white border border-gray-200 text-rokit-body hover:border-rokit-orange/40 hover:text-rokit-dark'
-                }`}
+                className={activeCategory === cat ? T.chipActive : T.chipIdle}
               >
                 {cat}
               </button>
@@ -74,15 +76,15 @@ export default function Tutorials() {
               placeholder="Search tutorials…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-rokit-orange w-56"
+              className="pl-9 pr-4 py-2 border border-gray-200 text-sm focus:outline-none focus:border-rokit-orange w-56 bg-white"
             />
           </div>
         </div>
       </div>
 
       {/* Grid */}
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className={T.sectionAlt}>
+        <div className={T.sectionInner}>
           {loading ? (
             <LoadingSpinner center />
           ) : displayed.length === 0 ? (
@@ -100,8 +102,8 @@ export default function Tutorials() {
                 <button
                   key={i + 1}
                   onClick={() => setPage(i + 1)}
-                  className={`w-10 h-10 font-medium text-sm rounded-lg transition-all duration-200 ${
-                    page === i + 1 ? 'bg-rokit-orange text-white' : 'bg-white border border-gray-200 text-rokit-body hover:border-rokit-orange/40'
+                  className={`w-10 h-10 font-mono text-[10px] uppercase tracking-[0.1em] transition-all duration-200 ${
+                    page === i + 1 ? 'bg-rokit-orange text-white' : 'bg-white border border-rokit-orange/20 text-rokit-body hover:border-rokit-orange'
                   }`}
                 >
                   {i + 1}

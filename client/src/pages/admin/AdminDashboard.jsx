@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { ShoppingBag, FileText, Paintbrush, Users, Image, BookOpen, MessageSquare } from 'lucide-react';
+import { ShoppingBag, FileText, Paintbrush, Users, Image, BookOpen, MessageSquare, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import api from '../../utils/api';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
@@ -24,6 +24,7 @@ export default function AdminDashboard() {
     { icon: Image, label: 'Portfolio Items', value: stats.portfolio ?? 0, link: '/admin/portfolio', color: 'bg-rokit-green' },
     { icon: BookOpen, label: 'Tutorials', value: stats.tutorials ?? 0, link: '/admin/tutorials', color: 'bg-indigo-500' },
     { icon: MessageSquare, label: 'Messages', value: stats.messages ?? 0, link: '/admin/orders', color: 'bg-red-400' },
+    { icon: Star, label: 'Client Brands', value: stats.clients ?? 0, link: '/admin/clients', color: 'bg-rokit-orange' },
   ] : [];
 
   return (
@@ -61,6 +62,7 @@ export default function AdminDashboard() {
             { label: 'Tutorials', to: '/admin/tutorials', desc: 'Create, edit, and publish tutorials using the rich text editor.' },
             { label: 'Services', to: '/admin/services', desc: 'Update service descriptions, pricing, and turnaround times.' },
             { label: 'Customers', to: '/admin/customers', desc: 'Browse all registered customer accounts.' },
+            { label: 'Client Logos', to: '/admin/clients', desc: 'Add and manage brand logos shown in the homepage marquee.' },
           ].map(item => (
             <Link key={item.label} to={item.to} className="bg-rokit-tan p-6 hover:bg-rokit-orange/10 transition-colors group">
               <h3 className="font-black text-rokit-dark group-hover:text-rokit-orange text-lg mb-1 transition-colors">{item.label}</h3>

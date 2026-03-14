@@ -53,7 +53,7 @@ router.patch('/messages/:id/read', markMessageRead);
 
 // Client logos
 router.get('/clients', getClients);
-router.post('/clients', createClient);
+router.post('/clients', upload.single('logo'), createClient);
 router.delete('/clients/:id', deleteClient);
 
 module.exports = router;

@@ -38,6 +38,7 @@ import PortfolioManager from './pages/admin/PortfolioManager';
 import TutorialsManager from './pages/admin/TutorialsManager';
 import ServicesManager from './pages/admin/ServicesManager';
 import CustomersManager from './pages/admin/CustomersManager';
+import ClientsManager from './pages/admin/ClientsManager';
 import AdminLayout from './components/layout/AdminLayout';
 
 const ProtectedRoute = ({ children }) => {
@@ -76,6 +77,7 @@ export default function App() {
           <Route path="tutorials" element={<TutorialsManager />} />
           <Route path="services" element={<ServicesManager />} />
           <Route path="customers" element={<CustomersManager />} />
+          <Route path="clients" element={<ClientsManager />} />
         </Route>
 
         {/* Public + portal routes */}

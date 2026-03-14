@@ -11,7 +11,7 @@ const ContactMessage = require('../models/ContactMessage');
 // Dashboard stats
 const getStats = async (req, res) => {
   try {
-    const [orders, quotations, designs, portfolioCount, tutorials, customers, messages] = await Promise.all([
+    const [orders, quotations, designs, portfolioCount, tutorials, customers, messages, clients] = await Promise.all([
       JobOrder.countDocuments(),
       Quotation.countDocuments(),
       DesignRequest.countDocuments(),
@@ -19,8 +19,9 @@ const getStats = async (req, res) => {
       Tutorial.countDocuments({ status: 'published' }),
       User.countDocuments({ role: 'customer' }),
       ContactMessage.countDocuments({ read: false }),
+      Client.countDocuments({ active: true }),
     ]);
-    res.json({ orders, quotations, designs, portfolioCount, tutorials, customers, unreadMessages: messages });
+    res.json({ orders, quotations, designs, portfolioCount, tutorials, customers, unreadMessages: messages, messages, clients });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -209,7 +210,16 @@ const getClients = async (req, res) => {
 
 const createClient = async (req, res) => {
   try {
-    const client = await Client.create(req.body);
+    const { name, website, displayOrder } = req.body;
+    if (!name) return res.status(400).json({ message: 'Client name is required' });
+    let logoUrl = req.body.logoUrl || '';
+    let logoPublicId = '';
+    if (req.file) {
+      logoUrl = req.file.path;
+      logoPublicId = req.file.filename;
+    }
+    if (!logoUrl) return res.status(400).json({ message: 'Logo is required' });
+    const client = await Client.create({ name, logoUrl, logoPublicId, website, displayOrder: displayOrder || 0 });
     res.status(201).json(client);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -218,7 +228,15 @@ const createClient = async (req, res) => {
 
 const deleteClient = async (req, res) => {
   try {
-    await Client.findByIdAndDelete(req.params.id);
+    const client = await Client.findById(req.params.id);
+    if (!client) return res.status(404).json({ message: 'Client not found' });
+    if (client.logoPublicId) {
+      try {
+        const cloudinary = require('../config/cloudinary');
+        await cloudinary.uploader.destroy(client.logoPublicId);
+      } catch { /* non-blocking */ }
+    }
+    await client.deleteOne();
     res.json({ message: 'Deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });

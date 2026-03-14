@@ -32,7 +32,7 @@ function Counter({ target, suffix }) {
   }, [target]);
 
   return (
-    <span ref={ref} className="text-4xl md:text-5xl font-bold text-rokit-orange">
+    <span ref={ref} className="font-display text-5xl md:text-6xl font-light text-rokit-orange">
       {count.toLocaleString()}{suffix}
     </span>
   );
@@ -40,14 +40,14 @@ function Counter({ target, suffix }) {
 
 export default function StatsSection() {
   return (
-    <section className="bg-white py-16 border-y border-gray-100">
+    <section className="bg-rokit-cream-dark py-20 border-y border-rokit-orange/10">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-8">
         {stats.map((stat) => {
           const StatIcon = stat.icon;
           return (
             <div key={stat.label} className="text-center">
               <div className="flex justify-center mb-3">
-                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-rokit-orange/10 text-rokit-orange">
+                <div className="w-12 h-12 flex items-center justify-center bg-rokit-orange/10 text-rokit-orange">
                   <StatIcon size={22} />
                 </div>
               </div>

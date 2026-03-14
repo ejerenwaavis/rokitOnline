@@ -70,7 +70,7 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
         isDark
-          ? 'bg-white/95 backdrop-blur-sm shadow-sm border-gray-100 py-3'
+          ? 'bg-rokit-cream/95 backdrop-blur-sm shadow-sm border-rokit-orange/10 py-3'
           : 'bg-transparent border-transparent py-5'
       }`}
     >
@@ -153,7 +153,7 @@ export default function Navbar() {
           ) : (
             <Link to="/auth/login" className={`text-sm transition-colors tracking-wide ${loginColor}`}>Login</Link>
           )}
-          <Link to="/portal/quotes/new" className="text-sm px-4 py-2 bg-rokit-orange hover:bg-rokit-orange/90 text-white rounded-lg font-medium tracking-wide transition-colors">
+          <Link to="/portal/quotes/new" className="text-xs px-4 py-2.5 bg-rokit-orange hover:bg-rokit-orange-dark text-white font-medium tracking-[0.1em] uppercase transition-colors">
             Get a Quote
           </Link>
         </div>
@@ -209,7 +209,7 @@ export default function Navbar() {
             ) : (
               <Link to="/auth/login" onClick={() => setMenuOpen(false)} className="block text-sm text-white/60 hover:text-white px-3 py-2 transition-colors">Login</Link>
             )}
-            <Link to="/portal/quotes/new" onClick={() => setMenuOpen(false)} className="block text-center text-sm bg-rokit-orange hover:bg-rokit-orange/90 text-white rounded-lg px-4 py-2.5 font-medium mx-3 transition-colors">
+            <Link to="/portal/quotes/new" onClick={() => setMenuOpen(false)} className="block text-center text-xs bg-rokit-orange hover:bg-rokit-orange-dark text-white px-4 py-2.5 font-medium tracking-[0.1em] uppercase mx-3 transition-colors">
               Get a Quote
             </Link>
           </div>

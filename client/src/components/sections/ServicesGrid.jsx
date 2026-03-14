@@ -24,7 +24,7 @@ export default function ServicesGrid() {
   }, []);
 
   return (
-    <section className="bg-white py-24">
+    <section className="bg-rokit-cream py-24">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-14">
           <p className="text-rokit-orange text-xs font-medium uppercase tracking-[0.15em] mb-3">What We Do</p>
@@ -42,9 +42,9 @@ export default function ServicesGrid() {
               <Link
                 key={service._id}
                 to={`/services/${service.slug}`}
-                className="group bg-white border border-gray-100 rounded-xl p-7 hover:border-rokit-orange/20 hover:shadow-lg transition-all duration-300"
+                className="group bg-white border border-rokit-orange/10 p-7 hover:border-rokit-orange/30 hover:shadow-lg transition-all duration-300"
               >
-                <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-rokit-orange/10 text-rokit-orange mb-5 group-hover:bg-rokit-orange group-hover:text-white transition-colors duration-300">
+                <div className="w-12 h-12 flex items-center justify-center bg-rokit-orange/10 text-rokit-orange mb-5 group-hover:bg-rokit-orange group-hover:text-white transition-colors duration-300">
                   <ServiceIcon size={22} />
                 </div>
                 <h3 className="text-base font-semibold text-rokit-dark mb-2">

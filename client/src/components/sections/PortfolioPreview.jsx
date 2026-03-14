@@ -27,7 +27,7 @@ export default function PortfolioPreview() {
   }, []);
 
   return (
-    <section className="bg-white py-24">
+    <section className="bg-rokit-cream py-24">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-14">
           <p className="text-rokit-orange text-xs font-medium uppercase tracking-[0.15em] mb-3">Our Work</p>
@@ -43,7 +43,7 @@ export default function PortfolioPreview() {
             const badgeColor = categoryColors[item.category] || 'bg-gray-500';
             const imgUrl = item.images?.[0]?.url || '/assets/images/strip-1.jpg';
             return (
-              <div key={item._id} className="group relative overflow-hidden rounded-xl bg-rokit-dark aspect-[4/3]">
+              <div key={item._id} className="group relative overflow-hidden bg-rokit-dark aspect-[4/3]">
                 <img
                   src={imgUrl}
                   alt={item.title}

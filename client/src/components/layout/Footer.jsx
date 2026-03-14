@@ -22,7 +22,7 @@ export default function Footer() {
   return (
     <footer>
       {/* Main footer */}
-      <div className="bg-gray-50 border-t border-gray-100">
+      <div className="bg-rokit-cream border-t border-rokit-orange/10">
         {/* Top accent */}
         <div className="flex h-1">
           <div className="flex-1 bg-rokit-orange" />
@@ -54,7 +54,7 @@ export default function Footer() {
                 const SocialIcon = item.icon;
                 return (
                   <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer"
-                    className="w-9 h-9 flex items-center justify-center border border-gray-200 text-rokit-body rounded-full hover:border-rokit-orange hover:text-rokit-orange hover:bg-rokit-orange/10 transition-all duration-300"
+                    className="w-9 h-9 flex items-center justify-center border border-rokit-orange/20 text-rokit-body hover:border-rokit-orange hover:text-rokit-orange hover:bg-rokit-orange/10 transition-all duration-300"
                   >
                     <SocialIcon size={16} />
                   </a>
@@ -138,7 +138,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="bg-white border-t border-gray-100 py-4 px-4">
+      <div className="bg-rokit-cream-dark border-t border-rokit-orange/10 py-4 px-4">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-rokit-body/70">
           <p>© {new Date().getFullYear()} Rokit Media. All rights reserved.</p>
           <div className="flex gap-4">

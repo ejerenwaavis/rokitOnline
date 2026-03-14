@@ -11,7 +11,7 @@ const reasons = [
 
 export default function WhyUsSection() {
   return (
-    <section className="bg-gray-50 py-24">
+    <section className="bg-rokit-cream-dark py-24">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-14">
           <p className="text-rokit-orange text-xs font-medium uppercase tracking-[0.15em] mb-3">Why Choose Us</p>
@@ -23,8 +23,8 @@ export default function WhyUsSection() {
           {reasons.map((item) => {
             const ItemIcon = item.icon;
             return (
-              <div key={item.title} className="flex gap-4 bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <div className="shrink-0 w-10 h-10 rounded-full bg-rokit-orange/10 flex items-center justify-center text-rokit-orange mt-0.5">
+              <div key={item.title} className="flex gap-4 bg-rokit-cream p-6 border border-rokit-orange/10 hover:border-rokit-orange/25 transition-colors duration-300">
+                <div className="shrink-0 w-10 h-10 bg-rokit-orange/10 flex items-center justify-center text-rokit-orange mt-0.5">
                   <ItemIcon size={18} />
                 </div>
                 <div>

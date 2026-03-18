@@ -4,22 +4,24 @@
 
 @layer base {
   * { box-sizing: border-box; }
-  body { font-family: "Poppins", system-ui, sans-serif; color: #777777; background: #fff; }
-  h1, h2, h3, h4, h5, h6 { color: #222222; font-weight: 600; }
+  body { font-family: "DM Sans", system-ui, sans-serif; color: #737373; background: #FCFAF8; }
+  h1, h2, h3, h4, h5, h6 { color: #1A1A1A; font-weight: 400; }
   a { color: #FF9729; transition: color 0.2s ease; }
   a:hover { color: #e6861a; }
 }
 
 @layer components {
-  .btn-primary { @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-rokit-orange text-white font-medium rounded-lg border-2 border-rokit-orange hover:bg-rokit-orange-dark hover:border-rokit-orange-dark transition-all duration-200 cursor-pointer; }
-  .btn-outline { @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-transparent text-rokit-orange font-medium rounded-lg border-2 border-rokit-orange hover:bg-rokit-orange hover:text-white transition-all duration-200 cursor-pointer; }
-  .btn-gold { @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-transparent text-rokit-gold font-medium rounded-lg border-2 border-rokit-gold hover:bg-rokit-gold hover:text-white transition-all duration-200 cursor-pointer; }
-  .btn-white { @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-white text-rokit-dark font-medium rounded-lg border-2 border-white hover:bg-white/10 hover:text-white transition-all duration-200 cursor-pointer; }
-  .section-title { @apply text-3xl md:text-4xl font-bold text-rokit-dark mb-3; }
-  .section-subtitle { @apply text-rokit-body text-base md:text-lg mb-10; }
-  .section-divider { @apply w-10 h-0.5 bg-rokit-orange/60 mx-auto mb-6; }
-  .card { @apply bg-white shadow-sm hover:shadow-lg rounded-xl transition-shadow duration-300; }
-  .form-input { @apply w-full px-4 py-3 border border-gray-200 rounded-lg focus:border-rokit-orange focus:outline-none focus:ring-2 focus:ring-rokit-orange/10 transition-colors duration-200 text-rokit-dark bg-white; }
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-rokit-orange text-white font-medium tracking-[0.08em] uppercase text-sm border-2 border-rokit-orange hover:bg-rokit-orange-dark hover:border-rokit-orange-dark transition-all duration-200 cursor-pointer; }
+  .btn-outline { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent text-rokit-orange font-medium tracking-[0.08em] uppercase text-sm border-2 border-rokit-orange hover:bg-rokit-orange hover:text-white transition-all duration-200 cursor-pointer; }
+  .btn-gold { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent text-rokit-gold font-medium tracking-[0.08em] uppercase text-sm border-2 border-rokit-gold hover:bg-rokit-gold hover:text-white transition-all duration-200 cursor-pointer; }
+  .btn-white { @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent text-white font-medium tracking-[0.08em] uppercase text-sm border-2 border-white hover:bg-white hover:text-rokit-dark transition-all duration-200 cursor-pointer; }
+  .section-title { @apply font-display text-4xl md:text-5xl font-light text-rokit-dark mb-4 leading-tight; }
+  .section-subtitle { @apply text-rokit-body text-base md:text-lg mb-10 font-light; }
+  .section-divider { @apply w-8 h-px bg-rokit-orange mx-auto mb-8; }
+  .card { @apply bg-rokit-cream shadow-sm hover:shadow-lg transition-shadow duration-300 border border-rokit-orange/10; }
+  .eyebrow { @apply font-mono text-[10px] uppercase tracking-[0.22em] text-rokit-body block; }
+  .eyebrow-orange { @apply font-mono text-[10px] uppercase tracking-[0.22em] text-rokit-orange block; }
+  .form-input { @apply w-full px-4 py-3 border border-gray-200 focus:border-rokit-orange focus:outline-none focus:ring-2 focus:ring-rokit-orange/10 transition-colors duration-200 text-rokit-dark bg-white; }
   .form-label { @apply block text-sm font-medium text-rokit-dark mb-1; }
   .badge-status { @apply inline-block px-3 py-1 text-xs font-semibold rounded-full; }
 }

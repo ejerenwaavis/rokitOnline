@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
+import { T } from '../../theme';
 
 export default function Login() {
   const { login, verifyMfa, isAdmin } = useAuth();
@@ -80,24 +81,24 @@ export default function Login() {
   return (
     <>
       <Helmet><title>Log In – Rokit Media</title></Helmet>
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-20">
+      <div className="min-h-screen bg-rokit-cream flex items-center justify-center px-4 py-20">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <img src="/assets/images/rokit-logo.png" alt="Rokit Media" className="h-12 mx-auto mb-4" />
+            <img src="/assets/images/rokit-logo.png" alt="Rokit Media" className="h-10 mx-auto mb-5" />
             {mfaPending ? (
               <>
-                <h1 className="text-3xl font-black text-rokit-dark">Verify Your Identity</h1>
-                <p className="text-rokit-body mt-1">Enter the 6-digit code sent to <strong>{form.email}</strong></p>
+                <h1 className={`${T.h2} mb-1`}>Verify Your Identity</h1>
+                <p className={T.body}>Enter the 6-digit code sent to <strong>{form.email}</strong></p>
               </>
             ) : (
               <>
-                <h1 className="text-3xl font-black text-rokit-dark">Log In</h1>
-                <p className="text-rokit-body mt-1">Welcome back! Sign in to your account.</p>
+                <h1 className={`${T.h2} mb-1`}>Log In</h1>
+                <p className={T.body}>Welcome back! Sign in to your account.</p>
               </>
             )}
           </div>
 
-          <div className="bg-white p-8 shadow-lg rounded-xl">
+          <div className={T.formCard}>
             {!mfaPending ? (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
@@ -148,7 +149,7 @@ export default function Login() {
             ) : (
               <form onSubmit={handleVerifyMfa} className="space-y-5">
                 <div className="flex justify-center mb-2">
-                  <div className="w-14 h-14 bg-rokit-orange/10 rounded-full flex items-center justify-center">
+                  <div className="w-14 h-14 bg-rokit-orange/10 flex items-center justify-center">
                     <ShieldCheck size={28} className="text-rokit-orange" />
                   </div>
                 </div>

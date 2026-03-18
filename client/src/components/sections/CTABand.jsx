@@ -13,7 +13,7 @@ export default function CTABand() {
         <p className="text-rokit-orange text-xs font-medium uppercase tracking-[0.15em] mb-4">
           Ready to Get Started?
         </p>
-        <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
+        <h2 className="font-display text-5xl md:text-6xl font-light text-white leading-tight mb-6">
           Our Jobs Are Constantly<br />
           <span className="text-rokit-orange">Under Construction</span>
         </h2>

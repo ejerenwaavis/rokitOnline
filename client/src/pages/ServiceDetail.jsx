@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { CheckCircle, ArrowLeft, Clock, DollarSign } from 'lucide-react';
 import api from '../utils/api';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { T } from '../theme';
 
 export default function ServiceDetail() {
   const { slug } = useParams();
@@ -23,8 +24,8 @@ export default function ServiceDetail() {
   }, [slug]);
 
   if (error) return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-      <h2 className="text-2xl font-bold text-rokit-dark mb-4">Service Not Found</h2>
+    <div className={`${T.notFound} gap-4`}>
+      <h2 className={`${T.h3}`}>Service Not Found</h2>
       <Link to="/services" className="btn-primary">Back to Services</Link>
     </div>
   );
@@ -39,26 +40,26 @@ export default function ServiceDetail() {
       </Helmet>
 
       {/* Hero */}
-      <div className="bg-gray-50 border-b border-gray-100 pt-32 pb-14">
-        <div className="max-w-7xl mx-auto px-4">
-          <Link to="/services" className="inline-flex items-center gap-2 text-rokit-body hover:text-rokit-orange text-sm mb-6">
-            <ArrowLeft size={16} /> Back to Services
+      <div className={T.pageHero}>
+        <div className={T.pageHeroInner}>
+          <Link to="/services" className="inline-flex items-center gap-2 text-rokit-body hover:text-rokit-orange text-sm mb-6 font-mono text-[10px] uppercase tracking-[0.12em]">
+            <ArrowLeft size={14} /> Back to Services
           </Link>
-          <h1 className="text-5xl font-bold text-rokit-dark mb-3">{service.name}</h1>
-          <p className="text-rokit-body max-w-2xl">{service.shortDescription}</p>
+          <h1 className={`${T.h1} mb-3`}>{service.name}</h1>
+          <p className={`${T.body} max-w-2xl`}>{service.shortDescription}</p>
         </div>
       </div>
 
       {/* Content */}
-      <div className="bg-white py-20">
-        <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-3 gap-12">
+      <div className={T.sectionCream}>
+        <div className={`${T.sectionInner} grid lg:grid-cols-3 gap-12`}>
           {/* Main content */}
           <div className="lg:col-span-2">
             {service.images?.length > 0 && (
               <img
                 src={service.images[0]}
                 alt={service.name}
-                className="w-full h-72 object-cover mb-8 rounded-xl"
+                className="w-full h-72 object-cover mb-8"
               />
             )}
             {service.fullDescription && (
@@ -69,7 +70,7 @@ export default function ServiceDetail() {
             )}
             {service.features?.length > 0 && (
               <>
-                <h3 className="text-2xl font-bold text-rokit-dark mt-8 mb-4">What's Included</h3>
+                <h3 className={`${T.h3} mt-8 mb-4`}>What&apos;s Included</h3>
                 <ul className="space-y-3">
                   {service.features.map(f => (
                     <li key={f} className="flex items-start gap-3">
@@ -84,8 +85,8 @@ export default function ServiceDetail() {
 
           {/* Sidebar */}
           <aside className="space-y-6">
-            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
-              <h4 className="font-bold text-rokit-dark text-lg mb-4">Quick Info</h4>
+            <div className="bg-white border border-rokit-orange/10 p-6">
+              <h4 className="font-display font-light text-rokit-dark text-lg mb-4">Quick Info</h4>
               {service.startingPrice && !isNaN(+service.startingPrice) && (
                 <div className="flex items-center gap-3 mb-3 text-rokit-body">
                   <DollarSign size={18} className="text-rokit-orange" />
@@ -106,15 +107,15 @@ export default function ServiceDetail() {
               )}
             </div>
 
-            <div className="bg-rokit-orange p-6 rounded-xl text-white">
-              <h4 className="font-bold text-xl mb-3">Ready to Order?</h4>
+            <div className="bg-rokit-orange p-6 text-white">
+              <h4 className="font-display font-light text-xl mb-3">Ready to Order?</h4>
               <p className="text-white/90 text-sm mb-5">
                 Place a job order or request a free quote today — our team is ready to help.
               </p>
-              <Link to="/portal/order" className="block w-full bg-white text-rokit-orange font-bold text-center py-3 rounded-lg hover:bg-gray-50 transition-colors mb-3">
+              <Link to="/portal/order" className="block w-full bg-white text-rokit-orange font-mono text-[10px] uppercase tracking-[0.12em] text-center py-3 hover:bg-rokit-cream transition-colors mb-3">
                 Place an Order
               </Link>
-              <Link to="/portal/quote" className="block w-full border border-white text-white font-bold text-center py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <Link to="/portal/quote" className="block w-full border border-white text-white font-mono text-[10px] uppercase tracking-[0.12em] text-center py-3 hover:bg-white/10 transition-colors">
                 Get a Quote
               </Link>
             </div>

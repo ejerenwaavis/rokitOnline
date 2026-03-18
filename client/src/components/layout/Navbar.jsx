@@ -30,33 +30,12 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Only the homepage has a dark full-screen hero — all other pages have light bg.
-  // Transparent navbar: white links on homepage, dark links everywhere else.
   const isDark = scrolled;
-  const hasDarkHero = location.pathname === '/';
-
-  // Link colour tokens
-  const linkBase = isDark
-    ? 'text-gray-600 hover:text-rokit-dark'
-    : hasDarkHero
-      ? 'text-white/80 hover:text-white'
-      : 'text-rokit-dark/70 hover:text-rokit-dark';
+  // Editorial hero is now light cream — all pages use dark nav links from the start
+  const linkBase = isDark ? 'text-gray-500 hover:text-rokit-dark' : 'text-rokit-dark/55 hover:text-rokit-dark';
   const linkActive = 'text-rokit-orange';
-  const loginColor = isDark
-    ? 'text-gray-500 hover:text-rokit-dark'
-    : hasDarkHero
-      ? 'text-white/70 hover:text-white'
-      : 'text-rokit-dark/60 hover:text-rokit-dark';
-  const iconColor = isDark
-    ? 'text-gray-600 hover:text-rokit-dark'
-    : hasDarkHero
-      ? 'text-white/80 hover:text-white'
-      : 'text-rokit-dark/70 hover:text-rokit-dark';
-  const hamburgerColor = isDark
-    ? 'text-gray-600 hover:text-rokit-dark'
-    : hasDarkHero
-      ? 'text-white/80 hover:text-white'
-      : 'text-rokit-dark/70 hover:text-rokit-dark';
+  const loginColor = isDark ? 'text-gray-500 hover:text-rokit-dark' : 'text-rokit-dark/50 hover:text-rokit-dark';
+  const hamburgerColor = isDark ? 'text-gray-600 hover:text-rokit-dark' : 'text-rokit-dark/60 hover:text-rokit-dark';
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
@@ -70,15 +49,15 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
         isDark
-          ? 'bg-white/95 backdrop-blur-sm shadow-sm border-gray-100 py-3'
+          ? 'bg-rokit-cream/95 backdrop-blur-sm shadow-sm border-rokit-orange/10 py-3'
           : 'bg-transparent border-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        {/* Logo — white on dark-hero pages, coloured on light-top pages */}
+        {/* Logo — always coloured since background is always light */}
         <Link to="/" className="flex items-center">
           <img
-            src={(!isDark && hasDarkHero) ? '/assets/images/rokit-logo-white.png' : '/assets/images/rokit-logo.png'}
+            src="/assets/images/rokit-logo.png"
             alt="Rokit Media"
             className="h-6 w-auto transition-all duration-300"
           />
@@ -90,11 +69,12 @@ export default function Navbar() {
             link.children ? (
               <div key={link.label} className="relative group">
                 <button
-                  className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors tracking-wide ${linkBase}`}
+                  className={`relative flex items-center gap-1 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.15em] transition-colors ${linkBase}`}
                   onMouseEnter={() => setDropdown(link.label)}
                   onMouseLeave={() => setDropdown(null)}
                 >
-                  {link.label} <ChevronDown size={12} className="opacity-60" />
+                  {link.label} <ChevronDown size={9} className="opacity-60" />
+                  <span className="absolute bottom-0 left-3 right-3 h-px bg-rokit-orange scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 </button>
                 <div
                   className={`absolute top-full left-0 bg-rokit-dark/95 backdrop-blur-md min-w-48 shadow-2xl rounded-lg overflow-hidden ring-1 ring-white/10 transition-all duration-200 ${
@@ -118,11 +98,16 @@ export default function Navbar() {
               <NavLink
                 key={link.to}
                 to={link.to}
-                className={({ isActive }) =>
-                  `px-3 py-2 text-sm font-medium tracking-wide transition-colors ${isActive ? linkActive : linkBase}`
-                }
+                className="relative group px-3 py-2"
               >
-                {link.label}
+                {({ isActive }) => (
+                  <>
+                    <span className={`font-mono text-[10px] uppercase tracking-[0.15em] transition-colors ${isActive ? linkActive : linkBase}`}>
+                      {link.label}
+                    </span>
+                    <span className={`absolute bottom-0 left-3 right-3 h-px bg-rokit-orange transition-transform duration-300 origin-left ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`} />
+                  </>
+                )}
               </NavLink>
             )
           )}
@@ -132,9 +117,9 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center gap-4">
           {user ? (
             <div className="relative group">
-              <button className={`flex items-center gap-2 text-sm transition-colors ${iconColor}`}>
-                <User size={15} /> {user.name?.split(' ')[0] ?? 'Account'}
-                <ChevronDown size={12} className="opacity-60" />
+              <button className={`flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors ${loginColor}`}>
+                <User size={13} /> {user.name?.split(' ')[0] ?? 'Account'}
+                <ChevronDown size={9} className="opacity-60" />
               </button>
               <div className="absolute right-0 top-full bg-rokit-dark/95 backdrop-blur-md min-w-44 shadow-2xl rounded-lg overflow-hidden ring-1 ring-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 mt-1">
                 <Link to="/portal" className="flex items-center gap-2 px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors">
@@ -151,9 +136,9 @@ export default function Navbar() {
               </div>
             </div>
           ) : (
-            <Link to="/auth/login" className={`text-sm transition-colors tracking-wide ${loginColor}`}>Login</Link>
+            <Link to="/auth/login" className={`font-mono text-[10px] uppercase tracking-[0.15em] transition-colors ${loginColor}`}>Login</Link>
           )}
-          <Link to="/portal/quotes/new" className="text-sm px-4 py-2 bg-rokit-orange hover:bg-rokit-orange/90 text-white rounded-lg font-medium tracking-wide transition-colors">
+          <Link to="/portal/quotes/new" className="text-xs px-4 py-2.5 bg-rokit-orange hover:bg-rokit-orange-dark text-white font-medium tracking-[0.1em] uppercase transition-colors">
             Get a Quote
           </Link>
         </div>
@@ -209,7 +194,7 @@ export default function Navbar() {
             ) : (
               <Link to="/auth/login" onClick={() => setMenuOpen(false)} className="block text-sm text-white/60 hover:text-white px-3 py-2 transition-colors">Login</Link>
             )}
-            <Link to="/portal/quotes/new" onClick={() => setMenuOpen(false)} className="block text-center text-sm bg-rokit-orange hover:bg-rokit-orange/90 text-white rounded-lg px-4 py-2.5 font-medium mx-3 transition-colors">
+            <Link to="/portal/quotes/new" onClick={() => setMenuOpen(false)} className="block text-center text-xs bg-rokit-orange hover:bg-rokit-orange-dark text-white px-4 py-2.5 font-medium tracking-[0.1em] uppercase mx-3 transition-colors">
               Get a Quote
             </Link>
           </div>

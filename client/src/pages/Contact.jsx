@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
+import { T } from '../theme';
 
 const contactInfo = [
   {
@@ -53,23 +54,25 @@ export default function Contact() {
       </Helmet>
 
       {/* Hero */}
-      <div className="bg-gray-50 border-b border-gray-100 pt-32 pb-14 text-center">
-        <p className="text-rokit-orange text-xs font-medium tracking-[0.15em] uppercase mb-3">Reach Out</p>
-        <h1 className="text-5xl font-bold text-rokit-dark mb-4">Contact Us</h1>
-        <p className="text-rokit-body max-w-xl mx-auto">
-          Have a project in mind? We're ready to help. Drop us a message or give us a call.
-        </p>
+      <div className={T.pageHero}>
+        <div className={`${T.pageHeroInner} ${T.pageHeroCentered}`}>
+          <span className={`${T.eyebrowOrange} mb-3`}>Reach Out</span>
+          <h1 className={`${T.h1} mb-4`}>Contact Us</h1>
+          <p className={`${T.body} max-w-xl mx-auto`}>
+            Have a project in mind? We&apos;re ready to help. Drop us a message or give us a call.
+          </p>
+        </div>
       </div>
 
-      <section className="bg-white py-20">
-        <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-16">
+      <section className={T.sectionCream}>
+        <div className={`${T.sectionInner} grid lg:grid-cols-2 gap-16`}>
           {/* Contact Form */}
           <div>
-            <h2 className="text-3xl font-bold text-rokit-dark mb-8">Send Us a Message</h2>
+            <h2 className={`${T.h3} mb-8`}>Send Us a Message</h2>
             {sent ? (
-              <div className="bg-rokit-green/10 border border-rokit-green/30 rounded-xl p-8 text-center">
-                <p className="text-2xl font-bold text-rokit-green mb-2">Message Sent!</p>
-                <p className="text-rokit-body">Thank you for reaching out. Our team will respond within 24 hours.</p>
+              <div className={T.successBox}>
+                <p className="font-display text-2xl font-light text-rokit-green mb-2">Message Sent!</p>
+                <p className={T.body}>Thank you for reaching out. Our team will respond within 24 hours.</p>
                 <button onClick={() => { setSent(false); setForm({ name: '', email: '', phone: '', subject: '', message: '' }); }} className="mt-6 btn-outline">
                   Send Another
                 </button>
@@ -109,13 +112,13 @@ export default function Contact() {
 
           {/* Info Panel */}
           <div>
-            <h2 className="text-3xl font-bold text-rokit-dark mb-8">Our Office</h2>
+            <h2 className={`${T.h3} mb-8`}>Our Office</h2>
             <div className="space-y-6 mb-10">
               {contactInfo.map((item) => {
                 const ItemIcon = item.icon;
                 return (
                   <div key={item.label} className="flex gap-4">
-                    <div className="w-10 h-10 bg-rokit-orange/10 rounded-full flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 bg-rokit-orange/10 flex items-center justify-center shrink-0">
                       <ItemIcon size={18} className="text-rokit-orange" />
                     </div>
                     <div>
@@ -128,7 +131,7 @@ export default function Contact() {
             </div>
 
             {/* Google Maps iframe */}
-            <div className="aspect-video w-full overflow-hidden rounded-xl">
+            <div className="aspect-video w-full overflow-hidden">
               <iframe
                 title="Rokit Media Office Location"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.3!2d4.561!3d7.771!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwNDYnMTUuNiJOIDTCsDMzJzM5LjYiRQ!5e0!3m2!1sen!2sng!4v1600000000000!5m2!1sen!2sng"

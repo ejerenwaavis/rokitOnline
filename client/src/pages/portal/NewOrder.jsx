@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import toast from 'react-hot-toast';
@@ -52,10 +52,11 @@ function PaymentStep({ onSuccess }) {
 
 export default function NewOrder() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
-    serviceType: '',
-    description: '',
+    serviceType: searchParams.get('serviceType') || '',
+    description: searchParams.get('project') ? `Similar project to: ${searchParams.get('project')}` : '',
     specs: { width: '', height: '', quantity: '', material: '' },
     depositAmount: '',
     totalAmount: '',

@@ -41,6 +41,13 @@ const createPortfolioItem = async (req, res) => {
     if (data.featured !== undefined) {
       data.featured = data.featured === 'true' || data.featured === true;
     }
+    // milestones and obstacles arrive as JSON strings from FormData
+    if (typeof data.milestones === 'string') {
+      try { data.milestones = JSON.parse(data.milestones); } catch { data.milestones = []; }
+    }
+    if (typeof data.obstacles === 'string') {
+      try { data.obstacles = JSON.parse(data.obstacles); } catch { data.obstacles = []; }
+    }
     if (req.files && req.files.length > 0) {
       data.images = req.files.map((f, i) => ({
         url: f.path,
@@ -58,7 +65,14 @@ const createPortfolioItem = async (req, res) => {
 
 const updatePortfolioItem = async (req, res) => {
   try {
-    const item = await Portfolio.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const data = { ...req.body };
+    if (typeof data.milestones === 'string') {
+      try { data.milestones = JSON.parse(data.milestones); } catch { data.milestones = []; }
+    }
+    if (typeof data.obstacles === 'string') {
+      try { data.obstacles = JSON.parse(data.obstacles); } catch { data.obstacles = []; }
+    }
+    const item = await Portfolio.findByIdAndUpdate(req.params.id, data, { new: true });
     if (!item) return res.status(404).json({ message: 'Portfolio item not found' });
     res.json(item);
   } catch (err) {
@@ -75,4 +89,13 @@ const deletePortfolioItem = async (req, res) => {
   }
 };
 
-module.exports = { getPortfolio, getFeatured, getPortfolioById, createPortfolioItem, updatePortfolioItem, deletePortfolioItem };
+const uploadStepImage = async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+    res.json({ url: req.file.path, publicId: req.file.filename });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { getPortfolio, getFeatured, getPortfolioById, createPortfolioItem, updatePortfolioItem, deletePortfolioItem, uploadStepImage };

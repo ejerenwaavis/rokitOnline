@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:4100',
         changeOrigin: true,
       },
     },
@@ -25,6 +25,7 @@ export default defineConfig({
           'vendor-swiper': ['swiper'],
           'vendor-ui': ['lucide-react', 'react-hot-toast', 'react-helmet-async'],
           'vendor-lightbox': ['yet-another-react-lightbox'],
+          'vendor-motion': ['framer-motion'],
         },
       },
     },

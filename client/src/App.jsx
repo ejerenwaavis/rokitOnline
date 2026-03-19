@@ -17,6 +17,9 @@ import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Cookies from './pages/Cookies';
 import Health from './pages/Health';
+import SolutionNGO from './pages/SolutionNGO';
+import SolutionSME from './pages/SolutionSME';
+import PortfolioDetail from './pages/PortfolioDetail';
 
 // Auth
 import Login from './pages/auth/Login';
@@ -87,6 +90,9 @@ export default function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/services/:slug" element={<ServiceDetail />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/gallery/:id" element={<PortfolioDetail />} />
+          <Route path="/solutions/ngo" element={<SolutionNGO />} />
+          <Route path="/solutions/sme" element={<SolutionSME />} />
           <Route path="/tutorials" element={<Tutorials />} />
           <Route path="/tutorials/:slug" element={<TutorialPost />} />
           <Route path="/contact" element={<Contact />} />

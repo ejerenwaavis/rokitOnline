@@ -19,6 +19,13 @@ const navLinks = [
   },
   { label: 'Gallery', to: '/gallery' },
   { label: 'Tutorials', to: '/tutorials' },
+  {
+    label: 'Solutions', to: '/solutions',
+    children: [
+      { label: 'For NGOs', to: '/solutions/ngo' },
+      { label: 'For SMEs', to: '/solutions/sme' },
+    ]
+  },
   { label: 'Contact', to: '/contact' },
 ];
 
@@ -35,7 +42,8 @@ export default function Navbar() {
   const linkBase = isDark ? 'text-gray-500 hover:text-rokit-dark' : 'text-rokit-dark/55 hover:text-rokit-dark';
   const linkActive = 'text-rokit-orange';
   const loginColor = isDark ? 'text-gray-500 hover:text-rokit-dark' : 'text-rokit-dark/50 hover:text-rokit-dark';
-  const hamburgerColor = isDark ? 'text-gray-600 hover:text-rokit-dark' : 'text-rokit-dark/60 hover:text-rokit-dark';
+  // When mobile menu is open, icon must be white so it's visible on the dark overlay
+  const hamburgerColor = menuOpen ? 'text-white hover:text-rokit-orange' : isDark ? 'text-gray-600 hover:text-rokit-dark' : 'text-rokit-dark/60 hover:text-rokit-dark';
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
@@ -48,16 +56,18 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
-        isDark
-          ? 'bg-rokit-cream/95 backdrop-blur-sm shadow-sm border-rokit-orange/10 py-3'
-          : 'bg-transparent border-transparent py-5'
+        menuOpen
+          ? 'bg-rokit-dark/95 backdrop-blur-md border-white/10 py-3'
+          : isDark
+            ? 'bg-rokit-cream/95 backdrop-blur-sm shadow-sm border-rokit-orange/10 py-3'
+            : 'bg-transparent border-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        {/* Logo — always coloured since background is always light */}
+        {/* Logo — switches to white when mobile menu is open */}
         <Link to="/" className="flex items-center">
           <img
-            src="/assets/images/rokit-logo.png"
+            src={menuOpen ? '/assets/images/rokit-logo-white.png' : '/assets/images/rokit-logo.png'}
             alt="Rokit Media"
             className="h-6 w-auto transition-all duration-300"
           />

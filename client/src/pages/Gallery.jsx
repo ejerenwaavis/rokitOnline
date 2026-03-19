@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import Lightbox from 'yet-another-react-lightbox';
-import 'yet-another-react-lightbox/styles.css';
+import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { T } from '../theme';
@@ -20,8 +19,7 @@ export default function Gallery() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('');
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const url = activeCategory ? `/portfolio?category=${activeCategory}` : '/portfolio';
@@ -34,16 +32,6 @@ export default function Gallery() {
 
   const handleCategoryChange = (cat) => {
     setActiveCategory(cat);
-  };
-
-  const allImages = items.flatMap(item =>
-    (item.images || []).map(img => ({ src: img.url || img, title: item.title }))
-  );
-
-  const openLightbox = (itemIdx, imgIdx) => {
-    const beforeCount = items.slice(0, itemIdx).reduce((acc, i) => acc + (i.images?.length || 0), 0);
-    setLightboxIndex(beforeCount + imgIdx);
-    setLightboxOpen(true);
   };
 
   return (
@@ -87,37 +75,34 @@ export default function Gallery() {
           ) : items.length === 0 ? (
             <div className="text-center py-20 text-rokit-body">No portfolio items found.</div>
           ) : (
-            <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
-              {items.map((item, itemIdx) =>
-                (item.images || []).map((img, imgIdx) => (
-                  <div
-                    key={`${item._id}-${imgIdx}`}
-                    className="break-inside-avoid group relative overflow-hidden cursor-pointer bg-rokit-cream-dark"
-                    onClick={() => openLightbox(itemIdx, imgIdx)}
-                  >
-                    <img
-                      src={img.url || img}
-                      alt={item.title}
-                      className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                      <p className="text-white font-mono text-[10px] uppercase tracking-[0.12em] leading-tight">{item.title}</p>
-                    </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 auto-rows-[200px] sm:auto-rows-[220px] lg:auto-rows-[240px] gap-1" style={{ gridAutoFlow: 'dense' }}>
+              {items.map((item, index) => {
+                const isFeature = index % 5 === 0;
+                return (
+                <div
+                  key={item._id}
+                  className={`group relative overflow-hidden cursor-pointer bg-rokit-cream-dark ${isFeature ? 'col-span-2 row-span-2' : ''}`}
+                  onClick={() => navigate(`/gallery/${item._id}`)}
+                >
+                  <img
+                    src={item.images?.[0]?.url || item.images?.[0] || ''}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-end justify-end p-4 gap-1">
+                    <p className="text-white font-mono text-[10px] uppercase tracking-[0.12em] leading-tight text-right">{item.title}</p>
+                    <span className="font-mono text-[9px] uppercase tracking-wider text-rokit-orange">{item.category?.replace(/-/g, ' ')}</span>
+                    <span className="font-mono text-[9px] text-white/50 mt-1">View details →</span>
                   </div>
-                ))
-              )}
+                </div>
+                );
+              })}
             </div>
           )}
         </div>
       </section>
 
-      <Lightbox
-        open={lightboxOpen}
-        close={() => setLightboxOpen(false)}
-        index={lightboxIndex}
-        slides={allImages}
-      />
     </>
   );
 }

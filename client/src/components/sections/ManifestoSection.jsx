@@ -1,3 +1,10 @@
+import { motion } from 'framer-motion';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 36 },
+  visible: (i = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.7, delay: i * 0.12, ease: [0.25, 0.1, 0.25, 1] } }),
+};
+
 const tags = [
   'Large Format',
   'Graphic Design',
@@ -14,7 +21,9 @@ export default function ManifestoSection() {
         <div className="grid lg:grid-cols-[1fr_1fr] gap-16 items-start">
 
           {/* Left: opening quote */}
-          <div>
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp} custom={0}
+          >
             <span
               aria-hidden
               className="font-display text-[7rem] leading-none text-rokit-orange/15 select-none block -mb-6"
@@ -24,10 +33,12 @@ export default function ManifestoSection() {
               <span className="text-rokit-orange italic">We make your brand</span>{' '}
               impossible to ignore.
             </blockquote>
-          </div>
+          </motion.div>
 
           {/* Right: body + tags */}
-          <div className="space-y-5 pt-4">
+          <motion.div className="space-y-5 pt-4"
+            initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp} custom={1}
+          >
             <p className="text-rokit-body leading-relaxed font-light">
               From Abuja to Bradford, we&apos;ve delivered large-scale visibility for brands
               that refuse to blend in. Our work spans government ministries, NGOs,
@@ -39,16 +50,17 @@ export default function ManifestoSection() {
               and endures.
             </p>
             <div className="flex flex-wrap gap-2 pt-4">
-              {tags.map((tag) => (
-                <span
+              {tags.map((tag, i) => (
+                <motion.span
                   key={tag}
                   className="font-mono text-[10px] uppercase tracking-[0.15em] text-rokit-dark border border-rokit-orange/20 px-3 py-1.5 hover:border-rokit-orange hover:text-rokit-orange transition-colors duration-200 cursor-default"
+                  initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i * 0.6}
                 >
                   {tag}
-                </span>
+                </motion.span>
               ))}
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </div>

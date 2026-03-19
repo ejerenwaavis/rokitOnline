@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../../utils/api';
 
@@ -16,7 +16,12 @@ const serviceTypes = [
 
 export default function NewQuote() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', phone: '', serviceType: '', projectDescription: '' });
+  const [searchParams] = useSearchParams();
+  const [form, setForm] = useState({
+    name: '', email: '', phone: '',
+    serviceType: searchParams.get('serviceType') || '',
+    projectDescription: searchParams.get('project') ? `Similar project to: ${searchParams.get('project')}` : '',
+  });
   const [files, setFiles] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 

@@ -66,7 +66,7 @@ export default function About() {
               <h4 className="text-rokit-gold font-display text-xl font-light mb-2">Our Values</h4>
               <div className="flex flex-wrap gap-2 mt-2">
                 {['Creativity', 'Excellence', 'Integrity', 'Speed', 'Customer Focus'].map(v => (
-                  <span key={v} className={T.tag.replace('text-rokit-dark border-rokit-orange/20', 'text-white border-white/20').replace('hover:border-rokit-orange hover:text-rokit-orange', 'hover:border-white/50')}>{v}</span>
+                  <span key={v} className="font-mono text-[10px] uppercase tracking-[0.15em] text-white border border-white/30 px-3 py-1.5 hover:border-rokit-orange hover:text-rokit-orange transition-colors duration-200 cursor-default">{v}</span>
                 ))}
               </div>
             </div>
@@ -79,7 +79,7 @@ export default function About() {
         <div className={`${T.sectionInner} grid md:grid-cols-2 gap-12 items-center`}>
           <div className="relative">
             <img
-              src="/assets/images/ceo.jpg"
+              src="/assets/images/images/okorite.jpg"
               alt="Okorite Isokariari – CEO, Rokit Media"
               className="w-full max-w-sm mx-auto object-cover shadow-2xl"
             />

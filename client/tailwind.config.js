@@ -19,7 +19,7 @@ export default {
           'tan-dark': '#d4d3c5',
           cream: '#FCFAF8',
           'cream-dark': '#F5F0EB',
-          body: '#737373',
+          body: '#5e5e5e',
         },
       },
       fontFamily: {

@@ -40,7 +40,7 @@ export const T = {
   // Label-level H4s
   h4: 'font-display text-xl font-light text-rokit-dark',
   // Body text
-  body: 'text-rokit-body font-light leading-relaxed',
+  body: 'text-lg text-rokit-body font-light leading-relaxed',
 
   // ─── Cards ───────────────────────────────────────────────────────────────────
   card:       'bg-white border border-rokit-orange/10',

@@ -22,7 +22,7 @@ export default function HeroEditorial() {
       {/* ── Decorative right panel (desktop only) ── */}
       <div
         aria-hidden
-        className="absolute right-0 top-0 bottom-0 w-[44%] hidden xl:flex flex-col gap-3 p-8 pt-28 pointer-events-none"
+        className="absolute right-0 top-0 bottom-0 w-[44%] hidden flex-col gap-3 p-8 pt-28 pointer-events-none"
       >
         {/* Top row: two tiles */}
         <div className="flex gap-3 flex-1">

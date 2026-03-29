@@ -8,6 +8,15 @@
   h1, h2, h3, h4, h5, h6 { color: #1A1A1A; font-weight: 400; }
   a { color: #FF9729; transition: color 0.2s ease; }
   a:hover { color: #e6861a; }
+  a.btn-primary:hover,
+  a.btn-outline:hover,
+  a.btn-gold:hover,
+  a.bg-rokit-orange:hover {
+    color: #fff;
+  }
+  a.btn-white:hover {
+    color: #1A1A1A;
+  }
 }
 
 @layer components {

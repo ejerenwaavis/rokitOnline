@@ -148,7 +148,7 @@ export default function Navbar() {
           ) : (
             <Link to="/auth/login" className={`font-mono text-[10px] uppercase tracking-[0.15em] transition-colors ${loginColor}`}>Login</Link>
           )}
-          <Link to="/portal/quotes/new" className="text-xs px-4 py-2.5 bg-rokit-orange hover:bg-rokit-orange-dark text-white font-medium tracking-[0.1em] uppercase transition-colors">
+          <Link to="/portal/quotes/new" className="text-xs px-4 py-2.5 bg-rokit-orange hover:bg-rokit-orange-dark text-white hover:text-white font-medium tracking-[0.1em] uppercase transition-colors">
             Get a Quote
           </Link>
         </div>
@@ -204,7 +204,7 @@ export default function Navbar() {
             ) : (
               <Link to="/auth/login" onClick={() => setMenuOpen(false)} className="block text-sm text-white/60 hover:text-white px-3 py-2 transition-colors">Login</Link>
             )}
-            <Link to="/portal/quotes/new" onClick={() => setMenuOpen(false)} className="block text-center text-xs bg-rokit-orange hover:bg-rokit-orange-dark text-white px-4 py-2.5 font-medium tracking-[0.1em] uppercase mx-3 transition-colors">
+            <Link to="/portal/quotes/new" onClick={() => setMenuOpen(false)} className="block text-center text-xs bg-rokit-orange hover:bg-rokit-orange-dark text-white hover:text-white px-4 py-2.5 font-medium tracking-[0.1em] uppercase mx-3 transition-colors">
               Get a Quote
             </Link>
           </div>

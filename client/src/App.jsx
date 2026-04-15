@@ -3,6 +3,7 @@ import { useAuth } from './context/AuthContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import CookieBanner from './components/ui/CookieBanner';
+import CursorEffects from './components/ui/CursorEffects';
 
 // Public pages
 import Home from './pages/Home';
@@ -58,6 +59,7 @@ const AdminRoute = ({ children }) => {
 
 const MainLayout = () => (
   <>
+    <CursorEffects />
     <Navbar />
     <main>
       <Outlet />

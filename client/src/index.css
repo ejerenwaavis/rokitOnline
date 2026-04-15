@@ -37,6 +37,17 @@
 
 .swiper-pagination-bullet { background: rgba(255,255,255,0.6) !important; width: 10px !important; height: 10px !important; }
 .swiper-pagination-bullet-active { background: #FF9729 !important; width: 30px !important; border-radius: 4px !important; }
+
+/* ── Hero Slider entrance animations ── */
+.swiper-slide .hero-eyebrow,
+.swiper-slide .hero-headline,
+.swiper-slide .hero-subtitle,
+.swiper-slide .hero-ctas { opacity: 0; transform: translateY(50px); }
+.swiper-slide-active .hero-eyebrow  { animation: heroFadeUp 0.7s cubic-bezier(0.25,0.1,0.25,1) 0.10s forwards; }
+.swiper-slide-active .hero-headline { animation: heroFadeUp 0.85s cubic-bezier(0.25,0.1,0.25,1) 0.28s forwards; }
+.swiper-slide-active .hero-subtitle { animation: heroFadeUp 0.7s cubic-bezier(0.25,0.1,0.25,1) 0.50s forwards; }
+.swiper-slide-active .hero-ctas     { animation: heroFadeUp 0.7s cubic-bezier(0.25,0.1,0.25,1) 0.68s forwards; }
+@keyframes heroFadeUp { to { opacity: 1; transform: translateY(0); } }
 html { scroll-behavior: smooth; }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }

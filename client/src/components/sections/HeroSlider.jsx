@@ -55,14 +55,14 @@ export default function HeroSlider() {
               {/* Content */}
               <div className="relative z-10 max-w-7xl mx-auto px-4 w-full">
                 <div className="max-w-2xl">
-                  <div className="w-8 h-0.5 bg-rokit-orange mb-8" />
-                  <h1 className="font-display text-5xl md:text-7xl font-light text-white leading-none mb-6 tracking-tight">
+                  <div className="hero-eyebrow w-8 h-0.5 bg-rokit-orange mb-8" />
+                  <h1 className="hero-headline font-hero text-white leading-none mb-6 tracking-wide" style={{ fontSize: 'clamp(4rem, 12vw, 10rem)' }}>
                     {slide.title}
                   </h1>
-                  <p className="text-base md:text-lg text-white/70 mb-10 font-light max-w-lg tracking-wide">
+                  <p className="hero-subtitle text-base md:text-lg text-white/70 mb-10 font-light max-w-lg tracking-wide">
                     {slide.subtitle}
                   </p>
-                  <div className="flex flex-wrap gap-4">
+                  <div className="hero-ctas flex flex-wrap gap-4">
                     <Link to={slide.cta.to} className="btn-primary">
                       {slide.cta.label} <ArrowRight size={18} />
                     </Link>

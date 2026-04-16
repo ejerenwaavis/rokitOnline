@@ -13,9 +13,76 @@ const stamp = (delay = 0) => ({
   },
 });
 
+// Vintage film reel images (split across two strips — 8 each for full-height coverage)
+const REEL_A = [
+  '/assets/images/strip-1.jpg',
+  '/assets/images/reel/banner-print-1.jpg',
+  '/assets/images/prints.jpg',
+  '/assets/images/reel/web-design-1.jpg',
+  '/assets/images/1-no-text.jpg',
+  '/assets/images/reel/business-card-1.jpg',
+  '/assets/images/brand-elevated.jpg',
+  '/assets/images/reel/poster-design-1.jpg',
+];
+const REEL_B = [
+  '/assets/images/strip-2.jpg',
+  '/assets/images/reel/flyer-design-1.jpg',
+  '/assets/images/okorite.jpg',
+  '/assets/images/reel/billboard-1.jpg',
+  '/assets/images/about-cover.jpg',
+  '/assets/images/reel/creative-desk-1.jpg',
+  '/assets/images/ceo.jpg',
+  '/assets/images/reel/laptop-website-1.jpg',
+];
+
+function FilmStrip({ images, direction = 'up', duration = 30, className = '' }) {
+  const doubled = [...images, ...images];
+  const anim = direction === 'up' ? 'filmScrollUp' : 'filmScrollDown';
+
+  // One film frame: left sprocket column | image | right sprocket column
+  const frame = (src, i) => (
+    <div key={i} className="shrink-0 flex" style={{ background: '#111' }}>
+      {/* Left sprocket column */}
+      <div className="w-[22px] shrink-0 flex flex-col items-center justify-evenly py-[3px]">
+        {Array.from({ length: 4 }).map((_, j) => (
+          <div key={j} className="w-[16px] h-[16px] rounded-sm bg-white/80" />
+        ))}
+      </div>
+      {/* Image */}
+      <div className="flex-1 py-[3px]">
+        <div className="w-full h-full overflow-hidden rounded-2xl" style={{ aspectRatio: '16/10' }}>
+          <img
+            src={src} alt="" loading="lazy"
+            className="w-full h-full object-cover reel-img"
+          />
+        </div>
+      </div>
+      {/* Right sprocket column */}
+      <div className="w-[22px] shrink-0 flex flex-col items-center justify-evenly py-[3px]">
+        {Array.from({ length: 4 }).map((_, j) => (
+          <div key={j} className="w-[16px] h-[16px] rounded-sm bg-white/80" />
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className={`relative overflow-hidden ${className}`} style={{ background: '#111' }}>
+      <div
+        className="flex flex-col"
+        style={{ animation: `${anim} ${duration}s linear infinite` }}
+      >
+        {doubled.map((src, i) => frame(src, i))}
+      </div>
+    </div>
+  );
+}
+
 export default function HeroEditorial() {
   return (
-    <section className="relative min-h-screen bg-rokit-cream flex flex-col justify-center overflow-hidden pt-20">
+    <section
+      className="relative min-h-screen bg-rokit-cream flex flex-col justify-center overflow-hidden pt-20"
+    >
 
       {/* ── Cinematic intro scrim — dark flash clears on load ── */}
       <motion.div
@@ -50,67 +117,15 @@ export default function HeroEditorial() {
       {/* ── Thin vertical left accent ── */}
       <div className="absolute left-0 top-0 bottom-0 w-px bg-rokit-orange/20 hidden lg:block" />
 
-      {/* ── Decorative right panel (desktop only) ── */}
+      {/* ── Vintage film-strip reels (desktop only) ── */}
       <div
         aria-hidden
-        className="absolute right-0 top-0 bottom-0 w-[44%] hidden lg:flex flex-col gap-3 p-8 pt-28 pointer-events-none"
+        className="absolute right-0 top-0 bottom-0 w-[44%] hidden lg:flex items-stretch gap-3 p-8 pt-28 pointer-events-auto"
       >
         <div className="flex gap-3 flex-1">
-          <motion.div
-            className="flex-1 bg-rokit-dark/[0.03] border border-rokit-orange/[0.07] overflow-hidden relative"
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.95 }}
-          >
-            <div className="absolute bottom-4 left-4">
-              <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-rokit-orange/60">Large Format</p>
-            </div>
-            <motion.div
-              className="absolute left-0 top-0 w-1 bg-rokit-orange"
-              initial={{ height: 0 }} animate={{ height: '100%' }}
-              transition={{ duration: 1.1, delay: 1.15, ease: 'easeOut' }}
-            />
-          </motion.div>
-          <motion.div
-            className="w-2/5 bg-rokit-orange/[0.08] border border-rokit-orange/[0.12] overflow-hidden relative"
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1.05 }}
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <motion.div
-                className="font-display text-9xl font-light leading-none text-rokit-orange/[0.15] select-none"
-                initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 1.25 }}
-              >R</motion.div>
-            </div>
-          </motion.div>
+          <FilmStrip images={REEL_A} direction="up" duration={82} className="flex-1" />
+          <FilmStrip images={REEL_B} direction="down" duration={96} className="flex-1" />
         </div>
-
-        <div className="flex gap-3 h-36">
-          {['Branding', 'Web', 'Print'].map((label, i) => (
-            <motion.div
-              key={label}
-              className="flex-1 border border-rokit-orange/[0.07] relative overflow-hidden"
-              style={{ background: i === 1 ? 'rgba(255,151,41,0.06)' : 'rgba(26,26,26,0.02)' }}
-              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.15 + i * 0.1 }}
-            >
-              <motion.div
-                className="absolute bottom-0 left-0 right-0 bg-rokit-orange/[0.08]"
-                initial={{ height: 0 }}
-                animate={{ height: `${30 + i * 15}%` }}
-                transition={{ duration: 1, delay: 1.35 + i * 0.1, ease: 'easeOut' }}
-              />
-              <p className="absolute bottom-2 left-2 font-mono text-[8px] uppercase tracking-[0.18em] text-rokit-body/40">{label}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.div
-          className="absolute top-1/2 right-8 w-2 h-2 rounded-full bg-rokit-orange"
-          initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 1.6 }}
-          style={{ translateY: '-50%' }}
-        />
       </div>
 
       {/* ── Main content ── */}

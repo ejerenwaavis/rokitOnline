@@ -48,6 +48,23 @@
 .swiper-slide-active .hero-subtitle { animation: heroFadeUp 0.7s cubic-bezier(0.25,0.1,0.25,1) 0.50s forwards; }
 .swiper-slide-active .hero-ctas     { animation: heroFadeUp 0.7s cubic-bezier(0.25,0.1,0.25,1) 0.68s forwards; }
 @keyframes heroFadeUp { to { opacity: 1; transform: translateY(0); } }
+
+/* ── Vintage film-strip continuous scroll ── */
+@keyframes filmScrollUp {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+@keyframes filmScrollDown {
+  0%   { transform: translateY(-50%); }
+  100% { transform: translateY(0); }
+}
+.reel-img {
+  filter: grayscale(1) brightness(0.65) contrast(1.1);
+  transition: filter 0.5s ease-out;
+}
+.reel-img:hover {
+  filter: grayscale(0) brightness(1) contrast(1);
+}
 html { scroll-behavior: smooth; }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }

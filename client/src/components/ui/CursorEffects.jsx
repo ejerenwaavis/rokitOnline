@@ -33,7 +33,7 @@ export default function CursorEffects() {
         logo.current.y  = e.clientY;
         initialized = true;
         if (orbRef.current)  orbRef.current.style.opacity  = '1';
-        if (logoRef.current) logoRef.current.style.opacity = '0.045';
+        if (logoRef.current) logoRef.current.style.opacity = '0.064';
       }
     };
 
@@ -96,7 +96,7 @@ export default function CursorEffects() {
           opacity: 0,
           width: 128,
           height: 'auto',
-          filter: 'blur(14px) grayscale(1)',
+          filter: 'blur(9px) grayscale(1)',
           willChange: 'transform',
           transition: 'opacity 0.8s ease',
         }}

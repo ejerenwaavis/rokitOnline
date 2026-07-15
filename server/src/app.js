@@ -51,6 +51,7 @@ app.use('/api/designs',   require('./routes/designs'));
 app.use('/api/contact',   require('./routes/contact'));
 app.use('/api/clients',   require('./routes/clients'));
 app.use('/api/admin',     require('./routes/admin'));
+app.use('/api/enhance-photo',  require('./routes/enhance'));
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));

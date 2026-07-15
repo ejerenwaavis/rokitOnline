@@ -18,6 +18,7 @@ const navLinks = [
     ]
   },
   { label: 'Gallery', to: '/gallery' },
+  { label: 'Photo Enhancer', to: '/photo-enhancer' },
   { label: 'Tutorials', to: '/tutorials' },
   {
     label: 'Solutions', to: '/solutions',

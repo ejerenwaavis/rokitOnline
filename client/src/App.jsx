@@ -21,6 +21,7 @@ import Health from './pages/Health';
 import SolutionNGO from './pages/SolutionNGO';
 import SolutionSME from './pages/SolutionSME';
 import PortfolioDetail from './pages/PortfolioDetail';
+import PhotoEnhancer from './pages/PhotoEnhancer';
 
 // Auth
 import Login from './pages/auth/Login';
@@ -93,6 +94,7 @@ export default function App() {
           <Route path="/services/:slug" element={<ServiceDetail />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/gallery/:id" element={<PortfolioDetail />} />
+          <Route path="/photo-enhancer" element={<PhotoEnhancer />} />
           <Route path="/solutions/ngo" element={<SolutionNGO />} />
           <Route path="/solutions/sme" element={<SolutionSME />} />
           <Route path="/tutorials" element={<Tutorials />} />

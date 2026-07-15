@@ -1,0 +1,331 @@
+/* ────────────────────────────────────────────────────────────────
+   AI Photo Enhancer — scoped, theme-adaptive stylesheet
+   Every rule reads var(--ae-*, fallback). Nothing in here references
+   Tailwind or rokit-specific class names directly, so this file can
+   be copy-pasted into any project. Re-skin by changing the CSS
+   custom properties (see enhancerTheme.js), not this file.
+   ──────────────────────────────────────────────────────────────── */
+
+.ae-root {
+  --ae-accent: #FF9729;
+  --ae-accent-dark: #e6861a;
+  --ae-accent-soft: rgba(255,151,41,0.10);
+  --ae-gold: #EC9E00;
+  --ae-ink: #1A1A1A;
+  --ae-body: #5e5e5e;
+  --ae-bg: #FCFAF8;
+  --ae-surface: #FFFFFF;
+  --ae-border: rgba(26,26,26,0.08);
+  --ae-success: #14AD7C;
+  --ae-danger: #DC2626;
+  --ae-radius: 4px;
+  --ae-font-display: Georgia, serif;
+  --ae-font-body: system-ui, sans-serif;
+  --ae-font-mono: monospace;
+
+  background: var(--ae-bg);
+  color: var(--ae-body);
+  font-family: var(--ae-font-body);
+}
+
+.ae-eyebrow {
+  font-family: var(--ae-font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ae-accent);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.ae-title {
+  font-family: var(--ae-font-display);
+  color: var(--ae-ink);
+  font-weight: 400;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.ae-subtitle {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  max-width: 40rem;
+}
+
+/* ── Mode toggle (Restore vs Dramatic) ───────────────────────────── */
+.ae-mode-toggle {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.ae-mode-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--ae-radius);
+  border: 2px solid var(--ae-border);
+  background: var(--ae-surface);
+  color: var(--ae-ink);
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ae-mode-btn:hover { border-color: var(--ae-accent); }
+
+.ae-mode-btn.ae-mode-active {
+  border-color: var(--ae-accent);
+  background: var(--ae-accent-soft);
+  color: var(--ae-accent-dark);
+}
+
+.ae-mode-hint {
+  font-size: 0.68rem;
+  font-weight: 400;
+  opacity: 0.65;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+/* ── Dropzone ─────────────────────────────────────────────────── */
+.ae-dropzone {
+  border: 2px dashed var(--ae-border);
+  border-radius: var(--ae-radius);
+  background: var(--ae-surface);
+  padding: 3rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+
+.ae-dropzone:hover {
+  border-color: var(--ae-accent);
+  background: var(--ae-accent-soft);
+}
+
+.ae-dropzone.ae-dragover {
+  border-color: var(--ae-accent);
+  background: var(--ae-accent-soft);
+  transform: scale(1.01);
+}
+
+.ae-dropzone-icon {
+  color: var(--ae-accent);
+  margin-bottom: 1rem;
+}
+
+.ae-dropzone-title {
+  color: var(--ae-ink);
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.ae-dropzone-hint {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.ae-dropzone input[type='file'] {
+  display: none;
+}
+
+.ae-error-banner {
+  border: 1px solid var(--ae-danger);
+  background: color-mix(in srgb, var(--ae-danger) 8%, transparent);
+  color: var(--ae-danger);
+  border-radius: var(--ae-radius);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────── */
+.ae-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  border-radius: var(--ae-radius);
+  border: 2px solid var(--ae-accent);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ae-btn-primary {
+  background: var(--ae-accent);
+  color: #fff;
+}
+.ae-btn-primary:hover:not(:disabled) { background: var(--ae-accent-dark); border-color: var(--ae-accent-dark); }
+.ae-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ae-btn-outline {
+  background: transparent;
+  color: var(--ae-accent);
+}
+.ae-btn-outline:hover:not(:disabled) { background: var(--ae-accent); color: #fff; }
+
+/* ── Loading state ────────────────────────────────────────────── */
+.ae-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  background: var(--ae-surface);
+  border-radius: var(--ae-radius);
+  border: 1px solid var(--ae-border);
+}
+
+.ae-spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid var(--ae-accent-soft);
+  border-top-color: var(--ae-accent);
+  animation: ae-spin 0.8s linear infinite;
+  margin-bottom: 1.25rem;
+}
+
+@keyframes ae-spin { to { transform: rotate(360deg); } }
+
+.ae-progress-track {
+  width: 100%;
+  max-width: 280px;
+  height: 4px;
+  background: var(--ae-border);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.ae-progress-fill {
+  height: 100%;
+  background: var(--ae-accent);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.ae-loading-status {
+  color: var(--ae-ink);
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+  text-align: center;
+  min-height: 1.2em;
+}
+
+/* ── Before / After slider ───────────────────────────────────────── */
+.ae-slider-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  border-radius: var(--ae-radius);
+  overflow: hidden;
+  border: 1px solid var(--ae-border);
+  background: #000;
+  user-select: none;
+  touch-action: none;
+}
+
+.ae-slider-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.ae-slider-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #111;
+  pointer-events: none;
+}
+
+.ae-slider-after {
+  clip-path: inset(0 0 0 var(--ae-clip, 50%));
+}
+
+.ae-slider-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--ae-clip, 50%);
+  width: 3px;
+  background: #fff;
+  transform: translateX(-50%);
+  cursor: ew-resize;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+}
+
+.ae-slider-handle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+  border: 2px solid var(--ae-accent);
+}
+
+.ae-slider-handle::before {
+  content: '⟷';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  font-size: 14px;
+  color: var(--ae-accent);
+  font-weight: bold;
+}
+
+.ae-slider-label {
+  position: absolute;
+  top: 0.75rem;
+  font-family: var(--ae-font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #fff;
+  background: rgba(0,0,0,0.55);
+  padding: 4px 10px;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.ae-slider-label-before { left: 0.75rem; }
+.ae-slider-label-after { right: 0.75rem; }
+
+/* ── Result actions ───────────────────────────────────────────── */
+.ae-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .ae-dropzone { padding: 2rem 1rem; }
+  .ae-result-actions { flex-direction: column; }
+  .ae-result-actions .ae-btn { width: 100%; }
+}

@@ -52,6 +52,7 @@ app.use('/api/contact',   require('./routes/contact'));
 app.use('/api/clients',   require('./routes/clients'));
 app.use('/api/admin',     require('./routes/admin'));
 app.use('/api/enhance-photo',  require('./routes/enhance'));
+app.use('/api/media-bridge',   require('./routes/mediaBridge'));
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
@@ -66,8 +67,12 @@ app.use((req, res, next) => {
 });
 
 // Serve frontend static files (always — works in both dev and production on server)
-const frontendPath = path.join(__dirname, '../../client/public_html');
 const fs = require('fs');
+let frontendPath = path.join(__dirname, '../../client/public_html');
+if (fs.existsSync(path.join(__dirname, '../../public_html'))) {
+  frontendPath = path.join(__dirname, '../../public_html');
+}
+
 if (fs.existsSync(frontendPath)) {
   app.use(express.static(frontendPath));
   // React Router catch-all — serve index.html for any non-API route

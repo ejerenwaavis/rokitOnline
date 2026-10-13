@@ -44,6 +44,7 @@ import TutorialsManager from './pages/admin/TutorialsManager';
 import ServicesManager from './pages/admin/ServicesManager';
 import CustomersManager from './pages/admin/CustomersManager';
 import ClientsManager from './pages/admin/ClientsManager';
+import MediaBridge from './pages/admin/MediaBridge';
 import AdminLayout from './components/layout/AdminLayout';
 
 const ProtectedRoute = ({ children }) => {
@@ -84,6 +85,7 @@ export default function App() {
           <Route path="services" element={<ServicesManager />} />
           <Route path="customers" element={<CustomersManager />} />
           <Route path="clients" element={<ClientsManager />} />
+          <Route path="media-bridge" element={<MediaBridge />} />
         </Route>
 
         {/* Public + portal routes */}

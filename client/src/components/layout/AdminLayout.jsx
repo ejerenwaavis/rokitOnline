@@ -4,13 +4,14 @@ import { useAuth } from '../../context/AuthContext';
 import {
   LayoutDashboard, ShoppingBag, Images, BookOpen,
   Settings, Users, Menu, X, LogOut, ChevronRight,
-  MessageSquare, Star
+  MessageSquare, Star, Layers
 } from 'lucide-react';
 
 const navItems = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/admin/orders', label: 'Orders', icon: ShoppingBag },
   { to: '/admin/portfolio', label: 'Portfolio', icon: Images },
+  { to: '/admin/media-bridge', label: 'Media Bridge', icon: Layers },
   { to: '/admin/tutorials', label: 'Tutorials', icon: BookOpen },
   { to: '/admin/services', label: 'Services', icon: Settings },
   { to: '/admin/clients', label: 'Clients', icon: Star },

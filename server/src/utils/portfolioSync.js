@@ -58,6 +58,18 @@ async function syncProjectToPortfolio(project) {
     });
   }
 
+  // Only publish projects that are finalized (not drafts or pending media)
+  if (project.status === 'draft' || project.status === 'pending_media') {
+    // If it was previously in Portfolio, remove it so unfinished drafts do not appear live
+    await Portfolio.deleteMany({
+      $or: [
+        { projectCode: project.projectCode },
+        { projectId: project._id },
+      ],
+    });
+    return null;
+  }
+
   // If no media is uploaded, we do not create an empty public portfolio entry
   if (images.length === 0) {
     return null;

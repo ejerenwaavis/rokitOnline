@@ -4,9 +4,12 @@ const { syncProjectToPortfolio } = require('../utils/portfolioSync');
 
 const getPortfolio = async (req, res) => {
   try {
-    // Auto-sync any projects with uploaded media from the Media Bridge
+    // Auto-sync any finalized projects with uploaded media from the Media Bridge
     try {
-      const projectsWithMedia = await Project.find({ mediaCount: { $gt: 0 } });
+      const projectsWithMedia = await Project.find({
+        mediaCount: { $gt: 0 },
+        status: { $in: ['ready_for_review', 'published'] },
+      });
       for (const proj of projectsWithMedia) {
         await syncProjectToPortfolio(proj);
       }

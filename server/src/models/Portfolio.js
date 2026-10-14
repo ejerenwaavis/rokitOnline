@@ -5,9 +5,11 @@ const portfolioSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ['banner-prints', 'branding', 'roll-up-banners', 'web-design', 'graphic-design', 'large-format'],
+    trim: true,
   },
   description: { type: String },
+  projectCode: { type: String, index: true },
+  projectId: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
   images: [{
     url: { type: String, required: true },
     publicId: String,

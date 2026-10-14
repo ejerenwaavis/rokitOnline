@@ -1,7 +1,19 @@
 const Portfolio = require('../models/Portfolio');
+const Project = require('../models/Project');
+const { syncProjectToPortfolio } = require('../utils/portfolioSync');
 
 const getPortfolio = async (req, res) => {
   try {
+    // Auto-sync any projects with uploaded media from the Media Bridge
+    try {
+      const projectsWithMedia = await Project.find({ mediaCount: { $gt: 0 } });
+      for (const proj of projectsWithMedia) {
+        await syncProjectToPortfolio(proj);
+      }
+    } catch (syncErr) {
+      console.error('Error auto-syncing projects to portfolio:', syncErr);
+    }
+
     const filter = {};
     if (req.query.category) filter.category = req.query.category;
     const items = await Portfolio.find(filter).sort({ displayOrder: 1, createdAt: -1 });

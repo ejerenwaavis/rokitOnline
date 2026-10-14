@@ -2,6 +2,7 @@ const Project = require('../models/Project');
 const MediaBatchSession = require('../models/MediaBatchSession');
 const cloudinary = require('../config/cloudinary');
 const { parseProjectPortfolioRegister, slugify } = require('../services/markdownParser');
+const { syncProjectToPortfolio } = require('../utils/portfolioSync');
 
 /**
  * Helper to parse simple CSV file if user uploads CSV instead of MD
@@ -312,6 +313,13 @@ const commitProjectMedia = async (req, res) => {
     }
 
     await project.save();
+
+    // Synchronize to Portfolio collection so project immediately appears in Gallery & Admin Portfolio
+    try {
+      await syncProjectToPortfolio(project);
+    } catch (syncErr) {
+      console.error('Auto-sync to portfolio error:', syncErr);
+    }
 
     // Advance MediaBatchSession
     if (sessionId) {

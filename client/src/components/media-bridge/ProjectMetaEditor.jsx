@@ -7,13 +7,13 @@ export default function ProjectMetaEditor({
   isDirty,
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm mb-6">
+    <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-sm mb-6">
       <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-gray-100">
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-xs font-bold px-2.5 py-1 bg-rokit-dark text-white rounded">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="font-mono text-xs font-bold px-2.5 py-1 bg-rokit-dark text-white rounded shrink-0">
             {formData.projectCode || 'PRJ-???'}
           </span>
-          <span className="text-xs font-mono text-gray-500">
+          <span className="text-xs font-mono text-gray-500 break-all">
             /{formData.slug}
           </span>
         </div>

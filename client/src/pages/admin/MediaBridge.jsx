@@ -201,6 +201,29 @@ export default function MediaBridge() {
     setActiveMilestoneId(newMilestone.id);
   };
 
+  // Delete Milestone
+  const handleDeleteMilestone = (milestoneId) => {
+    const target = milestones.find((m) => m.id === milestoneId);
+    if (!target) return;
+
+    const stagedCount = (target.media || []).length;
+    if (stagedCount > 0) {
+      const confirmDelete = window.confirm(
+        `Milestone "${target.title}" contains ${stagedCount} staged media asset(s). Are you sure you want to delete it?`
+      );
+      if (!confirmDelete) return;
+    }
+
+    const updated = milestones.filter((m) => m.id !== milestoneId);
+    setMilestones(updated);
+
+    if (activeMilestoneId === milestoneId) {
+      setActiveMilestoneId(updated.length > 0 ? updated[0].id : '');
+    }
+
+    toast.success(`Milestone "${target.title}" deleted`);
+  };
+
   // Media staged locally under selected milestone
   const handleMediaUploaded = (milestoneId, mediaAsset) => {
     setMilestones((prev) =>
@@ -450,6 +473,7 @@ export default function MediaBridge() {
             activeMilestoneId={activeMilestoneId}
             onSelectMilestone={setActiveMilestoneId}
             onAddMilestone={handleAddMilestone}
+            onDeleteMilestone={handleDeleteMilestone}
           />
 
           <DropzoneArea

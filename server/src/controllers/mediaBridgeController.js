@@ -298,7 +298,7 @@ const commitProjectMedia = async (req, res) => {
     if (deltas.category) project.category = deltas.category;
 
     // Apply updated milestones with staged media
-    if (Array.isArray(milestones) && milestones.length > 0) {
+    if (Array.isArray(milestones)) {
       project.milestones = milestones;
     }
 

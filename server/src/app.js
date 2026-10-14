@@ -13,7 +13,10 @@ connectDB();
 const app = express();
 
 // Security headers (CSP disabled — React SPA serves all assets same-origin)
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(helmet({
+  contentSecurityPolicy: false,
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+}));
 
 // CORS
 app.use(cors({

@@ -14,6 +14,7 @@ const { createInteractionsRouter } = require('./routes/oidcInteractions');
 connectDB();
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Security headers (CSP disabled — React SPA serves all assets same-origin)
 app.use(helmet({

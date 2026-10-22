@@ -179,6 +179,23 @@ const updateUserRole = async (req, res) => {
   }
 };
 
+const updateUserStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    if (!['active', 'suspended'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status. Must be active or suspended.' });
+    }
+    if (req.params.id === req.user._id.toString()) {
+      return res.status(400).json({ message: 'You cannot suspend your own account.' });
+    }
+    const user = await User.findByIdAndUpdate(req.params.id, { status }, { new: true }).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // Contact messages
 const getMessages = async (req, res) => {
   try {
@@ -269,7 +286,7 @@ const deleteClient = async (req, res) => {
   }
 };
 
-module.exports = { getStats, getAllOrders, updateOrder, acceptOffer, forwardOrder, getAllQuotations, updateQuotation, getAllDesigns, getAllCustomers, updateUserRole, getMessages, markMessageRead, getClients, createClient, updateClient, deleteClient };
+module.exports = { getStats, getAllOrders, updateOrder, acceptOffer, forwardOrder, getAllQuotations, updateQuotation, getAllDesigns, getAllCustomers, updateUserRole, updateUserStatus, getMessages, markMessageRead, getClients, createClient, updateClient, deleteClient };
 
 const { orderForwardEmail } = require('../utils/emailTemplates');
 const { sendMail } = require('../config/email');

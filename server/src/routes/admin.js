@@ -5,7 +5,7 @@ const { adminOnly } = require('../middleware/adminCheck');
 const upload = require('../middleware/upload');
 const {
   getStats, getAllOrders, updateOrder, acceptOffer, forwardOrder, getAllQuotations, updateQuotation,
-  getAllDesigns, getAllCustomers, updateUserRole, getMessages, markMessageRead,
+  getAllDesigns, getAllCustomers, updateUserRole, updateUserStatus, getMessages, markMessageRead,
   getClients, createClient, updateClient, deleteClient,
 } = require('../controllers/adminController');
 const { createPortfolioItem, updatePortfolioItem, deletePortfolioItem } = require('../controllers/portfolioController');
@@ -47,6 +47,7 @@ router.delete('/services/:id', deleteService);
 // Customers
 router.get('/customers', getAllCustomers);
 router.patch('/customers/:id/role', updateUserRole);
+router.patch('/customers/:id/status', updateUserStatus);
 
 // Contact messages
 router.get('/messages', getMessages);

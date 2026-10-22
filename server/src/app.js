@@ -5,7 +5,10 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
+const { initOidcProvider } = require('./config/oidcProvider');
+const { createInteractionsRouter } = require('./routes/oidcInteractions');
 
 // Connect to MongoDB
 connectDB();
@@ -39,6 +42,43 @@ app.use('/api/payment', require('./routes/payment'));
 // Body parsers
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(cookieParser());
+
+// OIDC Provider Setup
+let oidcCallback = null;
+initOidcProvider().then((provider) => {
+  app.use('/interaction', createInteractionsRouter(provider));
+  oidcCallback = provider.callback();
+  console.log('[OIDC] Rokit OpenID Connect Provider initialized successfully');
+}).catch((err) => {
+  console.error('[OIDC INIT ERROR]', err);
+});
+
+// OIDC rate limiting on sensitive auth endpoints
+const oidcLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use('/oauth/token', oidcLimiter);
+app.use('/oauth/authorize', oidcLimiter);
+
+// OIDC endpoints dispatcher
+app.use((req, res, next) => {
+  if (
+    req.path === '/.well-known/openid-configuration' ||
+    req.path === '/.well-known/jwks.json' ||
+    req.path.startsWith('/oauth/')
+  ) {
+    if (oidcCallback) {
+      return oidcCallback(req, res, next);
+    } else {
+      return res.status(503).json({ error: 'OIDC provider initializing...' });
+    }
+  }
+  next();
+});
 
 // Logging
 if (process.env.NODE_ENV !== 'test') app.use(morgan('dev'));
@@ -94,8 +134,10 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.error(`[${new Date().toISOString()}] Starting Rokit Media API...`);
-  console.log(`[${new Date().toISOString()}] Logging...`);
-  process.stderr.write(`[${new Date().toISOString()}] 🚀 Rokit Media API running on port ${PORT}\n`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log('Rokit Media API running on port ' + PORT);
+  });
+}
+
+module.exports = app;

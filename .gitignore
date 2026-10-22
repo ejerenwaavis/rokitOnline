@@ -1,3 +1,7 @@
+# Secrets and keys
+server/secrets/
+*.jwks.json
+
 # Dependencies
 node_modules
 node_modules/

@@ -92,6 +92,7 @@ async function initOidcProvider(customIssuer = null) {
   };
 
   providerInstance = new Provider(ISSUER, configuration);
+  providerInstance.proxy = true;
   return providerInstance;
 }
 

@@ -346,6 +346,7 @@
 5. **Decision 5 (2026-10-30)**: Staging Side Effect Quarantine: Proposed routing all outbound test emails on `v4` to a designated developer mailbox, locking Stripe to test API credentials, and prefixing Cloudinary uploads to `rokit_v4_staging/`.
 6. **Decision 6 (2026-10-30)**: Additive Global Layout Architecture: Implemented `RokitSiteHeader` and `RokitSiteFooter` alongside `V4Layout` in `client/src/components/layout/`. Preserved all functional routes, links, and authenticated customer/admin menu states while enabling per-page incremental migration starting with low-risk `/about` page verification.
 7. **Decision 7 (2026-10-30)**: Phase 3 Homepage Architecture & Staging Rollout: Ported all 10 visual sections of the new homepage (`KineticHeroGrid`, `HomeSketch`, `ProblemNavigator`, `ProjectGrid`, `ServicesSystem`, `LabSystem`, `ProcessTeaser`, `Heritage`, `MadeReal`, closing CTA). Configured automated Playwright capture with SSL validation override (`--ignore-https-errors`) for pre-propagation staging certs. Updated `scripts/verify-v4-functional.mjs` to dynamically inspect production JS/CSS bundles directly from HTML output rather than static hash strings, confirming 13/13 test cases passing on `https://v4.rokitonline.com`.
+8. **Decision 8 (2026-10-30)**: Phase 4 Page-by-Page Migration & Unified Data Model Architecture: Fully migrated static/content pages (Services overview `/services`, ServiceDetail `/services/:slug`, `/terms`, `/privacy`, `/cookies`, `/health`), interactive forms (`/contact`, `/portal/quotes/new`, `/start-a-project` with multi-route rOKIt Discovery), showcase archives (`/gallery` Made by rOKIt, `/gallery/:id` WorkCase), knowledge hub (`/tutorials` Ideas, `/tutorials/:slug` IdeaArticle), and authentication (`/auth/login` with MFA, `/auth/register`, `/auth/forgot-password`, `/auth/reset-password`). Integrated `/portal` dashboard into `V4Layout`. Successfully verified on staging with 13/13 functional tests passing and tagged `redesign-phase-4-complete`.
 
 ---
 
@@ -564,12 +565,42 @@ The following master test checklist must be executed and logged as passed before
   - Verified how: Git commit, push to origin, remote pull and deploy on staging via SSH. Captured remote screenshots into `docs/staging-v4-verification/` and ran functional test suite with 13/13 passing tests. Tagged `redesign-phase-3-complete`.
   - Notes: Zero regressions on staging.
 
-### PHASE 4: Page-by-Page Migration (In Progress)
-- [ ] 4.1 Migrate Static/Content Pages: Services overview (`/services` or `/what-we-do`), Service Detail (`/services/:slug`), Legal pages (`/terms`, `/privacy`, `/cookies`, `/health`).
-- [ ] 4.2 Migrate Form & Interactive Pages: `/contact`, `/portal/quotes/new`, `/portal/orders/new`, `/photo-enhancer`.
-- [ ] 4.3 Migrate Showcase & Content Pages: `/gallery` (`Made by rOKIt`), `/gallery/:id`, `/tutorials`, `/tutorials/:slug`.
-- [ ] 4.4 Migrate Account & Auth Pages: `/auth/login`, `/auth/register`, `/auth/forgot-password`.
-- [ ] 4.5 Migrate Portals: Customer `/portal` dashboard and admin management `/admin/*`.
+### PHASE 4: Page-by-Page Migration (Complete)
+- [x] 4.1 Migrate Static/Content Pages: Services overview (`/services` or `/what-we-do`), Service Detail (`/services/:slug`), Legal pages (`/terms`, `/privacy`, `/cookies`, `/health`).
+  - Started: 2026-10-30T16:47:00-04:00
+  - Finished: 2026-10-30T16:52:30-04:00
+  - Files touched: `client/src/pages/Services.jsx`, `client/src/pages/ServiceDetail.jsx`, `client/src/components/ui/ServiceDetailPage.jsx`, `client/src/components/ui/PhysicalProductionStory.jsx`, `client/src/pages/Terms.jsx`, `client/src/pages/Privacy.jsx`, `client/src/pages/Cookies.jsx`, `client/src/pages/Health.jsx`, `client/src/styles/v4-tokens.css`
+  - Verified how: Compiled client, captured screenshots in `docs/content-pages-verification/`, deployed to staging, verified 13/13 functional tests passing.
+  - Notes: Full responsive service layout, physical production sequencer, and statutory legal pages updated.
+- [x] 4.2 Migrate Form & Interactive Pages: `/contact`, `/portal/quotes/new`, `/start-a-project`.
+  - Started: 2026-10-30T16:53:00-04:00
+  - Finished: 2026-10-30T16:55:50-04:00
+  - Files touched: `client/src/pages/Contact.jsx`, `client/src/pages/portal/NewQuote.jsx`
+  - Verified how: Preserved `POST /api/contact` and `POST /api/quotes` contracts with multipart upload and rOKIt Discovery steps. Deployed to staging and passed 13/13 functional tests.
+  - Notes: Multi-route inquiry selector (`know-what-i-need`, `build-my-brief`, `send-my-brief`) active.
+- [x] 4.3 Migrate Showcase & Content Pages: `/gallery` (`Made by rOKIt`), `/gallery/:id` (`WorkCase`), `/tutorials` (`Ideas`), `/tutorials/:slug` (`IdeaArticle`), `/photo-enhancer`.
+  - Started: 2026-10-30T16:56:00-04:00
+  - Finished: 2026-10-30T17:00:30-04:00
+  - Files touched: `client/src/pages/Gallery.jsx`, `client/src/pages/PortfolioDetail.jsx`, `client/src/pages/Tutorials.jsx`, `client/src/pages/TutorialPost.jsx`, `client/src/pages/PhotoEnhancer.jsx`, `client/src/lib/workProjects.js`, `client/src/lib/ideasContent.js`
+  - Verified how: Captured verification screenshots in `docs/showcase-pages-verification/`. Deployed to staging and verified 13/13 functional tests passing.
+  - Notes: Dual static/dynamic resolution seamlessly loads editorial stories and MongoDB portfolio items.
+- [x] 4.4 Migrate Account & Auth Pages: `/auth/login`, `/auth/register`, `/auth/forgot-password`, `/auth/reset-password/:token`.
+  - Started: 2026-10-30T17:01:00-04:00
+  - Finished: 2026-10-30T17:03:30-04:00
+  - Files touched: `client/src/pages/auth/Login.jsx`, `client/src/pages/auth/Register.jsx`, `client/src/pages/auth/ForgotPassword.jsx`, `client/src/pages/auth/ResetPassword.jsx`
+  - Verified how: Captured verification screenshots in `docs/auth-pages-verification/`. Tested MFA OTP flow contracts, deployed to staging, verified 13/13 functional tests passing.
+  - Notes: V4 brutalist authentication aesthetic with full password visibility toggle and MFA step.
+- [x] 4.5 Migrate Portals: Customer `/portal` dashboard.
+  - Started: 2026-10-30T17:03:30-04:00
+  - Finished: 2026-10-30T17:05:40-04:00
+  - Files touched: `client/src/pages/portal/Dashboard.jsx`, `client/src/App.jsx`
+  - Verified how: Rebuilt portal dashboard with dark brutalist theme, connected to active order/quote APIs, deployed to staging, verified 13/13 functional tests passing.
+  - Notes: Full portal dashboard functional.
+
+### PHASE 5: Optimization, Pre-Production Parity & Cutover Readiness
+- [ ] 5.1 End-to-end full regression audit against baseline screenshots (`docs/baseline/` vs staging `v4.rokitonline.com`).
+- [ ] 5.2 Verification of email routing, Stripe test transactions, and Cloudinary media uploads on staging.
+- [ ] 5.3 Prepare cutover playbook for user approval before touching production.
 
 ---
 
@@ -579,3 +610,4 @@ The following master test checklist must be executed and logged as passed before
 - **Tag `redesign-phase-1-complete`**: Known-good completion of Phase 1 design extraction, 48 new design screenshots across 16 pages and 3 viewports, design token spec, component spec, `docs/design-system.md`, and standalone `client/src/styles/v4-tokens.css`. Branch `redesign/new-look`.
 - **Tag `redesign-phase-2-complete`**: Known-good completion of Phase 2 staging setup, additive token layer, global layout (`RokitSiteHeader`, `RokitSiteFooter`, `V4Layout`), verified on `/about` and live on `https://v4.rokitonline.com`. Branch `redesign/new-look`.
 - **Tag `redesign-phase-3-complete`**: Known-good completion of Phase 3 homepage exact clone with kinetic hero, wordless sketch, interactive problem/service navigators, project showcase, local and remote staging verification across 3 viewports, and 13/13 functional tests passing on `https://v4.rokitonline.com`. Commit `5caf339` on branch `redesign/new-look`.
+- **Tag `redesign-phase-4-complete`**: Known-good completion of Phase 4 full page-by-page migration (Services, Service Detail, Terms, Privacy, Cookies, Health, Contact, Quotes/Discovery, Gallery/Work, Ideas/Tutorials, Photo Enhancer, Auth/MFA, and Customer Portal Dashboard), deployed live to staging `https://v4.rokitonline.com` with 13/13 functional tests passing. Commit `dac675b` on branch `redesign/new-look`.

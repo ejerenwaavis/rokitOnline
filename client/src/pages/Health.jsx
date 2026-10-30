@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { Helmet } from 'react-helmet-async';
 import api from '../utils/api';
 
 export default function Health() {
@@ -22,60 +23,78 @@ export default function Health() {
     }
   }, []);
 
-  useEffect(() => { check(); }, [check]);
+  useEffect(() => {
+    check();
+  }, [check]);
 
-  const dot = status === 'ok' ? 'bg-green-500' : status === 'error' ? 'bg-red-500' : 'bg-yellow-400 animate-pulse';
+  const dot =
+    status === 'ok'
+      ? 'bg-signal'
+      : status === 'error'
+      ? 'bg-red-500'
+      : 'bg-yellow-400 animate-pulse';
+
   const label = status === 'ok' ? 'Online' : status === 'error' ? 'Offline' : 'Checking…';
-  const labelColor = status === 'ok' ? 'text-green-600' : status === 'error' ? 'text-red-600' : 'text-yellow-500';
+  const labelColor =
+    status === 'ok' ? 'text-signal' : status === 'error' ? 'text-red-400' : 'text-yellow-400';
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
-        <h1 className="text-xl font-black text-rokit-dark mb-6">System Health</h1>
+    <>
+      <Helmet>
+        <title>System Health — rOKIt</title>
+        <meta name="description" content="System health, API connectivity, and telemetry." />
+      </Helmet>
 
-        <div className="space-y-4">
-          <div className="flex items-center justify-between border border-gray-100 rounded p-4">
-            <div className="flex items-center gap-3">
-              <span className={`w-3 h-3 rounded-full ${dot}`} />
-              <span className="font-semibold text-sm text-rokit-dark">API Server</span>
+      <div className="font-v4-body text-paper py-20 px-gutter flex items-center justify-center">
+        <div className="w-full max-w-lg border border-paper/15 bg-surface p-8 md:p-10">
+          <p className="v4-section-label">Diagnostics</p>
+          <h1 className="mt-2 font-v4-display text-3xl text-paper mb-6">System Health</h1>
+
+          <div className="space-y-4 font-mono text-xs">
+            <div className="flex items-center justify-between border border-paper/15 p-4 bg-night">
+              <div className="flex items-center gap-3">
+                <span className={`w-2.5 h-2.5 ${dot}`} />
+                <span className="text-paper">API Server</span>
+              </div>
+              <span className={`font-semibold uppercase tracking-wider ${labelColor}`}>{label}</span>
             </div>
-            <span className={`text-sm font-bold ${labelColor}`}>{label}</span>
+
+            {elapsed !== null && (
+              <div className="flex items-center justify-between border border-paper/15 p-4 bg-night">
+                <span className="text-neutral">Latency</span>
+                <span className="text-paper">{elapsed} ms</span>
+              </div>
+            )}
+
+            {data && status === 'ok' && (
+              <div className="flex items-center justify-between border border-paper/15 p-4 bg-night">
+                <span className="text-neutral">Server Clock</span>
+                <span className="text-paper">
+                  {data.timestamp ? new Date(data.timestamp).toISOString() : '—'}
+                </span>
+              </div>
+            )}
+
+            {data && status === 'error' && (
+              <div className="border border-red-500/30 bg-red-950/20 p-4 text-xs text-red-400 font-mono break-all">
+                {data.error}
+              </div>
+            )}
           </div>
 
-          {elapsed !== null && (
-            <div className="flex items-center justify-between border border-gray-100 rounded p-4">
-              <span className="text-sm text-rokit-body">Response time</span>
-              <span className="text-sm font-semibold text-rokit-dark">{elapsed}ms</span>
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={check}
+            className="v4-action-link mt-8 w-full min-h-12 border border-signal bg-signal text-night font-semibold text-xs uppercase tracking-wider hover:bg-paper transition-colors justify-center"
+          >
+            Re-check System
+          </button>
 
-          {data && status === 'ok' && (
-            <div className="flex items-center justify-between border border-gray-100 rounded p-4">
-              <span className="text-sm text-rokit-body">Server time</span>
-              <span className="text-sm font-semibold text-rokit-dark">
-                {data.timestamp ? new Date(data.timestamp).toLocaleString() : '—'}
-              </span>
-            </div>
-          )}
-
-          {data && status === 'error' && (
-            <div className="border border-red-100 bg-red-50 rounded p-4 text-xs text-red-600 font-mono break-all">
-              {data.error}
-            </div>
-          )}
+          <p className="mt-6 text-center text-xs font-mono text-neutral">
+            Client App: <span className="text-signal">Online</span>
+          </p>
         </div>
-
-        <button
-          onClick={check}
-          className="mt-6 w-full bg-rokit-orange text-white py-2 text-sm font-semibold hover:bg-rokit-orange-dark transition-colors"
-        >
-          Re-check
-        </button>
-
-        <p className="mt-4 text-center text-xs text-gray-400">
-          Frontend: <span className="font-semibold text-green-600">✓ Online</span>
-        </p>
       </div>
-    </div>
+    </>
   );
 }

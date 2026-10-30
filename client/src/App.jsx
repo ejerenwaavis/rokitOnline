@@ -93,12 +93,16 @@ export default function App() {
         <Route element={<V4Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/services/:slug" element={<ServiceDetail />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/cookies" element={<Cookies />} />
+          <Route path="/health" element={<Health />} />
         </Route>
 
         {/* Legacy / unmigrated routes wrapped in MainLayout */}
         <Route element={<MainLayout />}>
-          <Route path="/services" element={<Services />} />
-          <Route path="/services/:slug" element={<ServiceDetail />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/gallery/:id" element={<PortfolioDetail />} />
           <Route path="/photo-enhancer" element={<PhotoEnhancer />} />
@@ -107,10 +111,6 @@ export default function App() {
           <Route path="/tutorials" element={<Tutorials />} />
           <Route path="/tutorials/:slug" element={<TutorialPost />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/cookies" element={<Cookies />} />
-          <Route path="/health" element={<Health />} />
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
           <Route path="/auth/forgot-password" element={<ForgotPassword />} />

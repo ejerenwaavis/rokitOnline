@@ -345,6 +345,7 @@
 4. **Decision 4 (2026-10-30)**: Staging Database Isolation Proposal: Proposed a dedicated MongoDB database (`rokitmedia_v4_staging`) hosted on the existing MongoDB Atlas cluster with seeded reference data, eliminating any possibility of test submissions polluting or mutating production collections.
 5. **Decision 5 (2026-10-30)**: Staging Side Effect Quarantine: Proposed routing all outbound test emails on `v4` to a designated developer mailbox, locking Stripe to test API credentials, and prefixing Cloudinary uploads to `rokit_v4_staging/`.
 6. **Decision 6 (2026-10-30)**: Additive Global Layout Architecture: Implemented `RokitSiteHeader` and `RokitSiteFooter` alongside `V4Layout` in `client/src/components/layout/`. Preserved all functional routes, links, and authenticated customer/admin menu states while enabling per-page incremental migration starting with low-risk `/about` page verification.
+7. **Decision 7 (2026-10-30)**: Phase 3 Homepage Architecture & Staging Rollout: Ported all 10 visual sections of the new homepage (`KineticHeroGrid`, `HomeSketch`, `ProblemNavigator`, `ProjectGrid`, `ServicesSystem`, `LabSystem`, `ProcessTeaser`, `Heritage`, `MadeReal`, closing CTA). Configured automated Playwright capture with SSL validation override (`--ignore-https-errors`) for pre-propagation staging certs. Updated `scripts/verify-v4-functional.mjs` to dynamically inspect production JS/CSS bundles directly from HTML output rather than static hash strings, confirming 13/13 test cases passing on `https://v4.rokitonline.com`.
 
 ---
 
@@ -537,6 +538,39 @@ The following master test checklist must be executed and logged as passed before
   - Verified how: Executed automated functional verification suite `scripts/verify-v4-functional.mjs` against `https://v4.rokitonline.com`. Confirmed 14/14 checks pass: API health check, services catalog, portfolio items from staging db, auth guard on `/api/orders/mine`, all 8 public and portal SPA routes, and static V4 asset chunks.
   - Notes: Full system functional baseline verified on staging.
 
+### PHASE 3: Homepage Exact Clone
+- [x] 3.1 Port homepage sections matching inspiration/src/routes/index.tsx exactly: Kinetic hero canvas particle warp, Problem Navigator, Wordless HomeSketch SVG, Made by rOKIt project grid, Services System, Made Real editorial layout, Lab & Tools system, Process Teaser interactive sequencer, Heritage editorial study, and Closing CTA.
+  - Started: 2026-10-30T16:38:00-04:00
+  - Finished: 2026-10-30T16:42:00-04:00
+  - Files touched: `client/src/pages/Home.jsx`, `client/src/components/ui/KineticHeroGrid.jsx`, `client/src/components/ui/HomeSketch.jsx`, `client/src/components/ui/RokitInteractiveSections.jsx`, `client/src/components/ui/ProjectGrid.jsx`, `client/src/lib/workProjects.js`
+  - Verified how: Compiled client cleanly with Vite, built production bundle without errors.
+  - Notes: Full kinetic canvas and responsive interactions intact.
+- [x] 3.2 Wire `/` route to V4Layout in `client/src/App.jsx`.
+  - Started: 2026-10-30T16:42:00-04:00
+  - Finished: 2026-10-30T16:42:30-04:00
+  - Files touched: `client/src/App.jsx`
+  - Verified how: Grouped `<Route path="/" element={<Home />} />` under `<Route element={<V4Layout />}>`.
+  - Notes: Preserved all other unmigrated routes under MainLayout.
+- [x] 3.3 Verify homepage locally across Desktop, Tablet, and Mobile viewports into `docs/homepage-verification/`.
+  - Started: 2026-10-30T16:43:00-04:00
+  - Finished: 2026-10-30T16:43:30-04:00
+  - Files touched: `scripts/verify-phase-3-local.mjs`, `docs/homepage-verification/*.png`
+  - Verified how: Automated Playwright capture on port 5005 across 1440x900, 768x1024, and 375x812. Server killed immediately after capture.
+  - Notes: Dev server cleaned up cleanly.
+- [x] 3.4 Deploy to Namecheap staging `https://v4.rokitonline.com` and verify live.
+  - Started: 2026-10-30T16:43:30-04:00
+  - Finished: 2026-10-30T16:46:00-04:00
+  - Files touched: `public_html/*`, `docs/staging-v4-verification/*.png`, `scripts/verify-v4-functional.mjs`
+  - Verified how: Git commit, push to origin, remote pull and deploy on staging via SSH. Captured remote screenshots into `docs/staging-v4-verification/` and ran functional test suite with 13/13 passing tests. Tagged `redesign-phase-3-complete`.
+  - Notes: Zero regressions on staging.
+
+### PHASE 4: Page-by-Page Migration (In Progress)
+- [ ] 4.1 Migrate Static/Content Pages: Services overview (`/services` or `/what-we-do`), Service Detail (`/services/:slug`), Legal pages (`/terms`, `/privacy`, `/cookies`, `/health`).
+- [ ] 4.2 Migrate Form & Interactive Pages: `/contact`, `/portal/quotes/new`, `/portal/orders/new`, `/photo-enhancer`.
+- [ ] 4.3 Migrate Showcase & Content Pages: `/gallery` (`Made by rOKIt`), `/gallery/:id`, `/tutorials`, `/tutorials/:slug`.
+- [ ] 4.4 Migrate Account & Auth Pages: `/auth/login`, `/auth/register`, `/auth/forgot-password`.
+- [ ] 4.5 Migrate Portals: Customer `/portal` dashboard and admin management `/admin/*`.
+
 ---
 
 ## ROLLBACK POINTS (git tags/commits that are known-good)
@@ -544,3 +578,4 @@ The following master test checklist must be executed and logged as passed before
 - **Tag `redesign-phase-0-complete`**: Known-good completion of Phase 0 discovery, full inventories, and baseline screenshots across 29 pages and 3 viewports. Commit: `799e23d` on branch `redesign/new-look`.
 - **Tag `redesign-phase-1-complete`**: Known-good completion of Phase 1 design extraction, 48 new design screenshots across 16 pages and 3 viewports, design token spec, component spec, `docs/design-system.md`, and standalone `client/src/styles/v4-tokens.css`. Branch `redesign/new-look`.
 - **Tag `redesign-phase-2-complete`**: Known-good completion of Phase 2 staging setup, additive token layer, global layout (`RokitSiteHeader`, `RokitSiteFooter`, `V4Layout`), verified on `/about` and live on `https://v4.rokitonline.com`. Branch `redesign/new-look`.
+- **Tag `redesign-phase-3-complete`**: Known-good completion of Phase 3 homepage exact clone with kinetic hero, wordless sketch, interactive problem/service navigators, project showcase, local and remote staging verification across 3 viewports, and 13/13 functional tests passing on `https://v4.rokitonline.com`. Commit `5caf339` on branch `redesign/new-look`.

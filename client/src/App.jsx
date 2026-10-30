@@ -113,18 +113,18 @@ export default function App() {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/cookies" element={<Cookies />} />
           <Route path="/health" element={<Health />} />
-        </Route>
-
-        {/* Auth & Customer Portal Routes */}
-        <Route element={<MainLayout />}>
-          <Route path="/solutions/ngo" element={<SolutionNGO />} />
-          <Route path="/solutions/sme" element={<SolutionSME />} />
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
           <Route path="/auth/forgot-password" element={<ForgotPassword />} />
           <Route path="/auth/reset-password/:token" element={<ResetPassword />} />
           <Route path="/login" element={<Navigate to="/auth/login" replace />} />
           <Route path="/register" element={<Navigate to="/auth/register" replace />} />
+        </Route>
+
+        {/* Portal Routes */}
+        <Route element={<MainLayout />}>
+          <Route path="/solutions/ngo" element={<SolutionNGO />} />
+          <Route path="/solutions/sme" element={<SolutionSME />} />
           <Route path="/portal" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/portal/orders/new" element={<ProtectedRoute><NewOrder /></ProtectedRoute>} />
           <Route path="/portal/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../utils/api';
 
@@ -12,7 +12,7 @@ export default function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +27,7 @@ export default function ResetPassword() {
     setLoading(true);
     try {
       await api.post(`/auth/reset-password/${token}`, { password: form.password });
-      toast.success('Password updated! Please log in.');
+      toast.success('Password updated! Please log in with your new credentials.');
       navigate('/auth/login');
     } catch (err) {
       toast.error(err?.response?.data?.message || 'Reset link is invalid or has expired.');
@@ -38,62 +38,77 @@ export default function ResetPassword() {
 
   return (
     <>
-      <Helmet><title>Reset Password – Rokit Media</title></Helmet>
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-20">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <img src="/assets/images/rokit-logo.png" alt="Rokit Media" className="h-12 mx-auto mb-4" />
-            <h1 className="text-3xl font-black text-rokit-dark">Set New Password</h1>
-            <p className="text-rokit-body mt-1">Choose a strong password for your account.</p>
+      <Helmet>
+        <title>Set New Password — rOKIt</title>
+        <meta name="description" content="Set a new password for your rOKIt account." />
+      </Helmet>
+
+      <div className="font-v4-body text-paper py-20 px-gutter flex items-center justify-center">
+        <div className="w-full max-w-md border border-paper/15 bg-surface p-8 md:p-10">
+          <div className="mb-8">
+            <p className="v4-section-label">Security Update</p>
+            <h1 className="mt-3 font-v4-display text-3xl md:text-4xl text-paper">New Password</h1>
+            <p className="mt-2 text-sm text-paper/70 leading-relaxed">
+              Create a secure passphrase with at least 8 characters.
+            </p>
           </div>
 
-          <div className="bg-white p-8 shadow-lg rounded-xl">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label className="block text-sm font-semibold text-rokit-dark mb-1">New Password</label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={form.password}
-                    onChange={handleChange}
-                    required
-                    autoComplete="new-password"
-                    className="form-input pr-10"
-                    placeholder="Min. 8 characters"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(p => !p)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-rokit-body"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-rokit-dark mb-1">Confirm Password</label>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <label className="block space-y-1.5">
+              <span className="text-xs uppercase font-mono tracking-wider text-neutral block">
+                New Password * (min 8 chars)
+              </span>
+              <div className="relative">
                 <input
-                  type="password"
-                  name="confirmPassword"
-                  value={form.confirmPassword}
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  value={form.password}
                   onChange={handleChange}
                   required
                   autoComplete="new-password"
-                  className="form-input"
-                  placeholder="Repeat your password"
+                  className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 pr-12 text-paper focus:outline-none focus:border-signal"
+                  placeholder="••••••••"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((p) => !p)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral hover:text-paper"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
+            </label>
 
-              <button type="submit" disabled={loading} className="btn-primary w-full justify-center">
-                {loading ? 'Updating…' : 'Update Password'}
-              </button>
+            <label className="block space-y-1.5">
+              <span className="text-xs uppercase font-mono tracking-wider text-neutral block">
+                Confirm New Password *
+              </span>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="confirmPassword"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                required
+                autoComplete="new-password"
+                className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 text-paper focus:outline-none focus:border-signal"
+                placeholder="••••••••"
+              />
+            </label>
 
-              <p className="text-center text-sm text-rokit-body">
-                <Link to="/auth/login" className="text-rokit-orange font-semibold hover:underline">Back to Login</Link>
-              </p>
-            </form>
+            <button
+              type="submit"
+              disabled={loading}
+              className="v4-action-link mt-6 min-h-12 w-full border border-signal bg-signal text-night font-semibold text-xs uppercase font-mono tracking-wider hover:bg-paper transition-colors justify-center disabled:opacity-50"
+            >
+              {loading ? 'Updating…' : 'Update Password'} <ArrowRight className="size-4 ml-2" />
+            </button>
+          </form>
+
+          <div className="mt-8 border-t border-paper/15 pt-6 text-center text-xs font-mono">
+            <Link to="/auth/login" className="text-neutral hover:text-signal transition-colors">
+              ← Return to Sign In
+            </Link>
           </div>
         </div>
       </div>

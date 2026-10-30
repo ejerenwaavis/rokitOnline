@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Eye, EyeOff, ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff, ShieldCheck, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
-import { T } from '../../theme';
 
 export default function Login() {
   const { login, verifyMfa, isAdmin } = useAuth();
@@ -16,12 +15,12 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // MFA step state
+  // MFA state
   const [mfaPending, setMfaPending] = useState(false);
   const [mfaToken, setMfaToken] = useState('');
   const [otp, setOtp] = useState('');
 
-  const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,8 +50,8 @@ export default function Login() {
     }
     setLoading(true);
     try {
-      const result = await verifyMfa(mfaToken, otp.trim());
-      toast.success('Welcome back!');
+      await verifyMfa(mfaToken, otp.trim());
+      toast.success('Identity verified!');
       navigate(isAdmin() ? '/admin' : from, { replace: true });
     } catch (err) {
       toast.error(err?.response?.data?.message || 'Verification failed.');
@@ -72,7 +71,7 @@ export default function Login() {
         toast.success('A new code has been sent to your email.');
       }
     } catch {
-      toast.error('Could not resend code. Please go back and log in again.');
+      toast.error('Could not resend code. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -80,127 +79,144 @@ export default function Login() {
 
   return (
     <>
-      <Helmet><title>Log In – Rokit Media</title></Helmet>
-      <div className="min-h-screen bg-rokit-cream flex items-center justify-center px-4 py-20">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <img src="/assets/images/rokit-logo.png" alt="Rokit Media" className="h-10 mx-auto mb-5" />
-            {mfaPending ? (
-              <>
-                <h1 className={`${T.h2} mb-1`}>Verify Your Identity</h1>
-                <p className={T.body}>Enter the 6-digit code sent to <strong>{form.email}</strong></p>
-              </>
-            ) : (
-              <>
-                <h1 className={`${T.h2} mb-1`}>Log In</h1>
-                <p className={T.body}>Welcome back! Sign in to your account.</p>
-              </>
-            )}
+      <Helmet>
+        <title>Account Sign In — rOKIt</title>
+        <meta name="description" content="Sign in to your rOKIt account or client portal." />
+      </Helmet>
+
+      <div className="font-v4-body text-paper py-20 px-gutter flex items-center justify-center">
+        <div className="w-full max-w-md border border-paper/15 bg-surface p-8 md:p-10">
+          <div className="mb-8">
+            <p className="v4-section-label">{mfaPending ? 'Two-Factor Challenge' : 'Account Access'}</p>
+            <h1 className="mt-3 font-v4-display text-3xl md:text-4xl text-paper">
+              {mfaPending ? 'Verify Identity' : 'Log In'}
+            </h1>
+            <p className="mt-2 text-sm text-paper/70 leading-relaxed">
+              {mfaPending
+                ? `Enter the 6-digit security code sent to ${form.email}`
+                : 'Welcome back. Sign in to access your projects and briefs.'}
+            </p>
           </div>
 
-          <div className={T.formCard}>
-            {!mfaPending ? (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                  <label className="block text-sm font-semibold text-rokit-dark mb-1">Email</label>
+          {!mfaPending ? (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <label className="block space-y-2">
+                <span className="text-xs uppercase font-mono tracking-wider text-neutral block">
+                  Email Address
+                </span>
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                  autoComplete="email"
+                  className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 text-paper focus:outline-none focus:border-signal"
+                  placeholder="your@email.com"
+                />
+              </label>
+
+              <label className="block space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs uppercase font-mono tracking-wider text-neutral">
+                    Password
+                  </span>
+                  <Link
+                    to="/auth/forgot-password"
+                    className="text-xs font-mono text-signal hover:underline"
+                  >
+                    Forgot?
+                  </Link>
+                </div>
+                <div className="relative">
                   <input
-                    type="email"
-                    name="email"
-                    value={form.email}
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    value={form.password}
                     onChange={handleChange}
                     required
-                    autoComplete="email"
-                    className="form-input"
-                    placeholder="your@email.com"
+                    autoComplete="current-password"
+                    className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 pr-12 text-paper focus:outline-none focus:border-signal"
+                    placeholder="••••••••"
                   />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-rokit-dark mb-1">Password</label>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      name="password"
-                      value={form.password}
-                      onChange={handleChange}
-                      required
-                      autoComplete="current-password"
-                      className="form-input pr-10"
-                      placeholder="Your password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(p => !p)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-rokit-body"
-                    >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                  </div>
-                </div>
-
-                <button type="submit" disabled={loading} className="btn-primary w-full justify-center">
-                  {loading ? 'Signing in…' : 'Sign In'}
-                </button>
-
-                <p className="text-center text-sm">
-                  <Link to="/auth/forgot-password" className="text-rokit-body hover:text-rokit-orange transition-colors">Forgot password?</Link>
-                </p>
-              </form>
-            ) : (
-              <form onSubmit={handleVerifyMfa} className="space-y-5">
-                <div className="flex justify-center mb-2">
-                  <div className="w-14 h-14 bg-rokit-orange/10 flex items-center justify-center">
-                    <ShieldCheck size={28} className="text-rokit-orange" />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-rokit-dark mb-1 text-center">6-Digit Code</label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    maxLength={6}
-                    value={otp}
-                    onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    required
-                    autoFocus
-                    className="form-input text-center text-2xl font-bold tracking-widest"
-                    placeholder="——————"
-                  />
-                </div>
-
-                <button type="submit" disabled={loading || otp.length !== 6} className="btn-primary w-full justify-center">
-                  {loading ? 'Verifying…' : 'Verify & Sign In'}
-                </button>
-
-                <div className="flex items-center justify-between text-sm">
                   <button
                     type="button"
-                    onClick={() => { setMfaPending(false); setOtp(''); setMfaToken(''); }}
-                    className="text-rokit-body hover:text-rokit-orange transition-colors"
+                    onClick={() => setShowPassword((p) => !p)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral hover:text-paper"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
-                    ← Back
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleResend}
-                    disabled={loading}
-                    className="text-rokit-orange hover:underline font-medium"
-                  >
-                    Resend code
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
-              </form>
-            )}
+              </label>
 
-            {!mfaPending && (
-              <p className="text-center text-sm text-rokit-body mt-6">
-                Don't have an account?{' '}
-                <Link to="/register" className="text-rokit-orange font-semibold hover:underline">Create one</Link>
-              </p>
-            )}
-          </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="v4-action-link min-h-12 w-full border border-signal bg-signal text-night font-semibold text-xs uppercase font-mono tracking-wider hover:bg-paper transition-colors justify-center disabled:opacity-50"
+              >
+                {loading ? 'Authenticating…' : 'Sign In'} <ArrowRight className="size-4 ml-2" />
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleVerifyMfa} className="space-y-6">
+              <div className="flex items-center gap-3 border border-signal/30 bg-signal/10 p-3 text-xs font-mono text-signal">
+                <ShieldCheck size={18} className="shrink-0" />
+                <span>Multi-factor authentication active</span>
+              </div>
+
+              <label className="block space-y-2">
+                <span className="text-xs uppercase font-mono tracking-wider text-neutral block">
+                  6-Digit OTP Code
+                </span>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  maxLength={6}
+                  required
+                  autoFocus
+                  className="w-full min-h-[3.5rem] border border-paper/25 bg-transparent p-3 text-center text-2xl tracking-[0.5em] font-mono text-paper focus:outline-none focus:border-signal"
+                  placeholder="000000"
+                />
+              </label>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="v4-action-link min-h-12 w-full border border-signal bg-signal text-night font-semibold text-xs uppercase font-mono tracking-wider hover:bg-paper transition-colors justify-center disabled:opacity-50"
+              >
+                {loading ? 'Verifying…' : 'Confirm Code'} <ArrowRight className="size-4 ml-2" />
+              </button>
+
+              <div className="flex items-center justify-between pt-2 text-xs font-mono">
+                <button
+                  type="button"
+                  onClick={handleResend}
+                  disabled={loading}
+                  className="text-signal hover:underline disabled:opacity-50"
+                >
+                  Resend Code
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMfaPending(false)}
+                  className="text-neutral hover:text-paper"
+                >
+                  Back to Sign In
+                </button>
+              </div>
+            </form>
+          )}
+
+          {!mfaPending && (
+            <div className="mt-8 border-t border-paper/15 pt-6 text-center text-xs font-mono text-neutral">
+              Don’t have an account yet?{' '}
+              <Link to="/auth/register" className="text-signal hover:underline ml-1">
+                Create one here
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </>

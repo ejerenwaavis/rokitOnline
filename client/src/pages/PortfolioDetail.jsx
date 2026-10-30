@@ -1,229 +1,334 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Calendar, Tag, User, ChevronDown } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { findProject, servicePaths, publicProjects } from '../lib/workProjects';
 import api from '../utils/api';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
-import { T } from '../theme';
-import { useAuth } from '../context/AuthContext';
+
+function RelatedWork({ project }) {
+  const related = publicProjects
+    .filter(
+      (candidate) =>
+        candidate.slug !== project.slug &&
+        candidate.disciplines.some((discipline) => project.disciplines.includes(discipline))
+    )
+    .slice(0, 3);
+
+  if (!related.length) return null;
+
+  return (
+    <section className="border-t border-paper/15">
+      <div className="mx-auto max-w-site px-gutter py-section">
+        <p className="v4-section-label">Related work</p>
+        <div className="mt-8 grid gap-6 md:grid-cols-3">
+          {related.map((item) => (
+            <Link
+              key={item.slug}
+              to={`/gallery/${item.slug}`}
+              className="group border-t border-paper/20 py-5 block"
+            >
+              <span className="text-xs uppercase font-mono text-signal">
+                {item.disciplines[0]}
+              </span>
+              <h3 className="mt-3 font-v4-display text-xl text-paper group-hover:text-signal transition-colors">
+                {item.name}
+              </h3>
+              <ArrowRight className="mt-4 size-4 text-signal" aria-hidden="true" />
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function PortfolioDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
-  const [item, setItem] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [activeImg, setActiveImg] = useState(0);
-  const [ctaOpen, setCtaOpen] = useState(false);
+
+  // 1. Check if ID matches a static showcase project
+  const staticProject = findProject(id);
+
+  // 2. Otherwise load dynamic DB project
+  const [dbProject, setDbProject] = useState(null);
+  const [loading, setLoading] = useState(!staticProject);
 
   useEffect(() => {
-    const controller = new AbortController();
-    api.get(`/portfolio/${id}`, { signal: controller.signal })
-      .then(res => { setItem(res.data); setLoading(false); })
-      .catch(() => { setLoading(false); });
-    return () => controller.abort();
-  }, [id]);
+    if (!staticProject && id) {
+      setLoading(true);
+      api.get(`/portfolio/${id}`)
+        .then((res) => {
+          setDbProject(res.data);
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    }
+  }, [id, staticProject]);
 
-  if (loading) return <div className="min-h-screen bg-rokit-cream flex items-center justify-center"><LoadingSpinner /></div>;
-  if (!item) return (
-    <div className={T.notFound}>
-      <p className="text-rokit-body mb-4">Project not found.</p>
-      <Link to="/gallery" className="btn-primary">Back to Gallery</Link>
-    </div>
-  );
-
-  const images = item.images || [];
-  const coverImage = images[0]?.url || null;
-  const hasMilestones = Array.isArray(item.milestones) && item.milestones.length > 0;
-  const hasObstacles = Array.isArray(item.obstacles) && item.obstacles.length > 0;
-  const sortedMilestones = hasMilestones
-    ? [...item.milestones].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-    : [];
-
-  return (
-    <>
-      <Helmet>
-        <title>{item.title} – Rokit Media Portfolio</title>
-        <meta name="description" content={item.description || `Portfolio project: ${item.title}`} />
-      </Helmet>
-
-      {/* Back nav */}
-      <div className="bg-rokit-cream border-b border-rokit-orange/10 pt-24 pb-4">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-rokit-body hover:text-rokit-orange transition-colors"
-          >
-            <ArrowLeft size={13} /> Back to Gallery
-          </button>
-        </div>
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-night flex items-center justify-center font-v4-body text-paper">
+        <LoadingSpinner />
       </div>
+    );
+  }
 
-      {/* Hero image */}
-      {coverImage && (
-        <div className="bg-rokit-dark">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6">
-            <img
-              src={images[activeImg]?.url || coverImage}
-              alt={item.title}
-              className="w-full max-h-[70vh] object-contain"
-            />
-            {/* Thumbnail strip */}
-            {images.length > 1 && (
-              <div className="flex gap-2 mt-4 overflow-x-auto pb-1">
-                {images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveImg(i)}
-                    className={`flex-none w-16 h-16 overflow-hidden transition-opacity ${activeImg === i ? 'ring-2 ring-rokit-orange' : 'opacity-50 hover:opacity-80'}`}
+  // Render static editorial project case study
+  if (staticProject) {
+    const story = staticProject.story;
+    const storySections = story
+      ? [
+          ['Situation', story.situation],
+          ['Audience / end user', story.audience],
+          ['What we saw', story.observation],
+          ['Process', story.process],
+          ['Result', story.result],
+          ['Lesson', story.lesson],
+        ].filter((entry) => Boolean(entry[1]))
+      : [];
+
+    return (
+      <>
+        <Helmet>
+          <title>{staticProject.name} — Made by rOKIt</title>
+          <meta name="description" content={staticProject.hook} />
+        </Helmet>
+
+        <article className="font-v4-body text-paper">
+          <header className="mx-auto max-w-site px-gutter pb-16 pt-16">
+            <Link
+              to="/gallery"
+              className="v4-action-link min-h-11 text-signal hover:text-paper uppercase text-xs font-mono tracking-wider"
+            >
+              ← Made by rOKIt
+            </Link>
+            <p className="v4-section-label mt-10">
+              {staticProject.name}
+              {staticProject.sector ? ` · ${staticProject.sector}` : ''}
+            </p>
+            <h1 className="mt-6 max-w-[19ch] font-v4-display text-[clamp(2.8rem,7vw,6rem)] leading-[1.08]">
+              {staticProject.hook}
+            </h1>
+            {staticProject.secondary && (
+              <p className="mt-6 font-v4-display text-2xl text-paper/75">{staticProject.secondary}</p>
+            )}
+            <p className="mt-8 max-w-[62ch] text-sm leading-relaxed text-neutral">
+              {staticProject.disciplines.join(' · ')}
+            </p>
+          </header>
+
+          <section className="bg-paper text-night">
+            <div
+              className={`mx-auto grid max-w-site gap-10 px-gutter py-section ${
+                staticProject.contribution || staticProject.principle
+                  ? 'md:grid-cols-[minmax(0,1.25fr)_minmax(16rem,.75fr)]'
+                  : 'md:grid-cols-1'
+              }`}
+            >
+              <figure>
+                <div
+                  className="evidence-slot aspect-[4/3] flex items-center justify-center border border-night/20 text-xs font-mono text-night/60"
+                  role="img"
+                  aria-label="MEDIA REQUIRED"
+                >
+                  MEDIA REQUIRED
+                </div>
+              </figure>
+              {(staticProject.contribution || staticProject.principle) && (
+                <div className="border-t border-night/20 pt-5">
+                  <p className="v4-section-label !text-night/60">
+                    {staticProject.contribution ? 'rOKIt contribution' : 'Principle'}
+                  </p>
+                  {staticProject.contribution && (
+                    <p className="mt-6 font-v4-display text-2xl leading-relaxed">
+                      {staticProject.contribution}
+                    </p>
+                  )}
+                  {staticProject.principle && (
+                    <p className="mt-8 border-l-2 border-signal pl-4 font-v4-display text-xl leading-relaxed">
+                      {staticProject.principle}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          </section>
+
+          {storySections.length > 0 && (
+            <section className="mx-auto max-w-site px-gutter py-section" aria-label="Project story">
+              <div className="border-t border-paper/20">
+                {storySections.map(([label, copy]) => (
+                  <div
+                    key={label}
+                    className="grid gap-4 border-b border-paper/20 py-8 md:grid-cols-[minmax(0,.35fr)_minmax(0,1fr)]"
                   >
-                    <img src={img.url} alt="" className="w-full h-full object-cover" />
-                  </button>
+                    <h2 className="text-xs uppercase font-mono text-signal">{label}</h2>
+                    <p className="max-w-[65ch] font-v4-display text-xl leading-relaxed md:text-2xl text-paper">
+                      {copy}
+                    </p>
+                  </div>
                 ))}
               </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Content */}
-      <div className={T.sectionCream}>
-        <div className={`${T.sectionInner} max-w-4xl`}>
-
-          {/* Title block */}
-          <div className="mb-10">
-            <span className={`${T.eyebrowOrange} mb-3 block`}>{item.category?.replace(/-/g, ' ')}</span>
-            <h1 className={`${T.h1} mb-4`}>{item.title}</h1>
-            <div className="flex flex-wrap gap-4 items-center text-sm text-rokit-body">
-              {item.client && (
-                <span className="flex items-center gap-1.5">
-                  <User size={13} className="text-rokit-orange" /> {item.client}
-                </span>
-              )}
-              {item.completedDate && (
-                <span className="flex items-center gap-1.5">
-                  <Calendar size={13} className="text-rokit-orange" />
-                  {new Date(item.completedDate).toLocaleDateString('en-GB', { year: 'numeric', month: 'long' })}
-                </span>
-              )}
-              {Array.isArray(item.tags) && item.tags.length > 0 && (
-                <span className="flex items-center gap-1.5 flex-wrap">
-                  <Tag size={13} className="text-rokit-orange" />
-                  {item.tags.map(t => (
-                    <span key={t} className="bg-rokit-cream-dark border border-rokit-orange/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide">{t}</span>
-                  ))}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Description */}
-          {item.description && (
-            <div className="mb-14">
-              <div className="w-8 h-px bg-rokit-orange mb-6" />
-              <p className={`${T.body} text-lg max-w-2xl`}>{item.description}</p>
-            </div>
+            </section>
           )}
 
-          {/* Milestones / Process Timeline */}
-          {hasMilestones && (
-            <div className="mb-14">
-              <div className="mb-8">
-                <span className={`${T.eyebrow} block mb-2`}>Process</span>
-                <h2 className={T.h2}>How We Did It</h2>
-                <div className="w-8 h-px bg-rokit-orange mt-4" />
-              </div>
-              <div className="relative">
-                {/* Vertical line */}
-                <div className="absolute left-4 top-2 bottom-2 w-px bg-rokit-orange/20" />
-                <div className="space-y-8 pl-12">
-                  {sortedMilestones.map((m, i) => (
-                    <div key={i} className="relative">
-                      {/* Dot */}
-                      <div className="absolute -left-[2.15rem] top-1 w-4 h-4 rounded-full border-2 border-rokit-orange bg-rokit-cream flex items-center justify-center">
-                        <div className="w-1.5 h-1.5 rounded-full bg-rokit-orange" />
-                      </div>
-                      <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-rokit-orange">Step {i + 1}</span>
-                      <h3 className={`${T.h3} mt-1 mb-2`}>{m.title}</h3>
-                      {m.description && <p className={T.body}>{m.description}</p>}
-                      {m.image?.url && (
-                        <div className="mt-4">
-                          <img src={m.image.url} alt={m.title} className="w-full max-w-md rounded border border-rokit-orange/10 object-cover" />
-                        </div>
+          <section className="mx-auto max-w-site px-gutter py-section">
+            <h2 className="v4-section-label">Related services</h2>
+            <div className="mt-8 border-t border-paper/20">
+              {staticProject.disciplines.map((discipline) => (
+                <Link
+                  key={discipline}
+                  to={servicePaths[discipline] || '/services'}
+                  className="group flex min-h-20 items-center justify-between gap-6 border-b border-paper/20 py-4 font-v4-display text-xl hover:text-signal md:text-2xl transition-colors"
+                >
+                  {discipline}
+                  <ArrowRight className="size-5 shrink-0 text-signal" aria-hidden="true" />
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          <RelatedWork project={staticProject} />
+
+          <section className="border-t-2 border-signal">
+            <div className="mx-auto max-w-site px-gutter py-section">
+              <h2 className="font-v4-display text-4xl md:text-5xl">What are you trying to make work?</h2>
+              <Link
+                to="/portal/quotes/new"
+                className="v4-action-link mt-8 min-h-12 bg-signal px-6 font-semibold text-night hover:bg-paper uppercase text-xs tracking-wider"
+              >
+                Start a Project <ArrowRight className="size-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </section>
+        </article>
+      </>
+    );
+  }
+
+  // Render dynamic DB project from Portfolio collection
+  if (dbProject) {
+    const images = dbProject.images || [];
+    const milestones = dbProject.milestones || [];
+    const obstacles = dbProject.obstacles || [];
+
+    return (
+      <>
+        <Helmet>
+          <title>{dbProject.title} — Made by rOKIt</title>
+          <meta name="description" content={dbProject.description || dbProject.title} />
+        </Helmet>
+
+        <article className="font-v4-body text-paper">
+          <header className="mx-auto max-w-site px-gutter pb-16 pt-16">
+            <Link
+              to="/gallery"
+              className="v4-action-link min-h-11 text-signal hover:text-paper uppercase text-xs font-mono tracking-wider"
+            >
+              ← Made by rOKIt
+            </Link>
+            <p className="v4-section-label mt-10">
+              {dbProject.category || 'General'}
+              {dbProject.clientName ? ` · ${dbProject.clientName}` : ''}
+            </p>
+            <h1 className="mt-6 max-w-[19ch] font-v4-display text-[clamp(2.8rem,7vw,6rem)] leading-[1.08]">
+              {dbProject.title}
+            </h1>
+            {dbProject.description && (
+              <p className="mt-6 font-v4-display text-2xl text-paper/75">{dbProject.description}</p>
+            )}
+          </header>
+
+          {images.length > 0 && (
+            <section className="bg-paper text-night">
+              <div className="mx-auto max-w-site px-gutter py-section">
+                <div className="grid gap-8 md:grid-cols-2">
+                  {images.map((img, i) => (
+                    <figure key={i} className="border border-night/20">
+                      <img
+                        src={img.url}
+                        alt={img.caption || dbProject.title}
+                        className="aspect-[4/3] w-full object-cover"
+                      />
+                      {img.caption && (
+                        <figcaption className="p-3 text-xs font-mono text-night/70">
+                          {img.caption}
+                        </figcaption>
                       )}
-                    </div>
+                    </figure>
                   ))}
                 </div>
               </div>
-            </div>
+            </section>
           )}
 
-          {/* Obstacles & Solutions */}
-          {hasObstacles && (
-            <div className="mb-14">
-              <div className="mb-8">
-                <span className={`${T.eyebrow} block mb-2`}>Challenges</span>
-                <h2 className={T.h2}>Obstacles & How We Overcame Them</h2>
-                <div className="w-8 h-px bg-rokit-orange mt-4" />
-              </div>
-              <div className="space-y-6">
-                {item.obstacles.map((o, i) => (
-                  <div key={i} className="border border-rokit-orange/10 overflow-hidden">
-                    <div className="grid sm:grid-cols-2 gap-0">
-                      <div className="p-6 bg-rokit-cream-dark border-r border-rokit-orange/10">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-rokit-body block mb-3">Challenge</span>
-                        <p className={T.body}>{o.challenge}</p>
-                      </div>
-                      <div className="p-6 bg-white">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-rokit-orange block mb-3">Solution</span>
-                        <p className={T.body}>{o.solution}</p>
-                      </div>
-                    </div>
-                    {o.image?.url && (
-                      <div className="p-6 bg-white border-t border-rokit-orange/10">
-                        <img src={o.image.url} alt={`Obstacle ${i + 1}`} className="w-full max-w-lg rounded border border-rokit-orange/10 object-cover" />
-                      </div>
-                    )}
+          {milestones.length > 0 && (
+            <section className="mx-auto max-w-site px-gutter py-section">
+              <h2 className="v4-section-label mb-8">Execution Milestones</h2>
+              <div className="border-t border-paper/20">
+                {milestones.map((m, i) => (
+                  <div
+                    key={i}
+                    className="grid gap-4 border-b border-paper/20 py-8 md:grid-cols-[minmax(0,.35fr)_minmax(0,1fr)]"
+                  >
+                    <span className="text-xs uppercase font-mono text-signal">
+                      {String(i + 1).padStart(2, '0')} · {m.title}
+                    </span>
+                    <p className="font-v4-display text-xl text-paper leading-relaxed">
+                      {m.description}
+                    </p>
                   </div>
                 ))}
               </div>
-            </div>
+            </section>
           )}
 
-          {/* CTA */}
-          <div className="border-t border-rokit-orange/10 pt-10 flex flex-col sm:flex-row gap-4 items-start">
-            {isLoggedIn() ? (
-              <div className="relative">
-                <button
-                  onClick={() => setCtaOpen(p => !p)}
-                  className="btn-primary inline-flex items-center gap-2"
-                >
-                  Start a Similar Project <ChevronDown size={14} className={`transition-transform ${ctaOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {ctaOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-rokit-orange/10 shadow-lg z-50">
-                    <Link
-                      to={`/portal/quotes/new?serviceType=${encodeURIComponent(item.category || '')}&project=${encodeURIComponent(item.title || '')}`}
-                      className="block px-5 py-3 text-sm text-rokit-dark hover:bg-rokit-cream transition-colors font-mono uppercase tracking-wider text-[11px]"
-                    >
-                      Request a Quote
-                    </Link>
-                    <Link
-                      to={`/portal/orders/new?serviceType=${encodeURIComponent(item.category || '')}&project=${encodeURIComponent(item.title || '')}`}
-                      className="block px-5 py-3 text-sm text-rokit-dark hover:bg-rokit-cream transition-colors border-t border-rokit-orange/10 font-mono uppercase tracking-wider text-[11px]"
-                    >
-                      Create Job Order
-                    </Link>
+          {obstacles.length > 0 && (
+            <section className="mx-auto max-w-site px-gutter py-section">
+              <h2 className="v4-section-label mb-8">Obstacles & Solutions</h2>
+              <div className="grid gap-6 md:grid-cols-2">
+                {obstacles.map((obs, i) => (
+                  <div key={i} className="border border-paper/15 bg-surface p-6">
+                    <p className="text-xs uppercase font-mono text-signal mb-2">Challenge</p>
+                    <p className="text-paper text-base mb-4 font-v4-display">{obs.challenge}</p>
+                    <p className="text-xs uppercase font-mono text-neutral mb-2">How we solved it</p>
+                    <p className="text-neutral text-sm leading-relaxed">{obs.solution}</p>
                   </div>
-                )}
+                ))}
               </div>
-            ) : (
-              <Link to="/portal/quotes/new" className="btn-primary">Start a Similar Project</Link>
-            )}
-            <Link to="/gallery" className="btn-outline">Browse More Work</Link>
-          </div>
-        </div>
-      </div>
-    </>
+            </section>
+          )}
+
+          <section className="border-t-2 border-signal">
+            <div className="mx-auto max-w-site px-gutter py-section">
+              <h2 className="font-v4-display text-4xl md:text-5xl">What are you trying to make work?</h2>
+              <Link
+                to="/portal/quotes/new"
+                className="v4-action-link mt-8 min-h-12 bg-signal px-6 font-semibold text-night hover:bg-paper uppercase text-xs tracking-wider"
+              >
+                Start a Project <ArrowRight className="size-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </section>
+        </article>
+      </>
+    );
+  }
+
+  // Not found fallback
+  return (
+    <div className="min-h-screen bg-night font-v4-body text-paper flex flex-col items-center justify-center p-6 text-center">
+      <h1 className="font-v4-display text-4xl mb-4">Project Not Found</h1>
+      <p className="text-neutral mb-8">The project or case study you requested could not be located.</p>
+      <Link
+        to="/gallery"
+        className="v4-action-link min-h-12 border border-signal px-8 text-xs uppercase font-mono tracking-wider text-signal hover:bg-signal hover:text-night transition-colors"
+      >
+        Return to Made by rOKIt
+      </Link>
+    </div>
   );
 }

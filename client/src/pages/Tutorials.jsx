@@ -1,118 +1,180 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Search } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
+import { ideaArticles } from '../lib/ideasContent';
 import api from '../utils/api';
-import TutorialCard from '../components/ui/TutorialCard';
-import LoadingSpinner from '../components/ui/LoadingSpinner';
-import { T } from '../theme';
 
-const tutorialCategories = ['all', 'design tips', 'printing', 'branding', 'web', 'business'];
+const formats = ['All', 'Practical answer', 'Story & lesson', 'Perspective', 'Founder note', 'Framework'];
 
 export default function Tutorials() {
-  const [tutorials, setTutorials] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeFormat = searchParams.get('format') || 'All';
+  const [dbTutorials, setDbTutorials] = useState([]);
 
   useEffect(() => {
-    const controller = new AbortController();
-    const params = new URLSearchParams({ page, limit: 9 });
-    if (activeCategory !== 'all') params.append('category', activeCategory);
-    api.get(`/tutorials?${params}`, { signal: controller.signal })
-      .then(res => {
-        setLoading(false);
-        const tuts = Array.isArray(res.data?.tutorials) ? res.data.tutorials
-          : Array.isArray(res.data) ? res.data : [];
-        setTutorials(tuts);
-        setTotalPages(res.data?.totalPages || 1);
+    api.get('/tutorials?limit=12')
+      .then((res) => {
+        const list = Array.isArray(res.data?.tutorials) ? res.data.tutorials : Array.isArray(res.data) ? res.data : [];
+        const formatted = list.map((t) => ({
+          slug: t.slug,
+          title: t.title,
+          deck: t.excerpt || t.title,
+          topic: t.category || 'General',
+          format: 'Perspective',
+          isDb: true,
+        }));
+        setDbTutorials(formatted);
       })
-      .catch(() => { setLoading(false); setTutorials([]); });
-    return () => controller.abort();
-  }, [page, activeCategory]);
+      .catch(() => {});
+  }, []);
 
-  const displayed = search.trim()
-    ? tutorials.filter(t => t.title.toLowerCase().includes(search.toLowerCase()))
-    : tutorials;
+  const allArticles = [...ideaArticles, ...dbTutorials];
+  const featured = allArticles.find((a) => a.featured) || allArticles[0];
+  const visible = allArticles.filter((a) => activeFormat === 'All' || a.format === activeFormat);
 
   return (
     <>
       <Helmet>
-        <title>Tutorials & Tips – Rokit Media</title>
-        <meta name="description" content="Learn design, printing, and branding tips from the Rokit Media team." />
+        <title>Ideas — Writing Shaped by the Work at rOKIt</title>
+        <meta
+          name="description"
+          content="Practice notes, founder perspectives and evidence-informed thinking from rOKIt."
+        />
+        <meta property="og:title" content="Ideas — Writing Shaped by the Work at rOKIt" />
+        <meta property="og:description" content="What the work keeps teaching us." />
+        <meta property="og:type" content="website" />
       </Helmet>
 
-      {/* Hero */}
-      <div className={T.pageHero}>
-        <div className={`${T.pageHeroInner} ${T.pageHeroCentered}`}>
-          <span className={`${T.eyebrowOrange} mb-3`}>Knowledge Hub</span>
-          <h1 className={`${T.h1} mb-4`}>Tutorials &amp; Tips</h1>
-          <p className={`${T.body} max-w-xl mx-auto`}>
-            Practical guides, design tips, and industry insights from our creative team.
-          </p>
-        </div>
-      </div>
+      <div className="font-v4-body bg-paper text-night">
+        {/* Header */}
+        <section className="mx-auto max-w-site px-gutter pt-16 pb-12 border-b border-night/20">
+          <p className="v4-section-label !text-night/65">Ideas</p>
+          <h1 className="mt-4 font-v4-display text-4xl md:text-7xl leading-tight">
+            The Work Taught Us. We Wrote It Down.
+          </h1>
+        </section>
 
-      {/* Filters */}
-      {/* Filters */}
-      <div className="bg-rokit-cream border-b border-rokit-orange/10 py-4 sticky top-0 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 flex flex-wrap gap-3 items-center justify-between">
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-            {tutorialCategories.map(cat => (
+        {/* Featured Idea */}
+        {featured && (
+          <section className="bg-night text-paper">
+            <div className="mx-auto grid max-w-site grid-cols-12 gap-8 px-gutter py-section">
+              <div className="col-span-12 md:col-span-7">
+                <p className="v4-section-label">Featured · {featured.format}</p>
+                <h2 className="mt-6 max-w-[13ch] font-v4-display text-4xl md:text-5xl">
+                  {featured.title}
+                </h2>
+                <p className="mt-5 font-v4-display text-2xl italic text-signal">{featured.deck}</p>
+                <Link
+                  to={`/tutorials/${featured.slug}`}
+                  className="v4-action-link mt-8 min-h-11 text-paper hover:text-signal uppercase text-xs font-mono tracking-wider"
+                >
+                  Read the idea <ArrowRight className="size-3.5 ml-2" aria-hidden="true" />
+                </Link>
+              </div>
+              {featured.cover && (
+                <figure className="col-span-10 col-start-3 md:col-span-4 md:col-start-9">
+                  <img
+                    src={featured.cover.src}
+                    alt={featured.cover.alt}
+                    width={640}
+                    height={640}
+                    loading="lazy"
+                    className="aspect-square w-full object-cover"
+                  />
+                  <figcaption className="mt-3 text-xs text-neutral font-mono">
+                    {featured.cover.caption}
+                  </figcaption>
+                </figure>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Format Filter & List */}
+        <section className="mx-auto max-w-site px-gutter py-section">
+          <h2 className="v4-section-label !text-night/65">Latest Ideas</h2>
+          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 border-b border-night/20 pb-5" role="group">
+            {formats.map((fmt) => (
               <button
-                key={cat}
-                onClick={() => { setActiveCategory(cat); setPage(1); }}
-                className={activeCategory === cat ? T.chipActive : T.chipIdle}
+                key={fmt}
+                type="button"
+                aria-pressed={activeFormat === fmt}
+                onClick={() => {
+                  if (fmt === 'All') setSearchParams({});
+                  else setSearchParams({ format: fmt });
+                }}
+                className={`min-h-11 rounded-none px-0 text-xs font-mono uppercase tracking-wider transition-colors ${
+                  activeFormat === fmt ? 'text-signal underline font-semibold' : 'text-night hover:text-signal'
+                }`}
               >
-                {cat}
+                {fmt}
               </button>
             ))}
           </div>
-          <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search tutorials…"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              className="pl-9 pr-4 py-2 border border-gray-200 text-sm focus:outline-none focus:border-rokit-orange w-56 bg-white"
-            />
+
+          <div className="mt-8 divide-y divide-night/20">
+            {visible.map((article) => (
+              <Link
+                key={article.slug}
+                to={`/tutorials/${article.slug}`}
+                className="group grid gap-6 py-8 md:grid-cols-[minmax(0,.4fr)_minmax(0,1fr)_auto] items-start"
+              >
+                <span className="text-xs font-mono uppercase text-night/65">
+                  {article.topic} · {article.format}
+                </span>
+                <div>
+                  <h3 className="font-v4-display text-2xl text-night group-hover:text-signal transition-colors">
+                    {article.title}
+                  </h3>
+                  <p className="mt-3 text-sm text-night/75 leading-relaxed">{article.deck}</p>
+                </div>
+                <ArrowRight className="text-signal size-5 shrink-0 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </Link>
+            ))}
           </div>
-        </div>
+        </section>
+
+        {/* Tools & Lab */}
+        <section className="bg-night text-paper">
+          <div className="mx-auto max-w-site px-gutter py-section">
+            <p className="v4-section-label">Tools & Knowledge</p>
+            <h2 className="mt-5 max-w-[22ch] font-v4-display text-3xl md:text-4xl">
+              Templates Start Blank. Problems Don’t.
+            </h2>
+            <div className="mt-8 border-t border-paper/20 divide-y divide-paper/20">
+              <article className="grid gap-4 py-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
+                <h3 className="font-v4-display text-xl">rOKIt Discovery Brief Builder</h3>
+                <p className="text-sm leading-relaxed text-neutral">
+                  Step-by-step plain questioning that transforms raw ideas into structured specifications.
+                </p>
+                <span className="text-xs font-mono uppercase text-signal">Public Utility</span>
+              </article>
+              <article className="grid gap-4 py-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
+                <h3 className="font-v4-display text-xl">AI Photo Enhancer</h3>
+                <p className="text-sm leading-relaxed text-neutral">
+                  Deep facial restoration and print-grade upscaling for legacy and vintage assets.
+                </p>
+                <span className="text-xs font-mono uppercase text-signal">Production Tool</span>
+              </article>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-6">
+              <Link
+                to="/portal/quotes/new?route=build-my-brief"
+                className="v4-action-link min-h-11 text-signal hover:text-paper uppercase text-xs tracking-wider"
+              >
+                Build Your Brief <ArrowRight className="size-3.5 ml-1" aria-hidden="true" />
+              </Link>
+              <Link
+                to="/photo-enhancer"
+                className="v4-action-link min-h-11 text-paper hover:text-signal uppercase text-xs tracking-wider"
+              >
+                Try Photo Enhancer <ArrowRight className="size-3.5 ml-1" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+        </section>
       </div>
-
-      {/* Grid */}
-      <section className={T.sectionAlt}>
-        <div className={T.sectionInner}>
-          {loading ? (
-            <LoadingSpinner center />
-          ) : displayed.length === 0 ? (
-            <p className="text-center text-rokit-body py-16">No tutorials found.</p>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayed.map(t => <TutorialCard key={t._id} tutorial={t} />)}
-            </div>
-          )}
-
-          {/* Pagination */}
-          {totalPages > 1 && !search && (
-            <div className="flex justify-center gap-2 mt-12">
-              {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                  key={i + 1}
-                  onClick={() => setPage(i + 1)}
-                  className={`w-10 h-10 font-mono text-[10px] uppercase tracking-[0.1em] transition-all duration-200 ${
-                    page === i + 1 ? 'bg-rokit-orange text-white' : 'bg-white border border-rokit-orange/20 text-rokit-body hover:border-rokit-orange'
-                  }`}
-                >
-                  {i + 1}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
     </>
   );
 }

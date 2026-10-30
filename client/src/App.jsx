@@ -96,6 +96,16 @@ export default function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/services/:slug" element={<ServiceDetail />} />
           <Route path="/what-we-do" element={<Navigate to="/services" replace />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/gallery/:id" element={<PortfolioDetail />} />
+          <Route path="/work" element={<Navigate to="/gallery" replace />} />
+          <Route path="/work/:id" element={<PortfolioDetail />} />
+          <Route path="/tutorials" element={<Tutorials />} />
+          <Route path="/tutorials/:slug" element={<TutorialPost />} />
+          <Route path="/ideas" element={<Navigate to="/tutorials" replace />} />
+          <Route path="/ideas/:slug" element={<TutorialPost />} />
+          <Route path="/photo-enhancer" element={<PhotoEnhancer />} />
+          <Route path="/tools" element={<Navigate to="/photo-enhancer" replace />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/portal/quotes/new" element={<NewQuote />} />
           <Route path="/start-a-project" element={<NewQuote />} />
@@ -105,15 +115,10 @@ export default function App() {
           <Route path="/health" element={<Health />} />
         </Route>
 
-        {/* Legacy / unmigrated routes wrapped in MainLayout */}
+        {/* Auth & Customer Portal Routes */}
         <Route element={<MainLayout />}>
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/gallery/:id" element={<PortfolioDetail />} />
-          <Route path="/photo-enhancer" element={<PhotoEnhancer />} />
           <Route path="/solutions/ngo" element={<SolutionNGO />} />
           <Route path="/solutions/sme" element={<SolutionSME />} />
-          <Route path="/tutorials" element={<Tutorials />} />
-          <Route path="/tutorials/:slug" element={<TutorialPost />} />
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
           <Route path="/auth/forgot-password" element={<ForgotPassword />} />

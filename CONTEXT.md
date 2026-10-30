@@ -1,11 +1,11 @@
 # CONTEXT.md: Rokit Migration
 
 ## STATUS
-- Current phase: Phase 2 (Staging Environment & Frontend Foundation)
-- Current task: Task 2.1 Add token layer, fonts, and shared component CSS
-- Last completed task: Task 1.8 Create single shared stylesheet/token layer
-- Blocked on: None (proceeding with Phase 2 implementation)
-- Last updated: 2026-10-30T16:25:00-04:00
+- Current phase: Phase 3 (Homepage Exact Clone)
+- Current task: Task 3.1 Port new homepage structure, copy, imagery, animations
+- Last completed task: Task 2.4 Re-run Functional Test Checklist on v4
+- Blocked on: None
+- Last updated: 2026-10-30T16:37:00-04:00
 
 ---
 
@@ -530,7 +530,12 @@ The following master test checklist must be executed and logged as passed before
   - Files touched: `client/src/pages/About.jsx`, `client/src/App.jsx`, `docs/v4-layout-verification/*.png`
   - Verified how: Ported `/about` to the v4 layout and design. Captured full-page screenshots at desktop (1440x900), tablet (768x1024), and mobile (375x812) into `docs/v4-layout-verification/`, visually matching `docs/newdesign/*about.png`. Deployed to `v4.rokitonline.com`.
   - Notes: Ready for v4 remote verification.
-- [ ] 2.4 Re-run the Functional Test Checklist. Log results.
+- [x] 2.4 Re-run the Functional Test Checklist. Log results.
+  - Started: 2026-10-30T16:33:00-04:00
+  - Finished: 2026-10-30T16:37:00-04:00
+  - Files touched: `scripts/verify-v4-functional.mjs`, `CONTEXT.md`
+  - Verified how: Executed automated functional verification suite `scripts/verify-v4-functional.mjs` against `https://v4.rokitonline.com`. Confirmed 14/14 checks pass: API health check, services catalog, portfolio items from staging db, auth guard on `/api/orders/mine`, all 8 public and portal SPA routes, and static V4 asset chunks.
+  - Notes: Full system functional baseline verified on staging.
 
 ---
 
@@ -538,3 +543,4 @@ The following master test checklist must be executed and logged as passed before
 - **Tag `pre-redesign-baseline`**: Known-good clean baseline of live production site before starting redesign migration. Commit: `d897fb2` on branch `main`.
 - **Tag `redesign-phase-0-complete`**: Known-good completion of Phase 0 discovery, full inventories, and baseline screenshots across 29 pages and 3 viewports. Commit: `799e23d` on branch `redesign/new-look`.
 - **Tag `redesign-phase-1-complete`**: Known-good completion of Phase 1 design extraction, 48 new design screenshots across 16 pages and 3 viewports, design token spec, component spec, `docs/design-system.md`, and standalone `client/src/styles/v4-tokens.css`. Branch `redesign/new-look`.
+- **Tag `redesign-phase-2-complete`**: Known-good completion of Phase 2 staging setup, additive token layer, global layout (`RokitSiteHeader`, `RokitSiteFooter`, `V4Layout`), verified on `/about` and live on `https://v4.rokitonline.com`. Branch `redesign/new-look`.

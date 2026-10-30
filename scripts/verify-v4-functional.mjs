@@ -73,14 +73,24 @@ async function runTests() {
   }
 
   // TC-06: Static V4 assets serving
-  await check('V4 Static JS Bundle (/assets/index-D3agqEYI.js)', async () => {
-    const res = await get('/assets/index-D3agqEYI.js');
-    if (res.status !== 200) throw new Error(`Status ${res.status}`);
-  });
+  await check('V4 Active Assets check from root index.html', async () => {
+    const rootRes = await get('/');
+    const jsMatch = rootRes.body.match(/src="(\/assets\/index-[^"]+\.js)"/);
+    const cssMatch = rootRes.body.match(/href="(\/assets\/index-[^"]+\.css)"/);
+    if (!jsMatch) throw new Error('No JS bundle reference found in index.html');
+    if (!cssMatch) throw new Error('No CSS bundle reference found in index.html');
 
-  await check('V4 Static CSS Bundle (/assets/index-zl3we6hf.css)', async () => {
-    const res = await get('/assets/index-zl3we6hf.css');
-    if (res.status !== 200) throw new Error(`Status ${res.status}`);
+    const jsRes = await get(jsMatch[1]);
+    if (jsRes.status !== 200) throw new Error(`JS bundle ${jsMatch[1]} returned ${jsRes.status}`);
+    if (jsRes.body.startsWith('<!DOCTYPE html>') || jsRes.body.includes('<div id="root">')) {
+      throw new Error(`JS bundle returned HTML instead of JS code!`);
+    }
+
+    const cssRes = await get(cssMatch[1]);
+    if (cssRes.status !== 200) throw new Error(`CSS bundle ${cssMatch[1]} returned ${cssRes.status}`);
+    if (cssRes.body.startsWith('<!DOCTYPE html>') || cssRes.body.includes('<div id="root">')) {
+      throw new Error(`CSS bundle returned HTML instead of CSS stylesheet!`);
+    }
   });
 
   console.log(`\nVerification Complete: ${passed}/${total} passed.`);

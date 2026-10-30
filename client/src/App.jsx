@@ -119,13 +119,13 @@ export default function App() {
           <Route path="/auth/reset-password/:token" element={<ResetPassword />} />
           <Route path="/login" element={<Navigate to="/auth/login" replace />} />
           <Route path="/register" element={<Navigate to="/auth/register" replace />} />
+          <Route path="/portal" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         </Route>
 
-        {/* Portal Routes */}
+        {/* Portal Action Routes */}
         <Route element={<MainLayout />}>
           <Route path="/solutions/ngo" element={<SolutionNGO />} />
           <Route path="/solutions/sme" element={<SolutionSME />} />
-          <Route path="/portal" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/portal/orders/new" element={<ProtectedRoute><NewOrder /></ProtectedRoute>} />
           <Route path="/portal/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
           <Route path="/portal/designs/new" element={<ProtectedRoute><NewDesign /></ProtectedRoute>} />

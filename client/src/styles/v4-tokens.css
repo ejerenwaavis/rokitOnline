@@ -1,0 +1,183 @@
+/**
+ * rOKIt Design System Tokens (v4 Vision)
+ * Derived strictly from okoriterokit-hue/rokit-homepage-vision
+ * Phase 1.8: Standalone token layer (not yet wired into live templates).
+ */
+
+:root {
+  /* ── 1. Color Palette Tokens ── */
+  --v4-night: oklch(0.192 0 0);           /* #1D1D1D Deep Charcoal Canvas */
+  --v4-paper: oklch(0.957 0.013 86.8);   /* #F6F4EE Tactile Warm Newsprint */
+  --v4-signal: oklch(0.704 0.192 47.1);  /* #FF5B24 Electric Signal Orange */
+  --v4-neutral: oklch(0.691 0.005 91.5); /* #AAAAA6 Editorial Muted Grey */
+  --v4-surface: oklch(0.254 0 0);        /* #2D2D2D Elevated Charcoal Surface */
+
+  /* ── Semantic System Mappings ── */
+  --v4-background: var(--v4-night);
+  --v4-foreground: var(--v4-paper);
+  --v4-primary: var(--v4-signal);
+  --v4-primary-foreground: var(--v4-night);
+  --v4-border: color-mix(in oklab, var(--v4-paper) 15%, transparent);
+  --v4-input: color-mix(in oklab, var(--v4-paper) 25%, transparent);
+  --v4-ring: var(--v4-signal);
+
+  /* ── 2. Typography Scale ── */
+  --v4-font-display: "Libre Baskerville", Georgia, serif;
+  --v4-font-body: "IBM Plex Sans", system-ui, sans-serif;
+
+  /* ── 3. Spacing & Container Geometry ── */
+  --v4-spacing-gutter: clamp(1.25rem, 4vw, 3.75rem);
+  --v4-spacing-section: clamp(4rem, 8vw, 7.5rem);
+  --v4-container-site: 82.5rem;
+  --v4-radius: 0rem; /* Architectural brutalist square geometry */
+}
+
+/* ── 4. Typography & Utility Components ── */
+.v4-section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--v4-font-body);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--v4-neutral);
+  letter-spacing: 0.05em;
+}
+.v4-section-label::before {
+  content: "";
+  width: 2rem;
+  height: 1px;
+  flex: none;
+  background: var(--v4-signal);
+}
+
+.v4-action-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-family: var(--v4-font-body);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.v4-section-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--v4-border);
+}
+@media (min-width: 768px) {
+  .v4-section-heading {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+.v4-form-field {
+  display: grid;
+  gap: 0.65rem;
+  color: var(--v4-paper);
+  font-family: var(--v4-font-body);
+  font-size: 0.875rem;
+}
+.v4-form-field > span:first-child {
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+  color: var(--v4-neutral);
+  letter-spacing: 0.05em;
+}
+.v4-form-field small {
+  color: var(--v4-neutral);
+  line-height: 1.5;
+}
+.v4-form-field input:not([type="file"]),
+.v4-form-field textarea {
+  min-height: 3rem;
+  width: 100%;
+  border: 1px solid var(--v4-input);
+  background: transparent;
+  padding: 0.8rem 0.9rem;
+  color: var(--v4-paper);
+  font: inherit;
+  border-radius: var(--v4-radius);
+}
+.v4-form-field textarea {
+  resize: vertical;
+}
+.v4-form-field input:not([type="file"]):focus-visible,
+.v4-form-field textarea:focus-visible {
+  outline: 2px solid var(--v4-signal);
+  outline-offset: 3px;
+  border-color: var(--v4-signal);
+}
+
+/* ── 5. Keyframes & Animations ── */
+@keyframes v4-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes v4-image-reveal {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0); }
+}
+
+@keyframes v4-transform-in {
+  from { opacity: 0.15; transform: translateY(0.35em); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes v4-footer-activate {
+  0%, 18%, 100% { opacity: 0.45; transform: scale(1); }
+  8% { opacity: 1; transform: scale(2.1); }
+}
+
+@keyframes v4-logo-resolve {
+  from { opacity: 0; clip-path: inset(0 100% 0 0); }
+  to { opacity: 1; clip-path: inset(0); }
+}
+
+@keyframes v4-o-activate {
+  0%, 100% { opacity: 0; }
+  35%, 65% { opacity: 1; }
+}
+
+@keyframes v4-sketch-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes v4-sketch-nodes {
+  to { opacity: 1; }
+}
+
+@keyframes v4-object-enter {
+  from { transform: translateY(0.5rem); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+.v4-rise {
+  animation: v4-rise 650ms cubic-bezier(.22, .61, .36, 1) both;
+}
+.v4-rise-delay-1 { animation-delay: 100ms; }
+.v4-rise-delay-2 { animation-delay: 180ms; }
+.v4-rise-delay-3 { animation-delay: 260ms; }
+
+.v4-image-reveal {
+  animation: v4-image-reveal 1s cubic-bezier(.22, .61, .36, 1) 120ms both;
+}
+
+/* ── 6. Reduced Motion Protections ── */
+@media (prefers-reduced-motion: reduce) {
+  .v4-rise,
+  .v4-image-reveal,
+  .v4-rise-delay-1,
+  .v4-rise-delay-2,
+  .v4-rise-delay-3 {
+    animation: none !important;
+    transform: none !important;
+  }
+}

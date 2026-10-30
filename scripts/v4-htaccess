@@ -1,0 +1,24 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/rokiroqw/v4/server"
+PassengerBaseURI "/"
+PassengerNodejs "/home/rokiroqw/nodevenv/v4/server/22/bin/node"
+PassengerAppType node
+PassengerStartupFile src/app.js
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION BEGIN
+<IfModule Litespeed>
+</IfModule>
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION END
+
+# Robots protection for staging
+Header set X-Robots-Tag "noindex, nofollow"
+
+Options -MultiViews
+RewriteEngine On
+
+# Directly serve static files from public_html
+RewriteCond %{DOCUMENT_ROOT}/public_html%{REQUEST_URI} -f
+RewriteRule ^(.*)$ /public_html/$1 [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d

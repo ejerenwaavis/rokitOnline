@@ -1,11 +1,11 @@
 # CONTEXT.md: Rokit Migration
 
 ## STATUS
-- Current phase: Phase 0 (Discovery & Baseline)
-- Current task: Phase 0 Gate Review & Sign-Off
-- Last completed task: Task 0.11 Staging Plan & Isolation Strategy
-- Blocked on: User review of Phase 0 inventories, staging plan, and DB isolation proposal before proceeding to Phase 1
-- Last updated: 2026-10-30T10:15:00-04:00
+- Current phase: Phase 1 (Design Extraction & Specification)
+- Current task: Phase 1 Gate Review & Confirmation
+- Last completed task: Task 1.8 Create single shared stylesheet/token layer
+- Blocked on: User confirmation of Phase 1 design tokens and component specs before Phase 2 implementation
+- Last updated: 2026-10-30T15:38:00-04:00
 
 ---
 
@@ -263,12 +263,78 @@
 ---
 
 ## DESIGN TOKEN SPEC (filled in Phase 1)
-*(Will be extracted directly from `inspiration/src/styles.css` during Phase 1)*
+
+### Color Palette (Extracted from `inspiration/src/styles.css`)
+- `--night`: `oklch(0.192 0 0)` (approx `#1D1D1D` deep charcoal canvas). Primary dark background.
+- `--paper`: `oklch(0.957 0.013 86.8)` (approx `#F6F4EE` warm newsprint cream). High contrast typography, light section background.
+- `--signal`: `oklch(0.704 0.192 47.1)` (approx `#FF5B24` electric orange). Brand accent, focus rings, active states, key punctuation.
+- `--neutral`: `oklch(0.691 0.005 91.5)` (approx `#AAAAA6` warm muted grey). Metadata, secondary descriptions, labels.
+- `--surface`: `oklch(0.254 0 0)` (approx `#2D2D2D` elevated dark charcoal). Interactive cards, tool modules, dark elevated surfaces.
+
+### Semantic Mappings (`:root`)
+- `--background`: `var(--night)`
+- `--foreground`: `var(--paper)`
+- `--primary`: `var(--signal)`
+- `--primary-foreground`: `var(--night)`
+- `--border`: `oklch(0.957 0.013 86.8 / 15%)` (`border-paper/15`)
+- `--input`: `oklch(0.929 0.013 255.508)`
+- `--ring`: `oklch(0.704 0.04 256.788)`
+
+### Typography Scale
+- **Display Serif**: `"Libre Baskerville", Georgia, serif`
+  - Weights: `400`, `700`, `400 Italic`
+  - Hero Display: `font-display text-[clamp(3.6rem,8.7vw,8rem)] leading-[0.94]`
+  - Section Headlines: `font-display text-4xl leading-tight md:text-5xl`
+  - Card & Editorial Titles: `font-display text-2xl md:text-3xl`
+  - Founder Quotes & Callouts: `font-display text-xl md:text-2xl`
+- **Body & Sans**: `"IBM Plex Sans", system-ui, sans-serif`
+  - Weights: `400`, `500`, `600`
+  - Section Labels: `0.6875rem` (`11px`), `uppercase`, with 32px signal orange horizontal indicator rule.
+  - Action Links: `0.75rem` (`12px`), `line-height: 1.2`, gap `0.6rem`, trailing arrow.
+  - Body Copy: `0.875rem` - `1rem` (`14-16px`), `line-height: 1.55-1.65`.
+  - Micro Metadata: `0.625rem` (`10px`), uppercase.
+
+### Geometry & Spacing
+- `--spacing-gutter`: `clamp(1.25rem, 4vw, 3.75rem)` (Fluid 20px–60px screen padding).
+- `--spacing-section`: `clamp(4rem, 8vw, 7.5rem)` (Fluid 64px–120px vertical rhythm).
+- `--container-site`: `82.5rem` (`1320px` max-width container).
+- `--radius`: `0rem` (Architectural brutalist precision; sharp square corners for cards, buttons, tabs, inputs).
 
 ---
 
 ## COMPONENT SPEC (filled in Phase 1)
-*(Will be extracted directly from `inspiration/src/components/` during Phase 1)*
+
+### 1. Site Header (`RokitSiteHeader`)
+- Relative/sticky `header` with `z-20`, `bg-night`, `border-b border-paper/15`, `text-paper`.
+- Left: rOKIt wordmark logo (`h-10 w-auto max-w-[185px] object-contain object-left`).
+- Center/Right Navigation: `Made by rOKIt`, `Services` (with hover/click 2-column mega flyout), `Shop`, `Ideas`, `About`.
+- Action CTA: `Start a Project` (`action-link border border-paper/25 px-4 min-h-11 hover:border-signal hover:text-signal`).
+- Mobile: Hamburger toggle (`size-11 rounded-none text-paper hover:bg-surface hover:text-signal`), full-width drawer list.
+
+### 2. Kinetic Hero (`KineticHeroGrid`)
+- Interactive HTML5 canvas particle warp grid backdrop (`pointer-events: none`).
+- Grid spacing: 52px (desktop), 64px (coarse/touch). Pointer warp radius: 210px. Smooth ripple wave propagation.
+- Reduced motion: Disables dynamic warp, displays stable grid.
+
+### 3. Buttons & Action Links
+- Rectangular brutalist geometry (`rounded-none`).
+- Button primary: `bg-primary text-primary-foreground shadow hover:bg-primary/90`.
+- Button outline: `border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground`.
+- Action Link: `inline-flex items-center justify-center gap-[0.6rem] text-xs transition-colors hover:text-signal`.
+
+### 4. Form Fields (`.form-field`)
+- Container: `grid gap-2.5 text-paper`.
+- Labels: `uppercase text-[11px] text-neutral tracking-wider`.
+- Inputs & Textareas: `min-h-[3rem] border border-paper/25 bg-transparent p-3 text-paper focus-visible:outline-2 focus-visible:outline-signal focus-visible:outline-offset-3`.
+
+### 5. Site Footer (`RokitSiteFooter` & `FooterWordmark`)
+- 4-column link directory (`bg-night border-t border-paper/15 text-paper`).
+- Full-bleed interactive `FooterWordmark`: Scrolled into viewport triggers `is-active` state, resolving crisp white wordmark with pulsed signal orange circular `O` badge.
+- Bottom sub-bar with copyright and "We Make Ideas RocK."
+
+### 6. Motion & Transitions
+- Keyframe animations: `rise` (650ms cubic-bezier), `image-reveal` (1s clip-path), `transform-in`, `footer-activate`.
+- Full `@media (prefers-reduced-motion: reduce)` protections.
 
 ---
 
@@ -388,8 +454,59 @@ The following master test checklist must be executed and logged as passed before
   - Verified how: Inspected remote cPanel subdomain and Passenger configuration; formulated data isolation and side-effect quarantine strategy.
   - Notes: Awaiting user review at Phase 0 gate.
 
+### PHASE 1: Design Extraction (Exact, No Interpretation)
+- [x] 1.1 Run the new design locally. Screenshot every page/state at the same breakpoints as the baseline into `/docs/newdesign/`.
+  - Started: 2026-10-30T15:32:00-04:00
+  - Finished: 2026-10-30T15:36:00-04:00
+  - Files touched: `scripts/capture-all-newdesign.mjs`, `docs/newdesign/*.png`
+  - Verified how: Launched local inspiration server on port 8080 and executed automated Playwright capture across 16 pages × 3 viewports (48 full-page screenshots captured in `docs/newdesign/`).
+  - Notes: Dev server terminated cleanly after capture.
+- [x] 1.2 Extract design tokens directly from its CSS/config: colors (OKLCH, hex approximations, semantics), typography scale, spacing scale, border radii, shadows, borders, opacities, transitions.
+  - Started: 2026-10-30T15:36:00-04:00
+  - Finished: 2026-10-30T15:37:00-04:00
+  - Files touched: `docs/design-system.md`, `CONTEXT.md`
+  - Verified how: Analyzed all 549 lines of `inspiration/src/styles.css` and mapped all tokens.
+  - Notes: Mapped base tokens (`--night`, `--paper`, `--signal`, `--neutral`, `--surface`) and semantic mappings.
+- [x] 1.3 Fonts and assets: identify every font, icon set, image, SVG, and logo. Copy assets exactly.
+  - Started: 2026-10-30T15:36:30-04:00
+  - Finished: 2026-10-30T15:37:00-04:00
+  - Files touched: `client/src/assets/redesign/*`, `client/public/favicon.png`
+  - Verified how: Identified Libre Baskerville + IBM Plex Sans; copied editorial image assets and shop webp assets into `client/src/assets/redesign/` and `favicon.png` to `client/public/`.
+  - Notes: Copied cleanly without polluting live templates.
+- [x] 1.4 Component spec: header/nav, footer, buttons, links, headings, cards, form inputs, modals, tags, sections, dividers.
+  - Started: 2026-10-30T15:37:00-04:00
+  - Finished: 2026-10-30T15:37:30-04:00
+  - Files touched: `docs/design-system.md`, `CONTEXT.md`
+  - Verified how: Extracted exact JSX and class implementations from `rokit-site-header.tsx`, `rokit-site-footer.tsx`, `button.tsx`, `input.tsx`, `card.tsx`.
+  - Notes: Documented in `COMPONENT SPEC`.
+- [x] 1.5 Layout spec: header placement, nav structure, mobile menu behavior, footer layout, page container rules.
+  - Started: 2026-10-30T15:37:30-04:00
+  - Finished: 2026-10-30T15:38:00-04:00
+  - Files touched: `docs/design-system.md`, `CONTEXT.md`
+  - Verified how: Analyzed `max-w-site` (82.5rem), fluid gutters (`clamp(1.25rem, 4vw, 3.75rem)`), fluid section padding (`clamp(4rem, 8vw, 7.5rem)`), and 12-column grid.
+  - Notes: Documented in `docs/design-system.md`.
+- [x] 1.6 Motion & interaction spec: animations, hover effects, scroll behaviors, and timing.
+  - Started: 2026-10-30T15:38:00-04:00
+  - Finished: 2026-10-30T15:38:20-04:00
+  - Files touched: `docs/design-system.md`, `CONTEXT.md`
+  - Verified how: Extracted keyframe rules (`rise`, `image-reveal`, `transform-in`, `footer-activate`, `sketch-draw`) and reduced motion media queries.
+  - Notes: Documented in `docs/design-system.md`.
+- [x] 1.7 Write all of the above into DESIGN TOKEN SPEC and COMPONENT SPEC in CONTEXT.md, and also as `/docs/design-system.md`.
+  - Started: 2026-10-30T15:38:20-04:00
+  - Finished: 2026-10-30T15:38:35-04:00
+  - Files touched: `docs/design-system.md`, `CONTEXT.md`
+  - Verified how: Created comprehensive `/docs/design-system.md` and filled sections in `CONTEXT.md`.
+  - Notes: Complete single source of truth for design tokens.
+- [x] 1.8 Create a single shared stylesheet/token layer derived from the spec, not yet wired into the live site.
+  - Started: 2026-10-30T15:38:35-04:00
+  - Finished: 2026-10-30T15:38:50-04:00
+  - Files touched: `client/src/styles/v4-tokens.css`
+  - Verified how: Created `client/src/styles/v4-tokens.css` defining all CSS custom properties, utility classes, and keyframe animations.
+  - Notes: Standalone, additive, not yet imported by live app.
+
 ---
 
 ## ROLLBACK POINTS (git tags/commits that are known-good)
 - **Tag `pre-redesign-baseline`**: Known-good clean baseline of live production site before starting redesign migration. Commit: `d897fb2` on branch `main`.
 - **Tag `redesign-phase-0-complete`**: Known-good completion of Phase 0 discovery, full inventories, and baseline screenshots across 29 pages and 3 viewports. Commit: `799e23d` on branch `redesign/new-look`.
+- **Tag `redesign-phase-1-complete`**: Known-good completion of Phase 1 design extraction, 48 new design screenshots across 16 pages and 3 viewports, design token spec, component spec, `docs/design-system.md`, and standalone `client/src/styles/v4-tokens.css`. Branch `redesign/new-look`.

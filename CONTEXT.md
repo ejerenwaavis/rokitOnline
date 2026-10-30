@@ -392,3 +392,4 @@ The following master test checklist must be executed and logged as passed before
 
 ## ROLLBACK POINTS (git tags/commits that are known-good)
 - **Tag `pre-redesign-baseline`**: Known-good clean baseline of live production site before starting redesign migration. Commit: `d897fb2` on branch `main`.
+- **Tag `redesign-phase-0-complete`**: Known-good completion of Phase 0 discovery, full inventories, and baseline screenshots across 29 pages and 3 viewports. Commit: `799e23d` on branch `redesign/new-look`.

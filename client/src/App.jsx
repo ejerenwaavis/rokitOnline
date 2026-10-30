@@ -95,6 +95,10 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
           <Route path="/services/:slug" element={<ServiceDetail />} />
+          <Route path="/what-we-do" element={<Navigate to="/services" replace />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/portal/quotes/new" element={<NewQuote />} />
+          <Route path="/start-a-project" element={<NewQuote />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/cookies" element={<Cookies />} />
@@ -110,7 +114,6 @@ export default function App() {
           <Route path="/solutions/sme" element={<SolutionSME />} />
           <Route path="/tutorials" element={<Tutorials />} />
           <Route path="/tutorials/:slug" element={<TutorialPost />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
           <Route path="/auth/forgot-password" element={<ForgotPassword />} />
@@ -120,7 +123,6 @@ export default function App() {
           <Route path="/portal" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/portal/orders/new" element={<ProtectedRoute><NewOrder /></ProtectedRoute>} />
           <Route path="/portal/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
-          <Route path="/portal/quotes/new" element={<NewQuote />} />
           <Route path="/portal/designs/new" element={<ProtectedRoute><NewDesign /></ProtectedRoute>} />
           <Route path="/portal/order" element={<Navigate to="/portal/orders/new" replace />} />
           <Route path="/portal/quote" element={<Navigate to="/portal/quotes/new" replace />} />

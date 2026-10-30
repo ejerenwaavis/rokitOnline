@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { MapPin, Phone, Mail, Clock, ExternalLink } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, ArrowRight, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
-import { T } from '../theme';
 
 const contactInfo = [
   {
@@ -28,11 +27,11 @@ export default function Contact() {
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.message) {
+    if (!form.name || !form.email || !form.subject || !form.message) {
       toast.error('Please fill in all required fields.');
       return;
     }
@@ -42,7 +41,7 @@ export default function Contact() {
       setSent(true);
       toast.success('Message sent! We\'ll get back to you shortly.');
     } catch {
-      toast.error('Failed to send message. Please try again.');
+      toast.error('Failed to send message. Please check connection and try again.');
     } finally {
       setSubmitting(false);
     }
@@ -51,105 +50,189 @@ export default function Contact() {
   return (
     <>
       <Helmet>
-        <title>Contact Us – Rokit Media</title>
-        <meta name="description" content="Get in touch with Rokit Media – creative printing and design agency in Osogbo, Nigeria." />
+        <title>Contact Us — rOKIt</title>
+        <meta
+          name="description"
+          content="Start a conversation with rOKIt. Reach our Abuja or UK studios for brand, digital, communication and physical production inquiries."
+        />
+        <meta property="og:title" content="Contact Us — rOKIt" />
+        <meta
+          property="og:description"
+          content="Start with what you have. Reach rOKIt studios in Nigeria and the UK."
+        />
       </Helmet>
 
-      {/* Hero */}
-      <div className={T.pageHero}>
-        <div className={`${T.pageHeroInner} ${T.pageHeroCentered}`}>
-          <span className={`${T.eyebrowOrange} mb-3`}>Reach Out</span>
-          <h1 className={`${T.h1} mb-4`}>Contact Us</h1>
-          <p className={`${T.body} max-w-xl mx-auto`}>
-            Have a project in mind? We&apos;re ready to help. Drop us a message or give us a call.
+      <div className="font-v4-body text-paper">
+        {/* Hero */}
+        <section className="mx-auto max-w-site px-gutter pt-16 pb-12 border-b border-paper/15">
+          <p className="v4-section-label">Start a conversation</p>
+          <h1 className="mt-4 font-v4-display text-4xl md:text-6xl">Talk to rOKIt.</h1>
+          <p className="mt-4 max-w-[50ch] text-base leading-relaxed text-paper/70">
+            A question, a challenge, or a specification. We’ll help work out what it needs next.
           </p>
-        </div>
-      </div>
+        </section>
 
-      <section className={T.sectionCream}>
-        <div className={`${T.sectionInner} grid lg:grid-cols-2 gap-16`}>
-          {/* Contact Form */}
-          <div>
-            <h2 className={`${T.h3} mb-8`}>Send Us a Message</h2>
-            {sent ? (
-              <div className={T.successBox}>
-                <p className="font-display text-2xl font-light text-rokit-green mb-2">Message Sent!</p>
-                <p className={T.body}>Thank you for reaching out. Our team will respond within 24 hours.</p>
-                <button onClick={() => { setSent(false); setForm({ name: '', email: '', phone: '', subject: '', message: '' }); }} className="mt-6 btn-outline">
-                  Send Another
-                </button>
+        {/* Main Grid */}
+        <section className="mx-auto max-w-site px-gutter py-section">
+          <div className="grid grid-cols-12 gap-x-8 gap-y-16">
+            {/* Contact Details Column */}
+            <div className="col-span-12 md:col-span-5 space-y-10">
+              <div>
+                <p className="v4-section-label">Studios & Reach</p>
+                <h2 className="mt-3 font-v4-display text-2xl text-paper">Where We Work</h2>
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-sm font-semibold text-rokit-dark mb-1">Full Name *</label>
-                    <input name="name" value={form.name} onChange={handleChange} required className="form-input" placeholder="Your name" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-rokit-dark mb-1">Email *</label>
-                    <input type="email" name="email" value={form.email} onChange={handleChange} required className="form-input" placeholder="your@email.com" />
-                  </div>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-sm font-semibold text-rokit-dark mb-1">Phone</label>
-                    <input name="phone" value={form.phone} onChange={handleChange} className="form-input" placeholder="+234 …" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-rokit-dark mb-1">Subject *</label>
-                    <input name="subject" value={form.subject} onChange={handleChange} required className="form-input" placeholder="Brief subject" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-rokit-dark mb-1">Message *</label>
-                  <textarea name="message" value={form.message} onChange={handleChange} required rows={6} className="form-input resize-none" placeholder="Tell us about your project…" />
-                </div>
-                <button type="submit" disabled={submitting} className="btn-primary w-full justify-center">
-                  {submitting ? 'Sending…' : 'Send Message'}
-                </button>
-              </form>
-            )}
-          </div>
 
-          {/* Info Panel */}
-          <div>
-            <h2 className={`${T.h3} mb-8`}>Our Office</h2>
-            <div className="space-y-6 mb-10">
-              {contactInfo.map((item) => {
-                const ItemIcon = item.icon;
-                const content = (
-                  <div className="flex gap-4 group">
-                    <div className="w-10 h-10 bg-rokit-orange/10 flex items-center justify-center shrink-0">
-                      <ItemIcon size={18} className="text-rokit-orange" />
+              <div className="space-y-6">
+                {contactInfo.map((info) => {
+                  const Icon = info.icon;
+                  return (
+                    <div key={info.label} className="border-t border-paper/15 pt-5">
+                      <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-signal mb-1">
+                        <Icon className="size-3.5" aria-hidden="true" />
+                        <span>{info.label}</span>
+                      </div>
+                      {info.href ? (
+                        <a
+                          href={info.href}
+                          target={info.href.startsWith('http') ? '_blank' : undefined}
+                          rel={info.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                          className="text-base text-paper hover:text-signal transition-colors block leading-relaxed"
+                        >
+                          {info.value}
+                        </a>
+                      ) : (
+                        <p className="text-base text-neutral leading-relaxed">{info.value}</p>
+                      )}
                     </div>
-                    <div className="flex-1">
-                      <p className="font-bold text-rokit-dark text-sm">{item.label}</p>
-                      <p className="text-rokit-body text-sm">{item.value}</p>
-                    </div>
-                    {item.href && <ExternalLink size={14} className="text-rokit-body/40 group-hover:text-rokit-orange transition-colors shrink-0 mt-3" />}
-                  </div>
-                );
-                return item.href ? (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    target={item.href.startsWith('http') ? '_blank' : undefined}
-                    rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    className="block hover:bg-rokit-cream-dark -mx-3 px-3 py-2 rounded transition-colors"
+                  );
+                })}
+              </div>
+
+              <div className="border border-paper/15 bg-surface p-6">
+                <p className="text-xs font-mono uppercase tracking-wider text-signal mb-2">Notice</p>
+                <p className="text-sm leading-relaxed text-paper/75">
+                  Visiting our Abuja or UK offices is by prior appointment to ensure our creative and production leads are dedicated to your session.
+                </p>
+              </div>
+            </div>
+
+            {/* Form Column */}
+            <div className="col-span-12 md:col-span-7">
+              {sent ? (
+                <div className="border-l-2 border-signal pl-6 py-6" role="status">
+                  <Check className="size-8 text-signal mb-4" aria-hidden="true" />
+                  <h2 className="font-v4-display text-3xl text-paper">WE’VE GOT IT.</h2>
+                  <p className="mt-4 max-w-[50ch] text-base leading-relaxed text-paper/75">
+                    Your message has been delivered to the rOKIt team. We review every note and will get back to you with clear direction shortly.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSent(false);
+                      setForm({ name: '', email: '', phone: '', subject: '', message: '' });
+                    }}
+                    className="v4-action-link mt-8 min-h-12 border border-signal px-6 text-xs uppercase font-mono tracking-wider text-signal hover:bg-signal hover:text-night transition-colors"
                   >
-                    {content}
-                  </a>
-                ) : (
-                  <div key={item.label} className="px-3 py-2">
-                    {content}
+                    Send Another Message
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <p className="v4-section-label">Direct Note</p>
+                    <h2 className="mt-3 font-v4-display text-2xl text-paper">Send a Message</h2>
                   </div>
-                );
-              })}
+
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    <label className="form-field">
+                      <span className="text-xs uppercase font-mono tracking-wider text-neutral mb-2 block">
+                        Full Name *
+                      </span>
+                      <input
+                        name="name"
+                        value={form.name}
+                        onChange={handleChange}
+                        required
+                        className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 text-paper focus:outline-none focus:border-signal"
+                        placeholder="Your name"
+                      />
+                    </label>
+
+                    <label className="form-field">
+                      <span className="text-xs uppercase font-mono tracking-wider text-neutral mb-2 block">
+                        Email Address *
+                      </span>
+                      <input
+                        type="email"
+                        name="email"
+                        value={form.email}
+                        onChange={handleChange}
+                        required
+                        className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 text-paper focus:outline-none focus:border-signal"
+                        placeholder="you@domain.com"
+                      />
+                    </label>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    <label className="form-field">
+                      <span className="text-xs uppercase font-mono tracking-wider text-neutral mb-2 block">
+                        Phone <small className="text-neutral/60">(optional)</small>
+                      </span>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={form.phone}
+                        onChange={handleChange}
+                        className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 text-paper focus:outline-none focus:border-signal"
+                        placeholder="+234..."
+                      />
+                    </label>
+
+                    <label className="form-field">
+                      <span className="text-xs uppercase font-mono tracking-wider text-neutral mb-2 block">
+                        Subject *
+                      </span>
+                      <input
+                        name="subject"
+                        value={form.subject}
+                        onChange={handleChange}
+                        required
+                        className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 text-paper focus:outline-none focus:border-signal"
+                        placeholder="e.g. Identity & Web consultation"
+                      />
+                    </label>
+                  </div>
+
+                  <label className="form-field block">
+                    <span className="text-xs uppercase font-mono tracking-wider text-neutral mb-2 block">
+                      Message *
+                    </span>
+                    <textarea
+                      name="message"
+                      value={form.message}
+                      onChange={handleChange}
+                      required
+                      rows={6}
+                      className="w-full border border-paper/25 bg-transparent p-3 text-paper focus:outline-none focus:border-signal leading-relaxed"
+                      placeholder="Tell us what you are trying to make happen..."
+                    />
+                  </label>
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="v4-action-link min-h-12 border border-signal bg-signal px-8 text-xs uppercase font-mono tracking-wider text-night font-semibold hover:bg-paper transition-colors disabled:opacity-50"
+                  >
+                    {submitting ? 'Sending…' : 'Send Message'}{' '}
+                    <ArrowRight className="size-4 ml-2" aria-hidden="true" />
+                  </button>
+                </form>
+              )}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </>
   );
 }

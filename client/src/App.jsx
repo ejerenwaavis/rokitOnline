@@ -89,16 +89,13 @@ export default function App() {
           <Route path="media-bridge" element={<MediaBridge />} />
         </Route>
 
-        {/* Public + portal routes */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
-        </Route>
-
         {/* V4 Redesign Verified Layout */}
         <Route element={<V4Layout />}>
+          <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
         </Route>
 
+        {/* Legacy / unmigrated routes wrapped in MainLayout */}
         <Route element={<MainLayout />}>
           <Route path="/services" element={<Services />} />
           <Route path="/services/:slug" element={<ServiceDetail />} />

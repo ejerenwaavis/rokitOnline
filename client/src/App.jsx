@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom
 import { useAuth } from './context/AuthContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import V4Layout from './components/layout/V4Layout';
 import CookieBanner from './components/ui/CookieBanner';
 import CursorEffects from './components/ui/CursorEffects';
 
@@ -91,7 +92,14 @@ export default function App() {
         {/* Public + portal routes */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
+        </Route>
+
+        {/* V4 Redesign Verified Layout */}
+        <Route element={<V4Layout />}>
           <Route path="/about" element={<About />} />
+        </Route>
+
+        <Route element={<MainLayout />}>
           <Route path="/services" element={<Services />} />
           <Route path="/services/:slug" element={<ServiceDetail />} />
           <Route path="/gallery" element={<Gallery />} />

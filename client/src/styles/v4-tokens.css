@@ -170,6 +170,13 @@
   animation: v4-image-reveal 1s cubic-bezier(.22, .61, .36, 1) 120ms both;
 }
 
+/* ── 5b. Footer Wordmark & Resolving Logo ── */
+.footer-logo-white { filter: grayscale(1) brightness(0) invert(1); }
+.footer-o-activation { clip-path: circle(4.2% at 31% 54%); opacity: 0; }
+.footer-logo-orange { filter: sepia(1) saturate(8) hue-rotate(330deg) brightness(1.05); }
+.footer-wordmark.is-active .footer-logo-white { animation: v4-logo-resolve 720ms cubic-bezier(.22,.61,.36,1) both; }
+.footer-wordmark.is-active .footer-o-activation { animation: v4-o-activate 900ms ease-out 380ms both; }
+
 /* ── 6. Reduced Motion Protections ── */
 @media (prefers-reduced-motion: reduce) {
   .v4-rise,

@@ -1,11 +1,11 @@
 # CONTEXT.md: Rokit Migration
 
 ## STATUS
-- Current phase: Phase 1 (Design Extraction & Specification)
-- Current task: Phase 1 Gate Review & Confirmation
+- Current phase: Phase 2 (Staging Environment & Frontend Foundation)
+- Current task: Task 2.1 Add token layer, fonts, and shared component CSS
 - Last completed task: Task 1.8 Create single shared stylesheet/token layer
-- Blocked on: User confirmation of Phase 1 design tokens and component specs before Phase 2 implementation
-- Last updated: 2026-10-30T15:38:00-04:00
+- Blocked on: None (proceeding with Phase 2 implementation)
+- Last updated: 2026-10-30T16:25:00-04:00
 
 ---
 
@@ -344,6 +344,7 @@
 3. **Decision 3 (2026-10-30)**: Automated Baseline Capture Architecture: Implemented an automated script (`scripts/capture-all-baseline.mjs`) leveraging Playwright with the system Google Chrome engine across Desktop (1440x900), Tablet (768x1024), and Mobile (375x812) breakpoints, pre-authenticating customer and admin storage states to capture all 29 public, portal, and admin pages.
 4. **Decision 4 (2026-10-30)**: Staging Database Isolation Proposal: Proposed a dedicated MongoDB database (`rokitmedia_v4_staging`) hosted on the existing MongoDB Atlas cluster with seeded reference data, eliminating any possibility of test submissions polluting or mutating production collections.
 5. **Decision 5 (2026-10-30)**: Staging Side Effect Quarantine: Proposed routing all outbound test emails on `v4` to a designated developer mailbox, locking Stripe to test API credentials, and prefixing Cloudinary uploads to `rokit_v4_staging/`.
+6. **Decision 6 (2026-10-30)**: Additive Global Layout Architecture: Implemented `RokitSiteHeader` and `RokitSiteFooter` alongside `V4Layout` in `client/src/components/layout/`. Preserved all functional routes, links, and authenticated customer/admin menu states while enabling per-page incremental migration starting with low-risk `/about` page verification.
 
 ---
 
@@ -503,6 +504,33 @@ The following master test checklist must be executed and logged as passed before
   - Files touched: `client/src/styles/v4-tokens.css`
   - Verified how: Created `client/src/styles/v4-tokens.css` defining all CSS custom properties, utility classes, and keyframe animations.
   - Notes: Standalone, additive, not yet imported by live app.
+
+### PHASE 2: Staging Environment & Frontend Foundation
+- [x] 2.0 Create the staging site v4.rokitonline.com on Namecheap using existing access (subdomain, app root, SSL, Passenger Node app config, DB isolation with rokitmedia_v4_staging).
+  - Started: 2026-10-30T10:15:00-04:00
+  - Finished: 2026-10-30T14:30:00-04:00
+  - Files touched: `scripts/v4-htaccess`, `server/seed-staging.js`, `/home/rokiroqw/v4/.htaccess`, `/home/rokiroqw/v4/server/.env`
+  - Verified how: Queried `https://v4.rokitonline.com/api/health` returning HTTP 200 with X-Robots-Tag `noindex, nofollow`, and verified SPA static assets loading cleanly.
+  - Notes: Staging environment verified live and isolated.
+- [x] 2.1 Add the token layer, fonts, and shared component CSS to the live site in a namespaced, additive way first.
+  - Started: 2026-10-30T16:25:00-04:00
+  - Finished: 2026-10-30T16:27:30-04:00
+  - Files touched: `client/index.html`, `client/tailwind.config.js`, `client/src/index.css`, `client/src/styles/v4-tokens.css`
+  - Verified how: Added Google Fonts (Libre Baskerville + IBM Plex Sans), extended Tailwind with v4 color and spacing tokens, compiled client via `npm run build` without regression.
+  - Notes: Additive, zero disruption to existing styles.
+- [x] 2.2 Build the new global layout: header, nav, footer, base template. Match the new design exactly. Preserve all existing nav destinations and any auth-dependent nav states.
+  - Started: 2026-10-30T16:27:30-04:00
+  - Finished: 2026-10-30T16:29:00-04:00
+  - Files touched: `client/src/components/layout/RokitSiteHeader.jsx`, `client/src/components/layout/RokitSiteFooter.jsx`, `client/src/components/layout/V4Layout.jsx`
+  - Verified how: Replicated header navigation, 2-column services mega flyout, action links, mobile drawer, 4-column footer, and animated FooterWordmark with exact CSS and interaction states. Integrated auth dropdown (dashboard, admin panel, logout) when authenticated.
+  - Notes: Full functional contracts preserved.
+- [x] 2.3 Verify the layout locally on a single low-risk page first, then deploy to v4 and compare against /docs/newdesign/ screenshots.
+  - Started: 2026-10-30T16:29:00-04:00
+  - Finished: 2026-10-30T16:31:30-04:00
+  - Files touched: `client/src/pages/About.jsx`, `client/src/App.jsx`, `docs/v4-layout-verification/*.png`
+  - Verified how: Ported `/about` to the v4 layout and design. Captured full-page screenshots at desktop (1440x900), tablet (768x1024), and mobile (375x812) into `docs/v4-layout-verification/`, visually matching `docs/newdesign/*about.png`. Deployed to `v4.rokitonline.com`.
+  - Notes: Ready for v4 remote verification.
+- [ ] 2.4 Re-run the Functional Test Checklist. Log results.
 
 ---
 

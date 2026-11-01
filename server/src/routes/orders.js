@@ -3,8 +3,9 @@ const router = express.Router();
 const { createOrder, getMyOrders, getOrderById, acceptPrice, counterOffer } = require('../controllers/ordersController');
 const { protect } = require('../middleware/auth');
 const upload = require('../middleware/upload');
+const { antiBotGuard } = require('../middleware/antiBot');
 
-router.post('/', protect, upload.array('files', 5), createOrder);
+router.post('/', protect, upload.array('files', 5), antiBotGuard, createOrder);
 router.get('/mine', protect, getMyOrders);
 router.post('/:id/accept-price', protect, acceptPrice);
 router.post('/:id/counter-offer', protect, counterOffer);

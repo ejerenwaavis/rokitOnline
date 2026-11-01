@@ -92,21 +92,24 @@ export default function PortalDashboard() {
           <div className="flex flex-wrap gap-4">
             <Link
               to="/portal/quotes/new"
-              className="v4-action-link min-h-12 border border-signal bg-signal px-6 text-xs uppercase font-mono tracking-wider text-night font-semibold hover:bg-paper transition-colors"
+              className="action-link inline-flex items-center justify-center gap-2 min-h-12 border border-signal bg-signal px-6 text-xs uppercase font-mono tracking-wider text-night font-semibold hover:bg-paper transition-colors"
             >
-              <Plus size={16} className="mr-1.5" /> Start a Project / Quote
+              <Plus size={16} className="shrink-0" />
+              <span>Start a Project / Quote</span>
             </Link>
             <Link
               to="/portal/orders/new"
-              className="v4-action-link min-h-12 border border-paper/30 px-6 text-xs uppercase font-mono tracking-wider text-paper hover:border-signal hover:text-signal transition-colors"
+              className="action-link inline-flex items-center justify-center gap-2 min-h-12 border border-paper/30 px-6 text-xs uppercase font-mono tracking-wider text-paper hover:border-signal hover:text-signal transition-colors"
             >
-              <Plus size={16} className="mr-1.5" /> Direct Job Order
+              <Plus size={16} className="shrink-0" />
+              <span>Direct Job Order</span>
             </Link>
             <Link
               to="/portal/designs/new"
-              className="v4-action-link min-h-12 border border-paper/30 px-6 text-xs uppercase font-mono tracking-wider text-paper hover:border-signal hover:text-signal transition-colors"
+              className="action-link inline-flex items-center justify-center gap-2 min-h-12 border border-paper/30 px-6 text-xs uppercase font-mono tracking-wider text-paper hover:border-signal hover:text-signal transition-colors"
             >
-              <Plus size={16} className="mr-1.5" /> Submit Design Brief
+              <Plus size={16} className="shrink-0" />
+              <span>Submit Design Brief</span>
             </Link>
           </div>
         </div>

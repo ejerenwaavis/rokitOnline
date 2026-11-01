@@ -9,7 +9,7 @@ import {
 
 const navItems = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/admin/orders', label: 'Orders', icon: ShoppingBag },
+  { to: '/admin/orders', label: 'Orders & Enquiries', icon: ShoppingBag },
   { to: '/admin/portfolio', label: 'Portfolio', icon: Images },
   { to: '/admin/media-bridge', label: 'Media Bridge', icon: Layers },
   { to: '/admin/tutorials', label: 'Tutorials', icon: BookOpen },
@@ -26,7 +26,7 @@ export default function AdminLayout() {
   const handleLogout = () => { logout(); navigate('/'); };
 
   return (
-    <div className="flex h-screen bg-gray-100 font-sans">
+    <div className="admin-panel flex h-screen bg-gray-100 font-sans text-rokit-dark">
       {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-rokit-dark flex flex-col transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0`}>
         {/* Logo */}
@@ -98,7 +98,7 @@ export default function AdminLayout() {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-6 text-rokit-dark">
           <Outlet />
         </main>
       </div>

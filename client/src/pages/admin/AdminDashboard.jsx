@@ -17,20 +17,20 @@ export default function AdminDashboard() {
   }, []);
 
   const cards = stats ? [
-    { icon: ShoppingBag, label: 'Total Orders', value: stats.orders ?? 0, link: '/admin/orders', color: 'bg-rokit-orange' },
-    { icon: FileText, label: 'Quotations', value: stats.quotations ?? 0, link: '/admin/orders', color: 'bg-rokit-gold' },
-    { icon: Paintbrush, label: 'Design Requests', value: stats.designs ?? 0, link: '/admin/orders', color: 'bg-purple-500' },
+    { icon: ShoppingBag, label: 'Total Orders', value: stats.orders ?? 0, link: '/admin/orders?tab=orders', color: 'bg-rokit-orange' },
+    { icon: FileText, label: 'Quotations', value: stats.quotations ?? 0, link: '/admin/orders?tab=quotations', color: 'bg-rokit-gold' },
+    { icon: Paintbrush, label: 'Design Requests', value: stats.designs ?? 0, link: '/admin/orders?tab=designs', color: 'bg-purple-500' },
     { icon: Users, label: 'Customers', value: stats.customers ?? 0, link: '/admin/customers', color: 'bg-blue-500' },
-    { icon: Image, label: 'Portfolio Items', value: stats.portfolio ?? 0, link: '/admin/portfolio', color: 'bg-rokit-green' },
+    { icon: Image, label: 'Portfolio Items', value: stats.portfolio ?? stats.portfolioCount ?? 0, link: '/admin/portfolio', color: 'bg-rokit-green' },
     { icon: BookOpen, label: 'Tutorials', value: stats.tutorials ?? 0, link: '/admin/tutorials', color: 'bg-indigo-500' },
-    { icon: MessageSquare, label: 'Messages', value: stats.messages ?? 0, link: '/admin/orders', color: 'bg-red-400' },
+    { icon: MessageSquare, label: 'Messages', value: stats.messages ?? 0, link: '/admin/orders?tab=messages', color: 'bg-red-400' },
     { icon: Star, label: 'Client Brands', value: stats.clients ?? 0, link: '/admin/clients', color: 'bg-rokit-orange' },
   ] : [];
 
   return (
     <>
       <Helmet><title>Admin Dashboard – Rokit Media</title></Helmet>
-      <div className="p-6">
+      <div className="p-6 text-rokit-dark">
         <h1 className="text-3xl font-black text-rokit-dark mb-2">Admin Dashboard</h1>
         <p className="text-rokit-body mb-8">Overview of your Rokit Media platform.</p>
 
@@ -57,11 +57,11 @@ export default function AdminDashboard() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
-            { label: 'Manage Orders', to: '/admin/orders', desc: 'View and update all job orders, quotations, and design requests.' },
+            { label: 'Orders, Quotes & Enquiries', to: '/admin/orders', desc: 'View, bulk-update, and bulk-delete job orders, quotations, design briefs, and messages.' },
             { label: 'Portfolio', to: '/admin/portfolio', desc: 'Upload new portfolio items and manage existing ones.' },
             { label: 'Tutorials', to: '/admin/tutorials', desc: 'Create, edit, and publish tutorials using the rich text editor.' },
             { label: 'Services', to: '/admin/services', desc: 'Update service descriptions, pricing, and turnaround times.' },
-            { label: 'Customers', to: '/admin/customers', desc: 'Browse all registered customer accounts.' },
+            { label: 'Customers & Bot Cleanup', to: '/admin/customers', desc: 'Browse accounts, detect suspected bot registrations, and perform bulk deletions.' },
             { label: 'Client Logos', to: '/admin/clients', desc: 'Add and manage brand logos shown in the homepage marquee.' },
           ].map(item => (
             <Link key={item.label} to={item.to} className="bg-rokit-tan p-6 hover:bg-rokit-orange/10 transition-colors group">

@@ -4,9 +4,39 @@ const { protect } = require('../middleware/auth');
 const { adminOnly } = require('../middleware/adminCheck');
 const upload = require('../middleware/upload');
 const {
-  getStats, getAllOrders, updateOrder, acceptOffer, forwardOrder, getAllQuotations, updateQuotation,
-  getAllDesigns, getAllCustomers, updateUserRole, updateUserStatus, getMessages, markMessageRead,
-  getClients, createClient, updateClient, deleteClient,
+  getStats,
+  getAllOrders,
+  updateOrder,
+  deleteOrder,
+  bulkDeleteOrders,
+  bulkUpdateOrderStatus,
+  acceptOffer,
+  forwardOrder,
+  getAllQuotations,
+  updateQuotation,
+  deleteQuotation,
+  bulkDeleteQuotations,
+  bulkUpdateQuotationStatus,
+  getAllDesigns,
+  updateDesign,
+  deleteDesign,
+  bulkDeleteDesigns,
+  bulkUpdateDesignStatus,
+  getAllCustomers,
+  updateUserRole,
+  updateUserStatus,
+  deleteCustomer,
+  bulkDeleteCustomers,
+  bulkUpdateCustomerStatus,
+  getMessages,
+  markMessageRead,
+  deleteMessage,
+  bulkDeleteMessages,
+  bulkMarkMessagesRead,
+  getClients,
+  createClient,
+  updateClient,
+  deleteClient,
 } = require('../controllers/adminController');
 const { createPortfolioItem, updatePortfolioItem, deletePortfolioItem } = require('../controllers/portfolioController');
 const { createTutorial, updateTutorial, deleteTutorial } = require('../controllers/tutorialsController');
@@ -18,16 +48,26 @@ router.get('/stats', getStats);
 
 // Orders
 router.get('/orders', getAllOrders);
+router.post('/orders/bulk-delete', bulkDeleteOrders);
+router.post('/orders/bulk-status', bulkUpdateOrderStatus);
 router.patch('/orders/:id', updateOrder);
+router.delete('/orders/:id', deleteOrder);
 router.post('/orders/:id/accept-offer', acceptOffer);
 router.post('/orders/:id/forward', forwardOrder);
 
 // Quotations
 router.get('/quotations', getAllQuotations);
+router.post('/quotations/bulk-delete', bulkDeleteQuotations);
+router.post('/quotations/bulk-status', bulkUpdateQuotationStatus);
 router.patch('/quotations/:id', updateQuotation);
+router.delete('/quotations/:id', deleteQuotation);
 
 // Design requests
 router.get('/designs', getAllDesigns);
+router.post('/designs/bulk-delete', bulkDeleteDesigns);
+router.post('/designs/bulk-status', bulkUpdateDesignStatus);
+router.patch('/designs/:id', updateDesign);
+router.delete('/designs/:id', deleteDesign);
 
 // Portfolio
 router.post('/portfolio', upload.array('images', 10), createPortfolioItem);
@@ -46,12 +86,18 @@ router.delete('/services/:id', deleteService);
 
 // Customers
 router.get('/customers', getAllCustomers);
+router.post('/customers/bulk-delete', bulkDeleteCustomers);
+router.post('/customers/bulk-status', bulkUpdateCustomerStatus);
 router.patch('/customers/:id/role', updateUserRole);
 router.patch('/customers/:id/status', updateUserStatus);
+router.delete('/customers/:id', deleteCustomer);
 
 // Contact messages
 router.get('/messages', getMessages);
+router.post('/messages/bulk-delete', bulkDeleteMessages);
+router.post('/messages/bulk-read', bulkMarkMessagesRead);
 router.patch('/messages/:id/read', markMessageRead);
+router.delete('/messages/:id', deleteMessage);
 
 // Client logos
 router.get('/clients', getClients);

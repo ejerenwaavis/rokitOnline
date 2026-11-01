@@ -1,6 +1,8 @@
 # Reference design repo (NEVER commit or deploy)
 inspiration/
 inspiration
+lovable_vision/
+lovable_vision
 docs/*-storage.json
 
 # Secrets and keys

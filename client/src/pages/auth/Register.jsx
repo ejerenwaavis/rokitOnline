@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Eye, EyeOff, ArrowRight } from 'lucide-react';
@@ -8,6 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
+  const formLoadedAtRef = useRef(Date.now());
 
   const [form, setForm] = useState({
     name: '',
@@ -15,6 +16,7 @@ export default function Register() {
     phone: '',
     password: '',
     confirmPassword: '',
+    website: '', // honeypot trap for bots
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -33,7 +35,10 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      await register(form.name, form.email, form.password, form.phone);
+      await register(form.name, form.email, form.password, form.phone, {
+        website: form.website,
+        _formLoadedAt: formLoadedAtRef.current,
+      });
       toast.success('Account created! Welcome to rOKIt.');
       navigate('/portal');
     } catch (err) {
@@ -50,35 +55,45 @@ export default function Register() {
         <meta name="description" content="Register for a rOKIt account to manage briefs, quotes, and production orders." />
       </Helmet>
 
-      <div className="font-v4-body text-paper py-20 px-gutter flex items-center justify-center">
+      <div className="font-body text-paper py-20 px-gutter flex items-center justify-center">
         <div className="w-full max-w-md border border-paper/15 bg-surface p-8 md:p-10">
           <div className="mb-8">
-            <p className="v4-section-label">New Client</p>
-            <h1 className="mt-3 font-v4-display text-3xl md:text-4xl text-paper">Create Account</h1>
-            <p className="mt-2 text-sm text-paper/70 leading-relaxed">
+            <p className="section-label">New Client</p>
+            <h1 className="mt-4 font-display text-3xl md:text-4xl text-paper">Create Account.</h1>
+            <p className="mt-3 text-sm text-paper/70 leading-relaxed">
               Track project milestones, approve proofs, and coordinate directly with rOKIt.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <label className="block space-y-1.5">
-              <span className="text-xs uppercase font-mono tracking-wider text-neutral block">
-                Full Name *
-              </span>
+            {/* Hidden anti-bot honeypot field */}
+            <div aria-hidden="true" className="hidden" style={{ display: 'none' }}>
+              <label>
+                Website
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={form.website}
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+
+            <label className="form-field">
+              <span>Full Name</span>
               <input
                 name="name"
                 value={form.name}
                 onChange={handleChange}
                 required
-                className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 text-paper focus:outline-none focus:border-signal"
                 placeholder="Your name"
               />
             </label>
 
-            <label className="block space-y-1.5">
-              <span className="text-xs uppercase font-mono tracking-wider text-neutral block">
-                Email Address *
-              </span>
+            <label className="form-field">
+              <span>Email Address</span>
               <input
                 type="email"
                 name="email"
@@ -86,29 +101,23 @@ export default function Register() {
                 onChange={handleChange}
                 required
                 autoComplete="email"
-                className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 text-paper focus:outline-none focus:border-signal"
                 placeholder="you@domain.com"
               />
             </label>
 
-            <label className="block space-y-1.5">
-              <span className="text-xs uppercase font-mono tracking-wider text-neutral block">
-                Phone Number <small className="text-neutral/60">(optional)</small>
-              </span>
+            <label className="form-field">
+              <span>Phone Number <small>(optional)</small></span>
               <input
                 type="tel"
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 text-paper focus:outline-none focus:border-signal"
                 placeholder="+234..."
               />
             </label>
 
-            <label className="block space-y-1.5">
-              <span className="text-xs uppercase font-mono tracking-wider text-neutral block">
-                Password * (min 8 chars)
-              </span>
+            <div className="grid gap-2">
+              <span className="text-xs uppercase text-neutral">Password (min 8 chars)</span>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -117,7 +126,7 @@ export default function Register() {
                   onChange={handleChange}
                   required
                   autoComplete="new-password"
-                  className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 pr-12 text-paper focus:outline-none focus:border-signal"
+                  className="min-h-12 w-full border border-paper/25 bg-transparent px-3.5 py-3 pr-12 text-xs text-paper focus:outline-none focus:border-signal"
                   placeholder="••••••••"
                 />
                 <button
@@ -126,15 +135,13 @@ export default function Register() {
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral hover:text-paper"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-            </label>
+            </div>
 
-            <label className="block space-y-1.5">
-              <span className="text-xs uppercase font-mono tracking-wider text-neutral block">
-                Confirm Password *
-              </span>
+            <label className="form-field">
+              <span>Confirm Password</span>
               <input
                 type={showPassword ? 'text' : 'password'}
                 name="confirmPassword"
@@ -142,7 +149,6 @@ export default function Register() {
                 onChange={handleChange}
                 required
                 autoComplete="new-password"
-                className="w-full min-h-[3rem] border border-paper/25 bg-transparent p-3 text-paper focus:outline-none focus:border-signal"
                 placeholder="••••••••"
               />
             </label>
@@ -150,15 +156,15 @@ export default function Register() {
             <button
               type="submit"
               disabled={loading}
-              className="v4-action-link mt-6 min-h-12 w-full border border-signal bg-signal text-night font-semibold text-xs uppercase font-mono tracking-wider hover:bg-paper transition-colors justify-center disabled:opacity-50"
+              className="action-link mt-6 min-h-12 w-full bg-signal px-7 font-semibold text-night hover:bg-paper disabled:opacity-50"
             >
-              {loading ? 'Creating Account…' : 'Register'} <ArrowRight className="size-4 ml-2" />
+              {loading ? 'Creating account…' : 'Create account'} <ArrowRight className="size-4" />
             </button>
           </form>
 
-          <div className="mt-8 border-t border-paper/15 pt-6 text-center text-xs font-mono text-neutral">
+          <div className="mt-8 border-t border-paper/15 pt-6 text-center text-xs text-neutral">
             Already registered?{' '}
-            <Link to="/auth/login" className="text-signal hover:underline ml-1">
+            <Link to="/auth/login" className="text-signal hover:text-paper ml-1">
               Sign in to your account
             </Link>
           </div>

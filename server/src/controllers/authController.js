@@ -12,10 +12,11 @@ const register = async (req, res) => {
     if (!name || !email || !password)
       return res.status(400).json({ message: 'Name, email and password are required' });
 
-    const exists = await User.findOne({ email });
+    const normalizedEmail = String(email).toLowerCase().trim();
+    const exists = await User.findOne({ email: normalizedEmail });
     if (exists) return res.status(409).json({ message: 'Email already registered' });
 
-    const user = await User.create({ name, email, password, phone });
+    const user = await User.create({ name, email: normalizedEmail, password, phone });
     res.status(201).json({
       _id: user._id, name: user.name, email: user.email,
       role: user.role, token: generateToken(user._id),
@@ -32,7 +33,8 @@ const login = async (req, res) => {
     if (!email || !password)
       return res.status(400).json({ message: 'Email and password required' });
 
-    const user = await User.findOne({ email });
+    const normalizedEmail = String(email).toLowerCase().trim();
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user || !(await user.matchPassword(password)))
       return res.status(401).json({ message: 'Invalid credentials' });
 
@@ -113,7 +115,7 @@ const forgotPassword = async (req, res) => {
     const { email } = req.body;
     if (!email) return res.status(400).json({ message: 'Email is required' });
 
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const user = await User.findOne({ email: String(email).toLowerCase().trim() });
     // Always respond 200 so we don't reveal whether an account exists
     if (!user) return res.json({ message: 'If that email exists, a reset link has been sent.' });
 

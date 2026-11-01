@@ -1,0 +1,12 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+import { RokitSiteFooter } from "@/components/rokit-site-footer";
+import { RokitSiteHeader } from "@/components/rokit-site-header";
+import { publicTools } from "@/lib/rokit-public-offerings";
+export const Route = createFileRoute("/tools")({ head: () => ({ meta: [{ title: "Tools — rOKIt" }, { name: "description", content: "Practical rOKIt tools for clarifying, planning and controlling useful work." }, { property: "og:title", content: "rOKIt Tools" }, { property: "og:description", content: "Start with what matters. Not an empty template." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }), component: ToolsPage });
+function ToolsPage() {
+  return <div className="min-h-screen bg-night font-body text-paper"><RokitSiteHeader /><main>
+    <section className="mx-auto grid min-h-[68svh] max-w-site grid-cols-12 content-center gap-8 px-gutter py-section"><div className="col-span-12 md:col-span-10"><p className="section-label">rOKIt Tools</p><h1 className="mt-7 max-w-[14ch] font-display text-[clamp(3.2rem,8vw,7rem)] leading-none">Templates Start Blank. Problems Don’t.</h1><p className="mt-8 max-w-[62ch] text-lg leading-relaxed text-paper/70">Practical tools shaped by problems we keep meeting—built to clarify, specify and control useful work.</p></div></section>
+    <section className="bg-paper text-night"><div className="mx-auto max-w-site px-gutter py-section"><p className="section-label !text-night/55">Public tools</p><div className="mt-8 border-t border-night/20">{publicTools.map((tool, index) => <article key={tool.title} className="grid gap-5 border-b border-night/20 py-9 md:grid-cols-[4rem_minmax(14rem,0.8fr)_minmax(0,1fr)_auto]"><span className="text-xs text-signal">0{index + 1}</span><div><p className="text-[10px] uppercase text-night/50">{tool.territory}</p><h2 className="mt-2 font-display text-2xl md:text-3xl">{tool.title}</h2></div><p className="max-w-[48ch] text-sm leading-relaxed text-night/65">{tool.copy}</p><span className="self-start border border-night/20 px-2 py-1 text-[10px] uppercase">{tool.maturity}</span></article>)}</div><Link to="/start-a-project" search={{ route: "build-my-brief" }} className="action-link mt-12 min-h-12 bg-signal px-7 font-semibold text-night">Build Your Brief <ArrowRight aria-hidden="true" /></Link></div></section>
+  </main><RokitSiteFooter /></div>;
+}

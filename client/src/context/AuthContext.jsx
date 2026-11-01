@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 import api from '../utils/api';
 
 const AuthContext = createContext(null);
@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const { data } = await api.post('/auth/login', { email, password });
-      // Admin MFA: server returns mfaPending instead of a full token
       if (data?.mfaPending) {
         return { mfaPending: true, mfaToken: data.mfaToken };
       }
@@ -48,10 +47,16 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (name, email, password, phone) => {
+  const register = async (name, email, password, phone, extra = {}) => {
     setLoading(true);
     try {
-      const { data } = await api.post('/auth/register', { name, email, password, phone });
+      const { data } = await api.post('/auth/register', {
+        name,
+        email,
+        password,
+        phone,
+        ...extra,
+      });
       localStorage.setItem('rokit_token', data.token);
       localStorage.setItem('rokit_user', JSON.stringify(data));
       setUser(data);
